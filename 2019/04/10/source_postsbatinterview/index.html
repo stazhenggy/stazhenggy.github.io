@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Statistics, Machine Learning, R">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="写在前面：1 本文的内容部分来源于七月在线发布的BAT机器学习面试1000题系列。 部分是自己面试其他公司时被问到的一些其他问题。剩余是自己在平时思考整理的一些内容。 定期复习，定期检查自己对于一些算法的理解。 遇到好的内容，也会不断迭代更新。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BAT及各类机器学习面试整理">
+<meta property="og:url" content="http://stazhenggy.github.io/2019/04/10/source_postsbatinterview/index.html">
+<meta property="og:site_name" content="S-Dragon">
+<meta property="og:description" content="写在前面：1 本文的内容部分来源于七月在线发布的BAT机器学习面试1000题系列。 部分是自己面试其他公司时被问到的一些其他问题。剩余是自己在平时思考整理的一些内容。 定期复习，定期检查自己对于一些算法的理解。 遇到好的内容，也会不断迭代更新。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-15T08:54:48.471Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="BAT及各类机器学习面试整理">
+<meta name="twitter:description" content="写在前面：1 本文的内容部分来源于七月在线发布的BAT机器学习面试1000题系列。 部分是自己面试其他公司时被问到的一些其他问题。剩余是自己在平时思考整理的一些内容。 定期复习，定期检查自己对于一些算法的理解。 遇到好的内容，也会不断迭代更新。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://stazhenggy.github.io/2019/04/10/source_postsbatinterview/">
+
+
+
+
+
+  <title>BAT及各类机器学习面试整理 | S-Dragon</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">S-Dragon</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://stazhenggy.github.io/2019/04/10/source_postsbatinterview/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ZHENG Guoying">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="S-Dragon">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">BAT及各类机器学习面试整理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-10T12:00:00+08:00">
+                2019-04-10
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-15T16:54:48+08:00">
+                2019-04-15
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index">
+                    <span itemprop="name">machine learning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>写在前面：<br>1 本文的内容部分来源于七月在线发布的BAT机器学习面试1000题系列。 部分是自己面试其他公司时被问到的一些其他问题。剩余是自己在平时思考整理的一些内容。 定期复习，定期检查自己对于一些算法的理解。 遇到好的内容，也会不断迭代更新。</p>
+<a id="more"></a>
+<p>2 部分摘抄自其它的博客的内容，都在后面全部跟上了链接。 </p>
+<h2 id="简要介绍下SVM-进阶-gt-手推SVM"><a href="#简要介绍下SVM-进阶-gt-手推SVM" class="headerlink" title="简要介绍下SVM(进阶-&gt;手推SVM)"></a>简要介绍下SVM(进阶-&gt;手推SVM)</h2><p>分类算法。 目标是确定一个分类超平面，从而将不同的数据分隔开。</p>
+<p>支持向量机学习方法包括构建由简至繁的模型：线性可分支持向量机、线性支持向量机及非线性支持向量机。当训练数据线性可分时，通过硬间隔最大化，学习一个线性的分类器，即线性可分支持向量机，又称为硬间隔支持向量机；当训练数据近似线性可分时，通过软间隔最大化，也学习一个线性的分类器，即线性支持向量机，又称为软间隔支持向量机；当训练数据线性不可分时，通过使用核技巧及软间隔最大化，学习非线性支持向量机。</p>
+<p><strong>SVM经典博客</strong></p>
+<ul>
+<li><a href="https://www.cnblogs.com/v-July-v/archive/2012/06/01/2539022.html" target="_blank" rel="noopener">支持向量机通俗导论(理解SVM的三层境界)</a></li>
+<li><a href="https://blog.csdn.net/sinat_35512245/article/details/54984251" target="_blank" rel="noopener">机器学习之深入理解SVM</a></li>
+</ul>
+<h2 id="在k-means或kNN，我们常用欧氏距离来计算最近的邻居之间的距离，有时也用曼哈顿距离，请对比下这两种距离的差别【中】"><a href="#在k-means或kNN，我们常用欧氏距离来计算最近的邻居之间的距离，有时也用曼哈顿距离，请对比下这两种距离的差别【中】" class="headerlink" title="在k-means或kNN，我们常用欧氏距离来计算最近的邻居之间的距离，有时也用曼哈顿距离，请对比下这两种距离的差别【中】"></a>在k-means或kNN，我们常用欧氏距离来计算最近的邻居之间的距离，有时也用曼哈顿距离，请对比下这两种距离的差别【中】</h2><p>欧氏距离，最常见的两点之间或多点之间的距离表示法，又称之为欧几里得度量，它定义于欧几里得空间中，如点$x = (x_1,\cdots,x_n)$ 和 $y = (y_1,\cdots,y_n)$ 之间的距离为：</p>
+<script type="math/tex; mode=display">De_{xy} = \sqrt{(x_1 - y_1)^{2} + (x_1 - y_1)^{2} + \codts + (x_n -y_n)^{2}} = \sqrt{\sum_{i = 1}^{n}{(x_i - y_i)^{2}}}</script><p>曼哈顿距离，我们可以定义曼哈顿距离的正式意义为L1-距离或城市区块距离，也就是在欧几里得空间的固定直角坐标系上两点所形成的线段对轴产生的投影的距离总和。例如在平面上，坐标$(x_1, y_1)$的点$P_1$与坐标$(x_2, y_2)$的点$P_2$的曼哈顿距离为:</p>
+<script type="math/tex; mode=display">Dm_{xy} = |x_1 - x_2| + |y_1 - y_2|
+
+要注意的是，曼哈顿距离依赖座标系统的转度，而非系统在座标轴上的平移或映射。
+
+通俗来讲，想象你在曼哈顿要从一个十字路口开车到另外一个十字路口，驾驶距离是两点间的直线距离吗？显然不是，除非你能穿越大楼。而实际驾驶距离就是这个“曼哈顿距离”，这也是曼哈顿距离名称的来源， 同时，曼哈顿距离也称为城市街区距离(City Block distance)。
+
+此外，欧几里得以及曼哈顿距离都是$L_p$距离的特例。 点$x = (x_1,\cdots,x_n)$ 和 $y = (y_1,\cdots,y_n)$ 的$L_p$距离为
+
+$$Dl_{xy} = ((x_1 - y_1)^{p} + (x_1 - y_1)^{p} + \codts + (x_n -y_n)^{p})^{\frac{1}{p}}</script><p><strong>相关内容</strong></p>
+<ul>
+<li><a href="https://blog.csdn.net/v_july_v/article/details/8203674" target="_blank" rel="noopener">KNN,距离度量</a></li>
+</ul>
+<h2 id="LR-【难】"><a href="#LR-【难】" class="headerlink" title="LR 【难】"></a>LR 【难】</h2><p>@rickjin：把LR从头到脚都给讲一遍。建模，现场数学推导，每种解法的原理，正则化，LR和maxent模型啥关系，lr为啥比线性回归好。有不少会背答案的人，问逻辑细节就糊涂了。原理都会? 那就问工程，并行化怎么做，有几种并行化方式，读过哪些开源的实现。还会，那就准备收了吧，顺便逼问LR模型发展历史。</p>
+<ul>
+<li><a href="https://blog.csdn.net/cyh_24/article/details/50359055" target="_blank" rel="noopener">LR前世今生</a></li>
+<li><a href="https://blog.csdn.net/sinat_35512245/article/details/54881672" target="_blank" rel="noopener">机器学习之logistic回归</a></li>
+</ul>
+<h2 id="LR和SVM的联系与区别"><a href="#LR和SVM的联系与区别" class="headerlink" title="LR和SVM的联系与区别"></a>LR和SVM的联系与区别</h2><p>@朝阳在望，联系：</p>
+<p>1 LR和SVM都可以处理分类问题，且一般都用于处理线性二分类问题（在改进的情况下可以处理多分类问题）<br>2 两个方法都可以增加不同的正则化项，如l1、l2等等。所以在很多实验中，两种算法的结果是很接近的。</p>
+<p>区别：<br>1 LR是参数模型，SVM是非参数模型。<br>2 从目标函数来看，区别在于逻辑回归采用的是logistical loss，SVM采用的是hinge loss.这两个损失函数的目的都是增加对分类影响较大的数据点的权重，减少与分类关系较小的数据点的权重。<br>3 SVM的处理方法是只考虑support vectors，也就是和分类最相关的少数点，去学习分类器。而逻辑回归通过非线性映射，大大减小了离分类平面较远的点的权重，相对提升了与分类最相关的数据点的权重。<br>4 逻辑回归相对来说模型更简单，好理解，特别是大规模线性分类时比较方便。而SVM的理解和优化相对来说复杂一些，SVM转化为对偶问题后,分类只需要计算与少数几个支持向量的距离,这个在进行复杂核函数计算时优势很明显,能够大大简化模型和计算。<br>5 logic能做的svm能做，但可能在准确率上有问题，svm能做的logic有的做不了。<br>6 logic给出的是概率</p>
+<h2 id="GBDT和XGBoost的区别是什么"><a href="#GBDT和XGBoost的区别是什么" class="headerlink" title="GBDT和XGBoost的区别是什么"></a>GBDT和XGBoost的区别是什么</h2><p>@Xijun LI：XGBoost类似于GBDT的优化版，不论是精度还是效率上都有了提升。与GBDT相比，具体的优点有</p>
+<ul>
+<li><a href="https://blog.csdn.net/zouxy09/article/details/20319673" target="_blank" rel="noopener">机器学习算法与Python实践之LR</a></li>
+</ul>
+<p>1.损失函数是用泰勒展式二项逼近，而不是像GBDT里的就是一阶导数<br>2.对树的结构进行了正则化约束，防止模型过度复杂，降低了过拟合的可能性<br>3.节点分裂的方式不同，GBDT是用的基尼系数，XGBoost是经过优化推导后的</p>
+<p><strong>相关内容</strong></p>
+<ul>
+<li><a href="https://xijunlee.github.io/2017/06/03/%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" target="_blank" rel="noopener">集成学习内容</a></li>
+</ul>
+<h2 id="LR与线性回归的区别与联系【中】"><a href="#LR与线性回归的区别与联系【中】" class="headerlink" title="LR与线性回归的区别与联系【中】"></a>LR与线性回归的区别与联系【中】</h2><p>@AntZ: LR工业上一般指<code>Logistic Regression</code>(逻辑回归)而不是<code>Linear Regression</code>(线性回归). <code>LR</code>在线性回归的实数范围输出值上施加<code>sigmoid</code>函数将值收敛到0~1范围, 其目标函数也因此从差平方和函数变为对数损失函数, 以提供最优化所需导数（sigmoid函数是softmax函数的二元特例, 其导数均为函数值的f*(1-f)形式）。请注意, LR往往是解决二元0/1分类问题的, 只是它和线性回归耦合太紧, 不自觉也冠了个回归的名字(马甲无处不在). 若要求多元分类,就要把sigmoid换成大名鼎鼎的softmax了。</p>
+<h2 id="决策树-Random-Forest-Boosting-Adaboost-GBDT和XGBoost的区别是什么"><a href="#决策树-Random-Forest-Boosting-Adaboost-GBDT和XGBoost的区别是什么" class="headerlink" title="决策树, Random Forest, Boosting, Adaboost, GBDT和XGBoost的区别是什么"></a>决策树, Random Forest, Boosting, Adaboost, GBDT和XGBoost的区别是什么</h2><p>随机森林Random Forest是一个包含多个决策树的分类器。GBDT（Gradient Boosting Decision Tree），即梯度上升决策树算法，相当于融合决策树和梯度上升boosting算法。</p>
+<p>@Xijun LI：xgboost类似于gbdt的优化版，不论是精度还是效率上都有了提升。与gbdt相比，具体的优点有：<br>1.损失函数是用泰勒展式二项逼近，而不是像gbdt里的就是一阶导数<br>2.对树的结构进行了正则化约束，防止模型过度复杂，降低了过拟合的可能性<br>3.节点分裂的方式不同，gbdt是用的gini系数，xgboost是经过优化推导后的</p>
+<p><a href="https://xijunlee.github.io/2017/06/03/%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" target="_blank" rel="noopener">https://xijunlee.github.io/2017/06/03/%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/</a></p>
+<h2 id="KNN中的K如何选取"><a href="#KNN中的K如何选取" class="headerlink" title="KNN中的K如何选取"></a>KNN中的K如何选取</h2><p>KNN中的K值选取对K近邻算法的结果会产生重大影响。如李航博士的一书「统计学习方法」上所说：</p>
+<ul>
+<li><p>如果选择较小的K值，就相当于用较小的领域中的训练实例进行预测，“学习”近似误差会减小，只有与输入实例较近或相似的训练实例才会对预测结果起作用，与此同时带来的问题是“学习”的估计误差会增大，换句话说，K值的减小就意味着整体模型变得复杂，容易发生过拟合；</p>
+</li>
+<li><p>如果选择较大的K值，就相当于用较大领域中的训练实例进行预测，其优点是可以减少学习的估计误差，但缺点是学习的近似误差会增大。这时候，与输入实例较远（不相似的）训练实例也会对预测器作用，使预测发生错误，且K值的增大就意味着整体的模型变得简单。</p>
+</li>
+<li><p>K=N，则完全不足取，因为此时无论输入实例是什么，都只是简单的预测它属于在训练实例中最多的累，模型过于简单，忽略了训练实例中大量有用信息。</p>
+</li>
+</ul>
+<p>在实际应用中，K值一般取一个比较小的数值，例如采用交叉验证法（简单来说，就是一部分样本做训练集，一部分做测试集）来选择最优的K值。</p>
+<p><strong>相关内容</strong></p>
+<p><a href="http://blog.csdn.net/v_july_v/article/details/8203674" target="_blank" rel="noopener">KNN</a></p>
+<h2 id="防止过拟合的方法"><a href="#防止过拟合的方法" class="headerlink" title="防止过拟合的方法"></a>防止过拟合的方法</h2><p>过拟合的原因是算法的学习能力过强；一些假设条件（如样本独立同分布）可能是不成立的；训练样本过少不能对整个空间进行分布估计。 </p>
+<p>处理方法有：</p>
+<ul>
+<li><p>早停止：如在训练中多次迭代后发现模型性能没有显著提高就停止训练。 决策树pre-pruning(cp, maxdepth, minsplit)</p>
+</li>
+<li><p>数据集扩增：原有数据增加、原有数据加随机噪声、重采样</p>
+</li>
+<li><p>正则化</p>
+</li>
+<li><p>交叉验证</p>
+</li>
+<li><p>特征选择/特征降维</p>
+</li>
+</ul>
+<h2 id="哪些机器学习算法不需要做归一化处理"><a href="#哪些机器学习算法不需要做归一化处理" class="headerlink" title="哪些机器学习算法不需要做归一化处理"></a>哪些机器学习算法不需要做归一化处理</h2><p>概率模型(比如树模型)不需要归一化，因为它们不关心变量的值，而是关心变量的分布和变量之间的条件概率，如决策树、rf。而像adaboost、svm、lr、KNN、KMeans之类的最优化问题就需要归一化。</p>
+<p>@管博士：我理解归一化和标准化主要是为了使计算更方便, 比如两个变量的量纲不同, 可能一个的数值远大于另一个。 那么他们同时作为变量的时候, 可能会造成数值计算的问题，比如说求矩阵的逆可能很不精确 或者梯度下降法的收敛比较困难。 还有如果需要计算欧式距离的话可能量纲也需要调整。 </p>
+<h2 id="对于树形结构为什么不需要归一化"><a href="#对于树形结构为什么不需要归一化" class="headerlink" title="对于树形结构为什么不需要归一化"></a>对于树形结构为什么不需要归一化</h2><p><strong>数值缩放</strong>，不影响分裂点位置。 因为第一步都是按照特征进行排序的，排序的顺序不变，那么所属的分支以及分裂点就不会有不同。对于线性模型，比如说LR，我有两个特征，一个是(0,1)的，一个是(0,10000)的，这样运用梯度下降时候，损失等高线是一个椭圆的形状，这样我想迭代到最优点，就需要很多次迭代，但是如果进行了归一化，那么等高线就是圆形的，那么SGD就会往原点迭代，需要的迭代次数较少。<br>另外，注意树模型是不能进行梯度下降的，因为树模型是阶跃的，阶跃点是不可导的，并且求导没意义，所以树模型（回归树）寻找最优点事通过寻找最优分裂点完成的。</p>
+<h2 id="数据归一化（或者标准化，注意归一化和标准化不同）的原因"><a href="#数据归一化（或者标准化，注意归一化和标准化不同）的原因" class="headerlink" title="数据归一化（或者标准化，注意归一化和标准化不同）的原因"></a>数据归一化（或者标准化，注意归一化和标准化不同）的原因</h2><p>@我愛大泡泡 能不归一化最好不归一化，之所以进行数据归一化是因为各维度的量纲不相同。而且需要看情况进行归一化。</p>
+<p><strong>相关内容</strong></p>
+<ul>
+<li><a href="http://blog.csdn.net/woaidapaopao/article/details/77806273" target="_blank" rel="noopener">数据归一化</a></li>
+</ul>
+<p>有些模型在各维度进行了不均匀的伸缩后，最优解与原来不等价（如SVM）需要归一化。</p>
+<p>有些模型伸缩有与原来等价，如：LR则不用归一化，但是实际中往往通过迭代求解模型参数，如果目标函数太扁（想象一下很扁的高斯模型）迭代算法会发生不收敛的情况，所以最坏进行数据归一化。</p>
+<p>补充：其实本质是由于loss函数不同造成的，SVM用了欧拉距离，如果一个特征很大就会把其他的维度dominated。而LR可以通过权重调整使得损失函数不变。</p>
+<h2 id="请简要说说一个完整机器学习项目的流程"><a href="#请简要说说一个完整机器学习项目的流程" class="headerlink" title="请简要说说一个完整机器学习项目的流程"></a>请简要说说一个完整机器学习项目的流程</h2><p>@寒小阳、龙心尘</p>
+<p><strong>1 抽象成数学问题</strong></p>
+<p>明确问题是进行机器学习的第一步。机器学习的训练过程通常都是一件非常耗时的事情，胡乱尝试时间成本是非常高的。<br>这里的抽象成数学问题，指的我们明确我们可以获得什么样的数据，目标是一个分类还是回归或者是聚类的问题，如果都不是的话，如果划归为其中的某类问题。</p>
+<p><strong>2 获取数据</strong></p>
+<p>数据决定了机器学习结果的上限，而算法只是尽可能逼近这个上限。<br>数据要有代表性，否则必然会过拟合。<br>对于分类问题，数据偏斜不能过于严重，不同类别的数据数量不要有数个数量级的差距。<br>对数据的量级有一个评估，多少个样本，多少个特征，可以估算出其对内存的消耗程度，判断训练过程中内存是否能够放得下。如果放不下就得考虑改进算法或者使用一些降维的技巧了。如果数据量实在太大，那就要考虑分布式了。</p>
+<p><strong>3 特征预处理与特征选择</strong></p>
+<p>良好的数据要能够提取出良好的特征才能真正发挥效力。<br>特征预处理、数据清洗是很关键的步骤，往往能够使得算法的效果和性能得到显著提高。归一化、离散化、因子化、缺失值处理、去除共线性等，数据挖掘过程中很多时间就花在它们上面。这些工作简单可复制，收益稳定可预期，是机器学习的基础必备步骤。</p>
+<p>筛选出显著特征、摒弃非显著特征，需要机器学习工程师反复理解业务。这对很多结果有决定性的影响。特征选择好了，非常简单的算法也能得出良好、稳定的结果。这需要运用特征有效性分析的相关技术，如相关系数、卡方检验、平均互信息、条件熵、后验概率、逻辑回归权重等方法。</p>
+<p><strong>4 训练模型与调优</strong></p>
+<p>直到这一步才用到我们上面说的算法进行训练。现在很多算法都能够封装成黑盒供人使用。但是真正考验水平的是调整这些算法的（超）参数，使得结果变得更加优良。这需要我们对算法的原理有深入的理解。理解越深入，就越能发现问题的症结，提出良好的调优方案。</p>
+<p><strong>5 模型诊断</strong></p>
+<p>如何确定模型调优的方向与思路呢？这就需要对模型进行诊断的技术。</p>
+<p>过拟合、欠拟合判断是模型诊断中至关重要的一步。常见的方法如交叉验证，绘制学习曲线等。 过拟合的基本调优思路是增加数据量，降低模型复杂度。 欠拟合的基本调优思路是提高特征数量和质量，增加模型复杂度。<br>误差分析也是机器学习至关重要的步骤。通过观察误差样本，全面分析误差产生误差的原因:是参数的问题还是算法选择的问题，是特征的问题还是数据本身的问题……<br>诊断后的模型需要进行调优，调优后的新模型需要重新进行诊断，这是一个反复迭代不断逼近的过程，需要不断地尝试， 进而达到最优状态。</p>
+<p><strong>6 模型融合</strong></p>
+<p>一般来说，模型融合后都能使得效果有一定提升。而且效果很好。</p>
+<p>工程上，主要提升算法准确度的方法是分别在模型的前端（特征清洗和预处理，不同的采样模式）与后端（模型融合）上下功夫。因为他们比较标准可复制，效果比较稳定。而直接调参的工作不会很多，毕竟大量数据训练起来太慢了，而且效果难以保证。</p>
+<p><strong>7 上线运行</strong></p>
+<p>这一部分内容主要跟工程实现的相关性比较大。工程上是结果导向，模型在线上运行的效果直接决定模型的成败。 不单纯包括其准确程度、误差等情况，还包括其运行的速度(时间复杂度)、资源消耗程度（空间复杂度）、稳定性是否可接受。<br>这些工作流程主要是工程实践上总结出的一些经验。并不是每个项目都包含完整的一个流程。这里的部分只是一个指导性的说明，只有大家自己多实践，多积累项目经验，才会有自己更深刻的认识。</p>
+<p><strong>机器学习算法大体步骤</strong></p>
+<p>1 对于一个问题，用数学语言来描述它； 然后对应一个模型来描述这个问题</p>
+<p>2 通过极大似然、最大后验概率或最小化分类误差等等建立模型的代价函数， 问题转化为最优化问题。 </p>
+<p>3 求这个代价函数的最优化问题的解。 求解大体分以下几种情况：</p>
+<pre><code>+ 代价函数存在解析解。 一般方法是对代价函数求导，找到导数为0的点即为最优解。 如果代价函数能简单求导，并且求导后为0的式子存在解析解，就可以直接得到最优参数
++ 如果代价函数很难求导数，例如函数里存在隐含变量或变量间存在相互依赖的情况；或求导后为0的式子得不到解析解，就需要借助迭代算法来一步步找到最优解。 
+</code></pre><h2 id="逻辑斯特回归为什么要对特征进行离散化"><a href="#逻辑斯特回归为什么要对特征进行离散化" class="headerlink" title="逻辑斯特回归为什么要对特征进行离散化"></a>逻辑斯特回归为什么要对特征进行离散化</h2><p>@严林</p>
+<p>在工业界，很少直接将连续值作为逻辑回归模型的特征输入，而是将连续特征离散化为一系列0、1特征交给逻辑回归模型，这样做的优势有以下几点：</p>
+<ol>
+<li><p>离散特征的增加和减少都很容易，易于模型的快速迭代；</p>
+</li>
+<li><p>稀疏向量内积乘法运算速度快，计算结果方便存储，容易扩展；</p>
+</li>
+<li><p>离散化后的特征对异常数据有很强的鲁棒性：比如一个特征是年龄&gt;30是1，否则0。如果特征没有离散化，一个异常数据“年龄300岁”会给模型造成很大的干扰；</p>
+</li>
+<li><p>逻辑回归属于广义线性模型，表达能力受限；单变量离散化为N个后，每个变量有单独的权重，相当于为模型引入了非线性，能够提升模型表达能力，加大拟合；</p>
+</li>
+<li><p>离散化后可以进行特征交叉，由M+N个变量变为M*N个变量，进一步引入非线性，提升表达能力；</p>
+</li>
+<li><p>特征离散化后，模型会更稳定，比如如果对用户年龄离散化，20-30作为一个区间，不会因为一个用户年龄长了一岁就变成一个完全不同的人。当然处于区间相邻处的样本会刚好相反，所以怎么划分区间是门学问；</p>
+</li>
+<li><p>特征离散化以后，起到了简化了逻辑回归模型的作用，降低了模型过拟合的风险。</p>
+</li>
+</ol>
+<p>李沐曾经说过：模型是使用离散特征还是连续特征，其实是一个“海量离散特征+简单模型” 同 “少量连续特征+复杂模型”的权衡。既可以离散化用线性模型，也可以用连续特征加深度学习。就看是喜欢折腾特征还是折腾模型了。通常来说，前者容易，而且可以n个人一起并行做，有成功经验；后者目前看很赞，能走多远还须拭目以待。</p>
+<p><strong>相关内容</strong></p>
+<p><a href="https://www.zhihu.com/question/31989952" target="_blank" rel="noopener">LR特征离散化</a></p>
+<h2 id="什么是熵"><a href="#什么是熵" class="headerlink" title="什么是熵"></a>什么是熵</h2><h2 id="熵、联合熵、条件熵、相对熵、互信息的定义"><a href="#熵、联合熵、条件熵、相对熵、互信息的定义" class="headerlink" title="熵、联合熵、条件熵、相对熵、互信息的定义"></a>熵、联合熵、条件熵、相对熵、互信息的定义</h2><h2 id="简单说下有监督学习和无监督学习的区别"><a href="#简单说下有监督学习和无监督学习的区别" class="headerlink" title="简单说下有监督学习和无监督学习的区别"></a>简单说下有监督学习和无监督学习的区别</h2><p>有监督学习：对具有标记的训练样本进行学习，以尽可能对训练样本集外的数据进行分类预测。（LR,SVM,BP,RF,GBDT）</p>
+<p>无监督学习：对未标记的样本进行训练学习，比发现这些样本中的结构知识。(KMeans,DL)</p>
+<h2 id="协方差和相关性有什么区别"><a href="#协方差和相关性有什么区别" class="headerlink" title="协方差和相关性有什么区别"></a>协方差和相关性有什么区别</h2><p>相关性是协方差的标准化格式。协方差本身很难做比较。例如：如果我们计算工资（$）和年龄（岁）的协方差，因为这两个变量有不同的度量，所以我们会得到不能做比较的不同的协方差。为了解决这个问题，我们计算相关性来得到一个介于-1和1之间的值，就可以忽略它们各自不同的度量。</p>
+<h2 id="线性分类器与非线性分类器的区别以及优劣"><a href="#线性分类器与非线性分类器的区别以及优劣" class="headerlink" title="线性分类器与非线性分类器的区别以及优劣"></a>线性分类器与非线性分类器的区别以及优劣</h2><p>如果模型是参数的线性函数，并且存在线性分类面，那么就是线性分类器，否则不是。</p>
+<p>常见的线性分类器有：LR,贝叶斯分类，单层感知机、线性回归<br>常见的非线性分类器：决策树、RF、GBDT、多层感知机<br>SVM两种都有(看线性核还是高斯核)<br>线性分类器速度快、编程方便，但是可能拟合效果不会很好<br>非线性分类器编程复杂，但是效果拟合能力强</p>
+<h2 id="简单说说贝叶斯定理"><a href="#简单说说贝叶斯定理" class="headerlink" title="简单说说贝叶斯定理"></a>简单说说贝叶斯定理</h2><p>全概率公式：<script type="math/tex">P(A) = \sum_{i = 1}^{n}{P(A|B_i)*P(B_i)}</script></p>
+<p>贝叶斯公式：<script type="math/tex">P(A = a_i|B) = \frac{P(B|A = a_i)*P(A = a_i)}{\sum_{i=1}^{n}{P(B|A = a_i)*P(A = a_i)}}</script></p>
+<p><strong>相关内容</strong></p>
+<p><a href="https://blog.csdn.net/v_july_v/article/details/40984699" target="_blank" rel="noopener">从贝叶斯方法到贝叶斯网络</a></p>
+<h2 id="简要介绍分类决策树"><a href="#简要介绍分类决策树" class="headerlink" title="简要介绍分类决策树"></a>简要介绍分类决策树</h2><p>决策树呈树型结构。 分类决策树是基于特征对实例进行分类的过程。 它可以认为是if-then规则的集合，也可以认为是定义在特征空间与类空间上的条件概率分布。 其主要优点是具有可读性，分类速度快。 决策树学习包含3个步骤： 特征选择，决策树的生成和决策树的剪枝。 </p>
+<h3 id="特征选择"><a href="#特征选择" class="headerlink" title="特征选择"></a>特征选择</h3><p>决策树特征选择在于选取对训练数据具有分类能力的特征。 通常特征选择的准则是信息增益(ID3), 信息增益比(C4.5), 基尼系数(CART)。</p>
+<h3 id="决策树生成"><a href="#决策树生成" class="headerlink" title="决策树生成"></a>决策树生成</h3><p>ID3算法的核心是在决策树各个结点上应用信息增益准侧选择特征， 递归地构建决策树。 具体方法是：从根结点开始，对结点计算所有特征的信息增益，选择信息增益最大的特征作为结点的特征，由该特征的不同取值建立子结点； 再对子结点递归地调用以上方法，构建决策树； 直到所有特征信息增益都很小或没有特征选择为止。 最后的得到一个决策树。 C4.5与ID3的算法类似，只是使用信息增益比来选择特征。</p>
+<h3 id="决策树剪枝"><a href="#决策树剪枝" class="headerlink" title="决策树剪枝"></a>决策树剪枝</h3><p>决策树生成算法递归地产生决策树，直到不能再继续下去为止。 这样产生的分类树可能会存在过拟合。 过拟合的原因是由于学习时过多考虑如何提高对训练数据的准确分类，从而构建出过于复杂的分类树。 解决这个问题的方法是考虑决策树的复杂度， 对已生成的树进行简化。 这一简化过程称为剪枝。 决策树的剪枝往往通过<strong>极小化损失函数</strong>来实现。 剪枝算法为从叶结点开始，向上回缩至父结点。 如果回缩之后，损失函数变小或增大值小于阈值， 则剪枝，该父结点变为新的叶结点。。</p>
+<h2 id="KNN中的K如何选取-1"><a href="#KNN中的K如何选取-1" class="headerlink" title="KNN中的K如何选取"></a>KNN中的K如何选取</h2><ul>
+<li><a href="https://discuss.analyticsvidhya.com/t/how-to-choose-the-value-of-k-in-knn-algorithm/2606" target="_blank" rel="noopener">determining k in knn</a></li>
+</ul>
+<p>The trick is that — in general — the lower the k value, the better the performance in the training set. That is to say, the better your model will capture the variability for the set of data it was trained on. You can think of it this way: k = 1 is the most overfit case for all instances. The prediction is based solely on the training sample nearest the sample provided.</p>
+<p>The trouble is that — even in a low dimensional, intuitive space — this cannot (or rather, does not frequently) generalize well. On larger data sets, it is better to increase the number of neighbors to better represent the shared characteristics of the class being discriminated: some variability is acceptable but it (hopefully) generallly cancels out to best reflect the average properties of the class(es) being identified.</p>
+<p>In general, there is no magic bullet for this problem. Sometimes, it might be obvious: plot the generalization error as a function of k. If there is an obvious elbow (rapid decrease followed by plateau) that is a good indication of an appropriately selected value for k. It means that there is a value of k “suggested” by the training data: a value that generalizes optimally without undue calculations of the class of nearest neighbors.</p>
+<p>There is no clear analytical solution, though. Fundamentally, this is a question of how well your training data reflects your testing data and how well your training and testing data reflect the data outside of the collected samples. Let me know if you have additional questions! I’m passionate about data science and happy to refine my answer!</p>
+<p>For a loose intuition, a low value of k corresponds to “sharp” decision boundaries in the classification space. Higher values of k correspond to “curvier” or, in the limit flat, decision boundaries. My recommendation would to make some synthetic data to get an intuition for the effect of varying k!</p>
+<p>If you carry on going, you will eventually end up with the CV error beginning to go up again. This is because the larger you make k, the more smoothing takes place, and eventually you will smooth so much that you will get a model that under-fits the data rather than over-fitting it (make k big enough and the output will be constant regardless of the attribute values). I’d extend the plot until the CV error starts to go noticably up again, just to be sure, and then pick the k that minimizes the CV error. The bigger you make k the smoother the decision boundary and the more simple the model, so if computational expense is not an issue, I would go for a larger value of k than a smaller one, if the difference in their CV errors is negligible.</p>
+<p>If the CV error doesn’t start to rise again, that probably means the attributes are not informative (at least for that distance metric) and giving constant outputs is the best that it can do.</p>
+<h3 id="如何确定聚类算法k-means中的k-有几种方法并简要介绍下"><a href="#如何确定聚类算法k-means中的k-有几种方法并简要介绍下" class="headerlink" title="如何确定聚类算法k-means中的k, 有几种方法并简要介绍下"></a>如何确定聚类算法k-means中的k, 有几种方法并简要介绍下</h3><ul>
+<li><p><a href="https://uc-r.github.io/kmeans_clustering" target="_blank" rel="noopener">kmeans in r</a></p>
+</li>
+<li><p><a href="https://www.datanovia.com/en/lessons/determining-the-optimal-number-of-clusters-3-must-know-methods/" target="_blank" rel="noopener">determine k</a></p>
+</li>
+</ul>
+<h2 id="选择题"><a href="#选择题" class="headerlink" title="选择题"></a>选择题</h2><p>1 下面哪种不属于数据预处理的方法？ (D)<br>A变量代换 B离散化 C 聚集 D 估计遗漏值</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a href="https://www.jianshu.com/p/980efc8105b2" target="_blank" rel="noopener">BAT机器学习面试1000题系列jianshu</a></li>
+<li><a href="https://blog.csdn.net/v_july_v/article/details/78121924" target="_blank" rel="noopener">BAT机器学习面试1000题系列CSDN</a></li>
+<li><a href="https://www.zhihu.com/question/23259302" target="_blank" rel="noopener">如何准备机器学习工程师的面试</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    ZHENG Guoying
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://stazhenggy.github.io/2019/04/10/source_postsbatinterview/" title="BAT及各类机器学习面试整理">http://stazhenggy.github.io/2019/04/10/source_postsbatinterview/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/10/modelfit/" rel="next" title="模型评价">
+                <i class="fa fa-chevron-left"></i> 模型评价
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ZHENG Guoying</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简要介绍下SVM-进阶-gt-手推SVM"><span class="nav-number">1.</span> <span class="nav-text">简要介绍下SVM(进阶-&gt;手推SVM)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在k-means或kNN，我们常用欧氏距离来计算最近的邻居之间的距离，有时也用曼哈顿距离，请对比下这两种距离的差别【中】"><span class="nav-number">2.</span> <span class="nav-text">在k-means或kNN，我们常用欧氏距离来计算最近的邻居之间的距离，有时也用曼哈顿距离，请对比下这两种距离的差别【中】</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LR-【难】"><span class="nav-number">3.</span> <span class="nav-text">LR 【难】</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LR和SVM的联系与区别"><span class="nav-number">4.</span> <span class="nav-text">LR和SVM的联系与区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GBDT和XGBoost的区别是什么"><span class="nav-number">5.</span> <span class="nav-text">GBDT和XGBoost的区别是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LR与线性回归的区别与联系【中】"><span class="nav-number">6.</span> <span class="nav-text">LR与线性回归的区别与联系【中】</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#决策树-Random-Forest-Boosting-Adaboost-GBDT和XGBoost的区别是什么"><span class="nav-number">7.</span> <span class="nav-text">决策树, Random Forest, Boosting, Adaboost, GBDT和XGBoost的区别是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KNN中的K如何选取"><span class="nav-number">8.</span> <span class="nav-text">KNN中的K如何选取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防止过拟合的方法"><span class="nav-number">9.</span> <span class="nav-text">防止过拟合的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#哪些机器学习算法不需要做归一化处理"><span class="nav-number">10.</span> <span class="nav-text">哪些机器学习算法不需要做归一化处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对于树形结构为什么不需要归一化"><span class="nav-number">11.</span> <span class="nav-text">对于树形结构为什么不需要归一化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据归一化（或者标准化，注意归一化和标准化不同）的原因"><span class="nav-number">12.</span> <span class="nav-text">数据归一化（或者标准化，注意归一化和标准化不同）的原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#请简要说说一个完整机器学习项目的流程"><span class="nav-number">13.</span> <span class="nav-text">请简要说说一个完整机器学习项目的流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#逻辑斯特回归为什么要对特征进行离散化"><span class="nav-number">14.</span> <span class="nav-text">逻辑斯特回归为什么要对特征进行离散化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是熵"><span class="nav-number">15.</span> <span class="nav-text">什么是熵</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#熵、联合熵、条件熵、相对熵、互信息的定义"><span class="nav-number">16.</span> <span class="nav-text">熵、联合熵、条件熵、相对熵、互信息的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单说下有监督学习和无监督学习的区别"><span class="nav-number">17.</span> <span class="nav-text">简单说下有监督学习和无监督学习的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#协方差和相关性有什么区别"><span class="nav-number">18.</span> <span class="nav-text">协方差和相关性有什么区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线性分类器与非线性分类器的区别以及优劣"><span class="nav-number">19.</span> <span class="nav-text">线性分类器与非线性分类器的区别以及优劣</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单说说贝叶斯定理"><span class="nav-number">20.</span> <span class="nav-text">简单说说贝叶斯定理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简要介绍分类决策树"><span class="nav-number">21.</span> <span class="nav-text">简要介绍分类决策树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特征选择"><span class="nav-number">21.1.</span> <span class="nav-text">特征选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#决策树生成"><span class="nav-number">21.2.</span> <span class="nav-text">决策树生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#决策树剪枝"><span class="nav-number">21.3.</span> <span class="nav-text">决策树剪枝</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KNN中的K如何选取-1"><span class="nav-number">22.</span> <span class="nav-text">KNN中的K如何选取</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何确定聚类算法k-means中的k-有几种方法并简要介绍下"><span class="nav-number">22.1.</span> <span class="nav-text">如何确定聚类算法k-means中的k, 有几种方法并简要介绍下</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择题"><span class="nav-number">23.</span> <span class="nav-text">选择题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">24.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZHENG Guoying</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

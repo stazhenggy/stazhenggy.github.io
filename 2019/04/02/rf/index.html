@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="random forest,ensemble learning,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="信息是用来消除随机不确定性的东西。 —— 香农">
+<meta name="keywords" content="random forest,ensemble learning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Random Forest">
+<meta property="og:url" content="http://stazhenggy.github.io/2019/04/02/rf/index.html">
+<meta property="og:site_name" content="S-Dragon">
+<meta property="og:description" content="信息是用来消除随机不确定性的东西。 —— 香农">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/mcomp.png">
+<meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/ensembleme.png">
+<meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/bb3.png">
+<meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/ensemble_adaboost.png">
+<meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/adaboost_alg.png">
+<meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/ensemble_pred.png">
+<meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/bag_alg.png">
+<meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/rf1.png">
+<meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/bagrf.png">
+<meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/stackingme.png">
+<meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/stacking.png">
+<meta property="og:updated_time" content="2019-04-15T11:44:30.915Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Random Forest">
+<meta name="twitter:description" content="信息是用来消除随机不确定性的东西。 —— 香农">
+<meta name="twitter:image" content="http://stazhenggy.github.io/2019/04/02/rf/mcomp.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://stazhenggy.github.io/2019/04/02/rf/">
+
+
+
+
+
+  <title>Random Forest | S-Dragon</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">S-Dragon</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://stazhenggy.github.io/2019/04/02/rf/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ZHENG Guoying">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="S-Dragon">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Random Forest</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-02T12:00:00+08:00">
+                2019-04-02
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-15T19:44:30+08:00">
+                2019-04-15
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index">
+                    <span itemprop="name">machine learning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="mcomp.png" alt></p>
+<blockquote>
+<p>信息是用来消除随机不确定性的东西。 —— 香农</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="集成学习-Ensemble-Learning"><a href="#集成学习-Ensemble-Learning" class="headerlink" title="集成学习(Ensemble Learning)"></a>集成学习(Ensemble Learning)</h1><p>集成学习通过构建并结合多个学习器来完成学习任务。 集成学习的一般结构： 先产生一组“个体学习器”，再用某种策略将它们结合起来。 个体学习器通常由一个现有的学习算法从训练数据产生。 如果个体学习器是“同质”的，即个体学习器由相同的算法生成，则这些个体学习器亦称“基学习器”，相应的学习算法称为“基学习算法”。 如果个体学习器是“异质”的，即个体学习器由不同的学习算法生成，则个体学习器常称为“组件学习器”或直接称为个体学习器。</p>
+<p><img src="ensembleme.png" alt></p>
+<p>根据个体学习器的生成方式，目前的集成学习大致可以分为两大类，一类是个体学习器间存在强依赖关系，必须串行生成的序列化方法，代表是Boosting. 另一类是个体学习器间不存在强依赖关系，可同时生成的并行化方法，代表是Bagging和Random Forest.</p>
+<p><img src="bb3.png" alt="baggingandboosting"></p>
+<h1 id="Boosting"><a href="#Boosting" class="headerlink" title="Boosting"></a>Boosting</h1><p>Boosting 是一族可将弱学习器提升为强学习器的算法。 这族算法的工作机制类似： 先从初始训练集训练出一个基学习器， 再根据基学习器的表现对训练样本分布进行调整，使得先前基学习器做错的训练样本在后续得到更多的关注。 然后基于调整后的样本分布来训练下一个基学习器。 如此重复进行，直到基学习器数目达到事先指定的值T。 最后将这T个基学习器进行加权结合。</p>
+<p><img src="ensemble_adaboost.png" alt="adaboost"> </p>
+<p><img src="adaboost_alg.png" alt="adaboost"> </p>
+<p>Boosting算法要求基学习器能对特定的数据分布进行学习。 这可通过”重赋权法(<strong>re-weighting</strong>)”实施，即在训练过程的每一轮，根据样本分布为每个训练样本重新赋予一个权重。</p>
+<p>Boosting主要关注降低偏差， 因此Boosting能基于泛化性能相当弱的学习器构建出很强的集成。</p>
+<h1 id="Bagging与随机森林"><a href="#Bagging与随机森林" class="headerlink" title="Bagging与随机森林"></a>Bagging与随机森林</h1><p>欲得到<strong>泛化性能强</strong>的集成，集成中的个体学习器应尽可能相互<strong>独立</strong>；虽然“独立”在现实任务中无法做到(因为所有的分类器是为解决同一个问题训练出来的)，但可以设法使基学习器尽可能具有较大的<strong>差异</strong>。 给定一个训练数据集，一种可能的做法是对训练样本进行采样，产生出若干个不同的子集，再从每个数据子集中训练出一个基学习器。 这样，由于<strong>训练数据不同</strong>，我们获得的<strong>基学习器</strong>有望具有比较大的<strong>差异</strong>。 然而，为获得好的集成，又希望<strong>个体学习器不能太差</strong>。 如果采样出的每个子集都完全不同，则每个基学习器只用到了一小部分训练数据，甚至不足以进行有效学习，这显然无法确保产生出比较好的基学习器。 为了解决这个问题，可以考虑使用互相<strong>有交叠</strong>的<strong>采样</strong>子集。 </p>
+<p>不同于Boosting, Bagging是通过<strong>re-sampling</strong>实现对不同的数据分布进行学习的。</p>
+<h2 id="Bagging"><a href="#Bagging" class="headerlink" title="Bagging"></a>Bagging</h2><p>Bagging(<strong>Bootstrap Aggregating</strong>)是<strong>并行式集成学习方法</strong>最著名的代表。 它直接基于Boostraping. 给定包含m个样本的数据集，有放回随机抽样得到含m个样本的采样集(初始训练集中有的样本在采样集里多次出现，有的则从未出现。 初始训练集中约有63.2%的样本出现在采样集中)。 照这样，可以采样出T个含m个训练样本的采样集，然后基于每个采样集训练出一个基学习器，再将这些基学习器进行结合。 这就是Bagging的基本流程。 在对预测输出进行结合时，Bagging对分类任务使用多数表决法，对回归任务使用简单平均法。 若分类预测时出现两个类收到同样票数的情形，则最简单的做法是随机选一个， 也可以进一步考察学习器投票的置信度来确定最终胜者。 </p>
+<p><img src="ensemble_pred.png" alt> </p>
+<p><img src="bag_alg.png" alt></p>
+<p>假定基学习器的计算复杂度为$O(m)$, 则Bagging的复杂度大致为$T(O(m) + O(s))$, 考虑到采样与投票/平均过程的复杂度$O(s)$很小， 而T通常是一个不太大的常数，因此， 训练一个Bagging集成与直接使用基学习算法训练一个学习器的复杂度同阶，这说明Bagging是一个很高效的集成学习算法。 另外，与标准Adaboost只适用于二分类任务不同，Bagging能不经修改地用于多分类、回归等任务。 </p>
+<p>另外，自主采样过程还给Bagging带来了另一个优点： 由于每个基学习器只使用了初始训练集中约63.2%的样本，剩下约36.8%的样本可用作验证集来对泛化性能进行“包外估计”(out-of-bag estimate)。 包外样本还有其他用途。 例如当基学习器是决策树时， 可使用包外样本来辅助剪枝， 或用于估计决策树中各结点的后验概率以辅助对零训练样本结点的处理； 当基学习器是神经网络时， 可使用包外样本来辅助早期停止以减小过拟合风险。</p>
+<p>Bagging主要关注降低方差，因此它在不剪枝决策树、神经网络等易受样本扰动的学习器上效用更为明显。</p>
+<h2 id="Random-Forest"><a href="#Random-Forest" class="headerlink" title="Random Forest"></a>Random Forest</h2><p><strong>Random Forest</strong>是<strong>Bagging</strong>的一个<strong>扩展变体</strong>。 RF在以决策树为基学习器构建Bagging集成的基础上，<strong>进一步</strong>在决策树的训练过程中引入了<strong>随机属性</strong>选择。 具体来说， 传统决策树在选择划分属性时是在当前结点的属性集合中选择一个最优属性； 而在RF中，对基决策树的每个结点， 先从该结点的属性集合中随机选择一个包含k个属性的子集，再从这个子集中选择一个最优属性用于划分。 这里的参数k控制了随机性的引入程度： 若k = 0, 则基决策树的构建与传统决策树相同；若k = 1，则随机选择一个树型用于划分； 一般情况下， 推荐$k = log_{2}d$. </p>
+<p><img src="rf1.png" alt></p>
+<p>随机森林简单，容易实现，计算开销小，令人惊奇的是，在很多现实任务中展现出强大的性能，被誉为“代表集成学习技术水平的方法”。 </p>
+<p>相比Bagging中基学习器的“多样性”仅通过<strong>样本扰动</strong>(初始训练集采样)而来不同， 随机森林中的基学习器的多样性还来自属性扰动，这就使得最终集成的泛化性能可通过个体学习器之间差异度的增加而进一步提升。 此外，随机森林的收敛性与Bagging相似。 随机森林的起始性能往往相对较差。 这很容易理解，因为通过引入<strong>属性扰动</strong>， 随机森林中个体学习器的性能往往有所降低。 然而，随着个体学习器数目的增加， 随机森林通常会收敛到更低的泛化误差。 值得一提的是，随机森林的训练效率常常优于Bagging. 因为在个体决策树的构建过程中，Bagging使用的是“确定型”决策树，即在选择划分属性时要对结点的所有属性进行考察，而随机森林使用“随机型”决策树只需考察一个属性子集。</p>
+<p><img src="bagrf.png" alt></p>
+<h3 id="几个优点"><a href="#几个优点" class="headerlink" title="几个优点"></a>几个优点</h3><ul>
+<li><p>准确率高</p>
+</li>
+<li><p>有效运行在大数据集上</p>
+</li>
+<li><p>可以处理高维特征样本，不需要降维</p>
+</li>
+<li><p>大数据集高维特征也相对稳定</p>
+</li>
+<li><p>可评估各特征在分类问题上的重要性</p>
+</li>
+<li><p>生成过程中可以获取到内部生成误差的一种无偏估计</p>
+</li>
+<li><p>可以处理缺失值</p>
+</li>
+<li><p>大多情况下不容易过拟合(双random-sampling)</p>
+</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>在数据噪音比较大的情况下会过拟合，过拟合的缺点对于随机森林来说还是较为致命的。</li>
+</ul>
+<h3 id="森林中每棵树的生成-并行"><a href="#森林中每棵树的生成-并行" class="headerlink" title="森林中每棵树的生成(并行)"></a>森林中每棵树的生成(并行)</h3><ul>
+<li><p>对于每棵树而言，随机有放回地从训练集中抽取$N$个训练样本(Bootstraping)作为该树的训练集。 </p>
+</li>
+<li><p>如果每个样本的特征维度为$M$, 指定一个常数<strong>m &lt;&lt; M</strong>, 随机从$M$个特征中选取$m$个特征。 每次基于这m个特征生成单棵树。</p>
+</li>
+<li><p>每颗树尽最大程度生长，<strong>没有剪枝</strong></p>
+</li>
+</ul>
+<h3 id="随机森林的错误率相关因素"><a href="#随机森林的错误率相关因素" class="headerlink" title="随机森林的错误率相关因素"></a>随机森林的错误率相关因素</h3><ul>
+<li><p>任意两颗树的相关性： 相关性越大， 错误率越大</p>
+</li>
+<li><p>每棵树的分类能力： 每颗树的分类能力越强，整个森林的错误率越低</p>
+</li>
+</ul>
+<p>减小$m$, 树的相关性和分类能力会相应降低；增大$m$, 两者也会随之增大。 所以关键问题是如何选择最优的m。 </p>
+<h3 id="袋外错误率-obb-error"><a href="#袋外错误率-obb-error" class="headerlink" title="袋外错误率(obb error)"></a>袋外错误率(obb error)</h3><p>上面我们提到，构建随机森林的关键问题就是如何选择最优的m，要解决这个问题主要依据计算袋外错误率oob error（out-of-bag error）。</p>
+<p>随机森林有一个重要的优点就是，没有必要对它进行交叉验证或者用一个独立的测试集来获得误差的一个无偏估计。它可以在内部进行评估，也就是说在生成的过程中就可以对误差建立一个无偏估计。</p>
+<p>我们知道，在构建每棵树时，我们对训练集使用了不同的bootstrap sample（随机且有放回地抽取）。所以对于每棵树而言（假设对于第k棵树），大约有1/3的训练实例没有参与第k棵树的生成，它们称为第k棵树的oob样本。</p>
+<p>而这样的采样特点就允许我们进行oob估计，它的计算方式如下：</p>
+<ol>
+<li><p>对每个样本，计算它作为oob样本的树对它的分类情况（约1/3的树）</p>
+</li>
+<li><p>以简单多数投票作为该样本的分类结果</p>
+</li>
+<li><p>最后用误分个数占样本总数的比率作为随机森林的oob误分率</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Put each case left out in the construction of the kth tree down the kth tree to get a classification. In this way, a test set classification is obtained for each case in about one-third of the trees. At the end of the run, take j to be the class that got most of the votes every time case n was oob. The proportion of times that j is not equal to the true class of n averaged over all cases is the oob error estimate. This has proven to be unbiased in many tests.</span><br></pre></td></tr></table></figure>
+<p>oob误分率是随机森林泛化误差的一个无偏估计，它的结果近似于需要大量计算的k折交叉验证。</p>
+<h3 id="和其他算法的比较"><a href="#和其他算法的比较" class="headerlink" title="和其他算法的比较"></a>和其他算法的比较</h3><h4 id="v-s-CART"><a href="#v-s-CART" class="headerlink" title="v.s. CART"></a>v.s. CART</h4><p>两者中的决策树均是二叉树。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>CART</th>
+<th>RF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CART在树生成时，从特征集中挑选最优的特征分列</td>
+<td>RF在树生成时，会随机从特征集中挑选子特征集，再从该子集中挑选最优特征分裂</td>
+</tr>
+<tr>
+<td>CART uses different stopping rules for tree growth, which ususally leads to a much shallower tree</td>
+<td>RF中每颗子树都完全生长直到叶结点“纯”。 因此RF中的子树可能会比较大</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>此外，RF相比CART，有两点新增：</p>
+<ol>
+<li><p>新增bagging. 即RF基于Boostraping构建出T个与原数据集相同大小的训练集。然后在每个训练集上构建tree model. 最终将所有树集成森林。</p>
+</li>
+<li><p>在每颗树生成时，节点分裂仅使用部分特征。</p>
+</li>
+</ol>
+<h2 id="结合策略"><a href="#结合策略" class="headerlink" title="结合策略"></a>结合策略</h2><h3 id="简单平均"><a href="#简单平均" class="headerlink" title="简单平均"></a>简单平均</h3><h3 id="加权平均"><a href="#加权平均" class="headerlink" title="加权平均"></a>加权平均</h3><h3 id="绝对多数投票法"><a href="#绝对多数投票法" class="headerlink" title="绝对多数投票法"></a>绝对多数投票法</h3><h3 id="加权投票法"><a href="#加权投票法" class="headerlink" title="加权投票法"></a>加权投票法</h3><p>类标记</p>
+<p>类概率</p>
+<p>有趣的是， 虽然分类器估计出的类概率值一般都不太准确， 但基于类概率进行结合往往比直接基于类标记进行结合性能更好。 </p>
+<h3 id="学习法"><a href="#学习法" class="headerlink" title="学习法"></a>学习法</h3><p>当训练数据很多时，一种更为强大的结合策略是使用“学习法”，即通过另一个学习器来进行结合。  <strong>Stacking</strong>是学习法的典型代表。 把个体学习器称为初级学习器， 用于结合的学习器称为次级学习器或元学习器。</p>
+<p>Stacking 先从初始数据集训练出初级学习器， 然后“生成” 一个新数据集用于训练次级学习器。 在这个新数据集中， 初级学习器的输出被当作样例输入特征， 而初始样本的标记仍被当作样例标记。</p>
+<p><img src="stackingme.png" alt="stacking"></p>
+<p>在训练阶段，次级训练集是利用初级学习器产生的，若直接用初级学习器的训练集来产生次级训练集，则过拟合风险比较大； 因此，一般通过交叉验证或留一法这样的方式， 用训练初级学习器未使用的样本来产生次级学习器的训练样本。 以k折交叉验证为例。</p>
+<p><img src="stacking.png" alt="stacking"></p>
+<p>初始训练集D被随机划分为k个大小相似的集合，$D_1,D_2,\cdots,D_k$. 令$D_j$和$\bar{D_j}$分别表示第j折的测试集和训练集。 </p>
+<p>给定T个初级学习算法，初级学习器$h_{t}^{j}$为在$\bar{D_j}$上使用第t个学习算法而得。</p>
+<p>对每个样本，$x_i$, 令$z_{it} = h_t(x_i)$ 表示$x_i$在第t个初级学习器上的预测值。 则由$x_i$产生的次级训练集为 ${z_i} = (z_{i1},z_{i2},\cdots,z_{iT})$</p>
+<p>在整个交叉验证结束后，从这T个初级学习器产生的次级训练集是$D^{‘} = {({z_i},y_i)}_{i = 1}^{m}$</p>
+<h1 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h1><p>1 设计一种能提升KNN性能的集成学习算法</p>
+<p>2 MultiBoosting将Adaboost作为Bagging的基学习器， Iterative Bagging 将Bagging作为Adaboost的基学习器。 比较两者的优缺点。</p>
+<p>MultiBoosting由于集合了Bagging，Wagging，AdaBoost，可以有效的降低误差和方差，特别是误差。但是训练成本和预测成本都会显著增加。Iterative Bagging相比Bagging会降低误差，但是方差上升。由于Bagging本身就是一种降低方差的算法，所以Iterative Bagging相当于Bagging与单分类器的折中。</p>
+<p>3 随机森林为什么比决策树Bagging集成的训练速度更快</p>
+<p>随机森林不仅会随机样本，还会在所有样本属性中随机几种出来计算。这样每次生成分类器时都是对部分属性计算最优，速度会比Bagging计算全属性要快。</p>
+<p>4 Bagging通常为何难以提升朴素贝叶斯分类器的性能</p>
+<p>Bagging主要是降低分类器的方差，而朴素贝叶斯分类器没有方差可以减小。对全训练样本生成的朴素贝叶斯分类器是最优的分类器，不能用随机抽样来提高泛化性能。</p>
+<p>5 GradientBoosting是一种常用的Boosting算法，试分析其与AdaBoost的异同。</p>
+<p>相同在于：都要生成多个分类器以及每个分类器都有一个权值，最后将所有分类器加权累加起来。</p>
+<p>不同在于：AdaBoost通过每个分类器的分类结果，改变样本权重用于生成新的分类器和计算对应权值，但用于训练的样本本身不会改变； GradientBoosting将每个分类器对样本的预测值与真实值的差值传入下一个分类器来生成新的分类器和对应权值(这个差值就是下降方向)，而每个样本的权值不变。</p>
+<p>6 试编程实现Bagging，以决策树桩为基学习器。 iris数据集</p>
+<p>7 编程实现AdaBoost，以不剪枝决策树为基学习器。 iris数据集</p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><p><a href="https://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm#inter" target="_blank" rel="noopener">随机森林主页</a></p>
+</li>
+<li><p><a href="https://scikit-learn.org/dev/modules/ensemble.html" target="_blank" rel="noopener">Python集成学习</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/qq_39521554/article/details/80714734" target="_blank" rel="noopener">随机森林通俗教程</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/q361239731/article/details/81013057" target="_blank" rel="noopener">资源: 各类资料</a></p>
+</li>
+<li><p><a href="https://www.ibm.com/support/knowledgecenter/en/SSBFT6_1.1.0/wsd/nodes/randomtrees.html" target="_blank" rel="noopener">RF/CART比较</a></p>
+</li>
+<li><p><a href="https://isaacchanghau.github.io/post/ml_zzh_note_4/" target="_blank" rel="noopener">周志华ensemble learning相关内容</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/26890738" target="_blank" rel="noopener">Stacking算法说明</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/27493821" target="_blank" rel="noopener">Stacking技术分享</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/25836678" target="_blank" rel="noopener">模型融合效果</a></p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    ZHENG Guoying
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://stazhenggy.github.io/2019/04/02/rf/" title="Random Forest">http://stazhenggy.github.io/2019/04/02/rf/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/random-forest/" rel="tag"># random forest</a>
+          
+            <a href="/tags/ensemble-learning/" rel="tag"># ensemble learning</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/29/adaboost/" rel="next" title="Adaboost">
+                <i class="fa fa-chevron-left"></i> Adaboost
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/10/modelfit/" rel="prev" title="模型评价">
+                模型评价 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ZHENG Guoying</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#集成学习-Ensemble-Learning"><span class="nav-number">1.</span> <span class="nav-text">集成学习(Ensemble Learning)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Boosting"><span class="nav-number">2.</span> <span class="nav-text">Boosting</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bagging与随机森林"><span class="nav-number">3.</span> <span class="nav-text">Bagging与随机森林</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Bagging"><span class="nav-number">3.1.</span> <span class="nav-text">Bagging</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Random-Forest"><span class="nav-number">3.2.</span> <span class="nav-text">Random Forest</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#几个优点"><span class="nav-number">3.2.1.</span> <span class="nav-text">几个优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点"><span class="nav-number">3.2.2.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#森林中每棵树的生成-并行"><span class="nav-number">3.2.3.</span> <span class="nav-text">森林中每棵树的生成(并行)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#随机森林的错误率相关因素"><span class="nav-number">3.2.4.</span> <span class="nav-text">随机森林的错误率相关因素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#袋外错误率-obb-error"><span class="nav-number">3.2.5.</span> <span class="nav-text">袋外错误率(obb error)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#和其他算法的比较"><span class="nav-number">3.2.6.</span> <span class="nav-text">和其他算法的比较</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#v-s-CART"><span class="nav-number">3.2.6.1.</span> <span class="nav-text">v.s. CART</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结合策略"><span class="nav-number">3.3.</span> <span class="nav-text">结合策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简单平均"><span class="nav-number">3.3.1.</span> <span class="nav-text">简单平均</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加权平均"><span class="nav-number">3.3.2.</span> <span class="nav-text">加权平均</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绝对多数投票法"><span class="nav-number">3.3.3.</span> <span class="nav-text">绝对多数投票法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加权投票法"><span class="nav-number">3.3.4.</span> <span class="nav-text">加权投票法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#学习法"><span class="nav-number">3.3.5.</span> <span class="nav-text">学习法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思考"><span class="nav-number">4.</span> <span class="nav-text">思考</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZHENG Guoying</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

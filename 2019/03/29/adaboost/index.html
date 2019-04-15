@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="adaboost,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本篇包含adaboost的手动实现例子以及adaboost在R上的实现例子。">
+<meta name="keywords" content="adaboost">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Adaboost">
+<meta property="og:url" content="http://stazhenggy.github.io/2019/03/29/adaboost/index.html">
+<meta property="og:site_name" content="S-Dragon">
+<meta property="og:description" content="本篇包含adaboost的手动实现例子以及adaboost在R上的实现例子。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://stazhenggy.github.io/2019/03/29/adaboost/bmodeling.png">
+<meta property="og:updated_time" content="2019-04-15T11:01:58.142Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Adaboost">
+<meta name="twitter:description" content="本篇包含adaboost的手动实现例子以及adaboost在R上的实现例子。">
+<meta name="twitter:image" content="http://stazhenggy.github.io/2019/03/29/adaboost/bmodeling.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://stazhenggy.github.io/2019/03/29/adaboost/">
+
+
+
+
+
+  <title>Adaboost | S-Dragon</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">S-Dragon</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://stazhenggy.github.io/2019/03/29/adaboost/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ZHENG Guoying">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="S-Dragon">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Adaboost</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-29T14:17:00+08:00">
+                2019-03-29
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-15T19:01:58+08:00">
+                2019-04-15
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index">
+                    <span itemprop="name">machine learning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="bmodeling.png" alt="Adaboost"></p>
+<p>本篇包含adaboost的手动实现例子以及adaboost在<code>R</code>上的实现例子。</p>
+<a id="more"></a>
+<h1 id="Adaboost简介"><a href="#Adaboost简介" class="headerlink" title="Adaboost简介"></a>Adaboost简介</h1><h2 id="几个特点"><a href="#几个特点" class="headerlink" title="几个特点"></a>几个特点</h2><p>Adaboost是一种比较有特点的算法，可以总结如下：</p>
+<p>1 每次迭代改变的是样本的分布，而不是重复采样（<strong>reweighting</strong> not resampling)</p>
+<p>2 样本分布的改变取决于样本是否被正确分类</p>
+<ul>
+<li><p>总是分类正确的样本权值低</p>
+</li>
+<li><p>总是分类错误的样本权值高（通常是边界附近的样本）</p>
+</li>
+</ul>
+<p>3 最终的结果是弱分类器的加权组合。 权值表示该弱分类器的性能</p>
+<h2 id="几个优点-简单，有效"><a href="#几个优点-简单，有效" class="headerlink" title="几个优点: 简单，有效"></a>几个优点: 简单，有效</h2><p>1 adaboost是一种有很高精度的分类器</p>
+<p>2 可以使用各种方法构建子分类器，adaboost算法提供的是框架</p>
+<p>3 当使用简单分类器时，计算出的结果是可以理解的。而且弱分类器构造极其简单</p>
+<p>4 简单，不用做特征筛选</p>
+<p>5 不用担心overfitting</p>
+<h1 id="实例计算过程"><a href="#实例计算过程" class="headerlink" title="实例计算过程"></a>实例计算过程</h1><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+<tr>
+<td>y</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="第1个分类器-G-1"><a href="#第1个分类器-G-1" class="headerlink" title="第1个分类器$G_1$"></a>第1个分类器$G_1$</h2><h3 id="样本权重-w-1"><a href="#样本权重-w-1" class="headerlink" title="样本权重$w_1$"></a>样本权重$w_1$</h3><p>首先给$x_1,x_2,\cdots,x_{10}$ 相同的权重，为$\frac{1}{10}$</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+<tr>
+<td>y</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>$w_1$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="分类结果-G-1"><a href="#分类结果-G-1" class="headerlink" title="分类结果 $G_1$"></a>分类结果 $G_1$</h3><p>找到阈值$v = 2.5$, 使该分类器对上述数据分类误差最低。</p>
+<p><strong>分类规则</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">if</span>(x &gt; <span class="number">2.5</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">    <span class="keyword">elif</span>(x &lt; <span class="number">2.5</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p><strong>分类结果</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+<tr>
+<td>y</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>$G_1(x)$</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td><strong>-1</strong></td>
+<td><strong>-1</strong></td>
+<td><strong>-1</strong></td>
+<td>-1</td>
+</tr>
+<tr>
+<td>$w_1$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="计算误差-e-1"><a href="#计算误差-e-1" class="headerlink" title="计算误差$e_{1}$"></a>计算误差$e_{1}$</h3><p>误差实际就是错分案例的权重之和。</p>
+<p>$e_{1} = \sum_{i=1}^{10}{w_{1i}I(G_{1}(x_{i}) \neq y_{i}}) = \frac{3}{10} = 0.3$ </p>
+<h3 id="根据-e-1-计算-G-1-在最终分类器中的权重"><a href="#根据-e-1-计算-G-1-在最终分类器中的权重" class="headerlink" title="根据$e_{1}$计算$G_1$在最终分类器中的权重"></a>根据$e_{1}$计算$G_1$在最终分类器中的权重</h3><p>$\alpha_{1} = \frac{1}{2}log\frac{1-e_1}{e_1} = \frac{1}{2}log\frac{1-0.3}{0.3} = 0.4236$</p>
+<p>可见，被误分类样本的权值之和影响误差率，误差率影响基本分类器在最终分类器中所占的权重。</p>
+<h2 id="最终分类器-f-1"><a href="#最终分类器-f-1" class="headerlink" title="最终分类器$f_1$"></a>最终分类器$f_1$</h2><p>$f_1(x) = sign(\alpha_{1}G_{1}(x)) = sign(0.4236G_1(x))$</p>
+<p><strong>最终分类结果</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+<tr>
+<td>y</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>$f_1(x)$</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td><strong>-1</strong></td>
+<td><strong>-1</strong></td>
+<td><strong>-1</strong></td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>分类器$f_1(x)$ 分类结果： 样本<code>6 7 8</code>最终被分错。</p>
+<h2 id="第2个分类器-G-2"><a href="#第2个分类器-G-2" class="headerlink" title="第2个分类器$G_2$"></a>第2个分类器$G_2$</h2><h3 id="基于-G-1-分类误差调整所有样本权重-w-2"><a href="#基于-G-1-分类误差调整所有样本权重-w-2" class="headerlink" title="基于$G_1$分类误差调整所有样本权重$w_2$"></a>基于$G_1$分类误差调整所有样本权重$w_2$</h3><p>$w_{2i} = \frac{w_{1i}}{Z_1}e^{-\alpha_{1}*G_1(x_i)y_i}$</p>
+<p>其中，$Z_{1} = \sum_{i = 1}^{10}w_{1i}e^{-\alpha_{1}*G_1(x_i)y_i}$</p>
+<p>由权重公式可知，每个样本的权重在下一轮是变大还是变小取决于该样本在上一轮分类中分类正确或错误。如果正确，则$-\alpha_{1}G_1(x_i)y_i &lt; 0$,即$e^{-\alpha_{1}G_1(x_i)y_i} &lt; 1$, 权重将会减小；如果错误, 则$-\alpha_{1}G_1(x_i)y_i &gt; 0$,即$e^{-\alpha_{1}G_1(x_i)y_i} &gt; 1$ 权重会增大。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+<tr>
+<td>y</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>$G_1(x)$</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td><strong>-1</strong></td>
+<td><strong>-1</strong></td>
+<td><strong>-1</strong></td>
+<td>-1</td>
+</tr>
+<tr>
+<td>$w_1$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+</tr>
+<tr>
+<td>$w_2$</td>
+<td>0.0715</td>
+<td>0.0715</td>
+<td>0.0715</td>
+<td>0.0715</td>
+<td>0.0715</td>
+<td>0.0715</td>
+<td>0.1666</td>
+<td>0.1666</td>
+<td>0.1666</td>
+<td>0.0715</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>由此可以看出，因为样本数据”6 7 8”被$G_1(x)$分错了，所以它们的权值由之前的0.1增大到0.1666，反之，其它数据皆被分正确，所以它们的权值皆由之前的0.1减小到0.0715。</p>
+<h3 id="基于新样本权重-w-2-得到新分类器-G-2"><a href="#基于新样本权重-w-2-得到新分类器-G-2" class="headerlink" title="基于新样本权重$w_2$得到新分类器$G_2$"></a>基于新样本权重$w_2$得到新分类器$G_2$</h3><p>找到阈值$v = 8.5$, 使得该分类器对上述数据分类误差最低。</p>
+<p><strong>分类规则</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">if</span>(x &gt; <span class="number">8.5</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">    <span class="keyword">elif</span>(x &lt; <span class="number">8.5</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p><strong>分类结果</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+<tr>
+<td>y</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>$G_2(x)$</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td><strong>1</strong></td>
+<td><strong>1</strong></td>
+<td><strong>1</strong></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>$w_2$</td>
+<td>0.0715</td>
+<td>0.0715</td>
+<td>0.0715</td>
+<td>0.0715</td>
+<td>0.0715</td>
+<td>0.0715</td>
+<td>0.1666</td>
+<td>0.1666</td>
+<td>0.1666</td>
+<td>0.0715</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="计算误差-e-2"><a href="#计算误差-e-2" class="headerlink" title="计算误差$e_{2}$"></a>计算误差$e_{2}$</h3><p>$e_{2} = \sum_{i=1}^{10}{w_{2i}I(G_{2}x_{i} \neq y_{i})} = 3*0.0715 = 0.2145$ </p>
+<h3 id="根据-e-2-计算-G-2-在最终分类器中的权重"><a href="#根据-e-2-计算-G-2-在最终分类器中的权重" class="headerlink" title="根据$e_{2}$计算$G_2$在最终分类器中的权重"></a>根据$e_{2}$计算$G_2$在最终分类器中的权重</h3><p>$\alpha_{2} = \frac{1}{2}log\frac{1-e_2}{e_2} = \frac{1}{2}log\frac{1-0.2145}{0.2145} = 0.649$</p>
+<h3 id="最终分类器-f-2"><a href="#最终分类器-f-2" class="headerlink" title="最终分类器$f_2$"></a>最终分类器$f_2$</h3><p>$f_{2}(x) = sign(\alpha_{1}G_{1}(x) + \alpha_{2}G_{2}(x)) = sign(0.4236G_1(x) + 0.649G_2(x))$</p>
+<p><strong>最终分类结果</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+<tr>
+<td>y</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>$f_2(x)$</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td><strong>1</strong></td>
+<td><strong>1</strong></td>
+<td><strong>1</strong></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>$G_1(x)$</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td><strong>-1</strong></td>
+<td><strong>-1</strong></td>
+<td><strong>-1</strong></td>
+<td>-1</td>
+</tr>
+<tr>
+<td>$G_2(x)$</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td><strong>1</strong></td>
+<td><strong>1</strong></td>
+<td><strong>1</strong></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>分类器$f_2(x)$分类结果： 样本<code>3 4 5</code> 最终被分错。</p>
+<h2 id="第3个分类器-G-3"><a href="#第3个分类器-G-3" class="headerlink" title="第3个分类器$G_3$"></a>第3个分类器$G_3$</h2><h3 id="基于-G-2-分类误差调整所有样本权重-w-3"><a href="#基于-G-2-分类误差调整所有样本权重-w-3" class="headerlink" title="基于$G_2$分类误差调整所有样本权重$w_3$"></a>基于$G_2$分类误差调整所有样本权重$w_3$</h3><p>$w_{3i} = \frac{w_{2i}}{Z_2}e^{-\alpha_{2}*G_2(x_i)y_i}$</p>
+<p>其中，$Z_{2} = \sum_{i = 1}^{10}w_{2i}e^{-\alpha_{2}*G_2(x_i)y_i}$</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+<tr>
+<td>y</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>$G_2(x)$</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td><strong>1</strong></td>
+<td><strong>1</strong></td>
+<td><strong>1</strong></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>$w_1$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+<td>$\frac{1}{10}$</td>
+</tr>
+<tr>
+<td>$w_2$</td>
+<td>0.0715</td>
+<td>0.0715</td>
+<td>0.0715</td>
+<td>0.0715</td>
+<td>0.0715</td>
+<td>0.0715</td>
+<td>0.1666</td>
+<td>0.1666</td>
+<td>0.1666</td>
+<td>0.0715</td>
+</tr>
+<tr>
+<td>$w_3$</td>
+<td>0.0455</td>
+<td>0.0455</td>
+<td>0.0455</td>
+<td>0.1666</td>
+<td>0.1666</td>
+<td>0.1666</td>
+<td>0.1060</td>
+<td>0.1060</td>
+<td>0.1060</td>
+<td>0.0455</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>同理，由于上一轮结束后，样本数据<code>3 4 5</code>被$G_2(x)$分错了，所以它们的权值由之前的0.0715增大到.1666，反之，其它数据皆被分正确，所以它们的权值皆由之前的0.0715减小到0.0455。</p>
+<h3 id="基于新样本权重-w-3-得到新分类器-G-3"><a href="#基于新样本权重-w-3-得到新分类器-G-3" class="headerlink" title="基于新样本权重$w_3$得到新分类器$G_3$"></a>基于新样本权重$w_3$得到新分类器$G_3$</h3><p>找到阈值$v = 5.5$, 使得该分类器对上述数据分类误差最低。</p>
+<p><strong>分类规则</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">if</span>(x &gt; <span class="number">5.5</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">elif</span>(x &lt; <span class="number">5.5</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span></span><br></pre></td></tr></table></figure>
+<p><strong>分类结果</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+<tr>
+<td>y</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>$G_3(x)$</td>
+<td><strong>-1</strong></td>
+<td><strong>-1</strong></td>
+<td><strong>-1</strong></td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td><strong>1</strong></td>
+</tr>
+<tr>
+<td>$w_3$</td>
+<td>0.0455</td>
+<td>0.0455</td>
+<td>0.0455</td>
+<td>0.1666</td>
+<td>0.1666</td>
+<td>0.1666</td>
+<td>0.1060</td>
+<td>0.1060</td>
+<td>0.1060</td>
+<td>0.0455</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="计算误差-e-3"><a href="#计算误差-e-3" class="headerlink" title="计算误差$e_{3}$"></a>计算误差$e_{3}$</h3><p>$e_{3} = \sum_{i=1}^{10}{w_{2i}I(G_{2}x_{i} \neq y_{i})} = 4*0.0455 = 0.182$ </p>
+<h3 id="根据-e-3-计算-G-3-在最终分类器-f-3-中的权重"><a href="#根据-e-3-计算-G-3-在最终分类器-f-3-中的权重" class="headerlink" title="根据$e_{3}$计算$G_3$在最终分类器$f_3$中的权重"></a>根据$e_{3}$计算$G_3$在最终分类器$f_3$中的权重</h3><p>$\alpha_{3} = \frac{1}{2}log\frac{1-e_3}{e_3} = \frac{1}{2}log\frac{1-0.182}{0.182} = 0.7514$</p>
+<h3 id="最终分类器-f-3"><a href="#最终分类器-f-3" class="headerlink" title="最终分类器$f_3$"></a>最终分类器$f_3$</h3><p>$f_{3}(x) = sign(\alpha_{1}G_{1}(x) + \alpha_{2}G_{2}(x) + \alpha_{3}G_{3}(x)) = sign(0.4236G_1(x) + 0.649G_2(x) + 0.7514G_3(x))$</p>
+<p><strong>最终分类结果</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+<tr>
+<td>y</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>$f_3(x)$</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>$G_1(x)$</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td><strong>-1</strong></td>
+<td><strong>-1</strong></td>
+<td><strong>-1</strong></td>
+<td>-1</td>
+</tr>
+<tr>
+<td>$G_2(x)$</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td><strong>1</strong></td>
+<td><strong>1</strong></td>
+<td><strong>1</strong></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>$G_3(x)$</td>
+<td><strong>-1</strong></td>
+<td><strong>-1</strong></td>
+<td><strong>-1</strong></td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td><strong>1</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>分类器$f_3(x)$ 分类结果全部正确，没有错分情况。</p>
+<p>至此，整个训练过程结束。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>现在来总结一下整个训练过程, 包含各样本权重，分类器误差率的变化：</p>
+<p>1 训练之前，各个样本的权重被初始化为$w_1 = (0.1, 0.1,0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1)$</p>
+<p>2 第一轮分类后，样本<code>6 7 8</code>被分错，对应误差率为$e_1 = 0.3$，此第一个基本分类器在最终分类器中所占的权重为$\alpha_{1} = 0.4236$。 同时，用于下一轮迭代的样本新权重为$w2 = (0.0715, 0.0715, 0.0715, 0.0715, 0.0715,  0.0715, 0.1666, 0.1666, 0.1666, 0.0715)$</p>
+<p>3 第二轮迭代后，样本<code>3 4 5</code>被分错，对应误差率为$e_2 = 0.2145$，此第二个基本分类器在最终分类器中所占的权重为$\alpha_{2} = 0.649$。 同时，用于下一轮迭代的样本新权值为$w_3 = (0.0455, 0.0455, 0.0455, 0.1666, 0.1666,  0.01666, 0.1060, 0.1060, 0.1060, 0.0455)$</p>
+<p>4 第三轮迭代中，样本<code>0 1 2 9</code>被分错，对应误差率为$e_3 = 0.1820$，此第三个基本分类器在最终分类器中所占的权重为$\alpha_{3} = 0.7514$。</p>
+<p>从上述过程中可以发现，如果某些个样本被分错，它们在下一轮迭代中的权值将被增大，同时，其它被分对的样本在下一轮迭代中的权值将被减小。就这样，分错样本权值增大，分对样本权值变小。 最终分类器:</p>
+<p>$f(x) = sign(f_3(x)) = sign(\alpha_1G_1(x) + \alpha_2G_2(x) + \alpha_3G_3(x)) = 0.4236G_1(x) + 0.6490G_2(x)+0.7514G_3(x)$</p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://blog.csdn.net/v_july_v/article/details/40718799" target="_blank" rel="noopener">Adaboost算法原理与推导</a></li>
+<li><a href="https://blog.csdn.net/guyuealian/article/details/70995333" target="_blank" rel="noopener">Adaboost简明解释</a></li>
+<li><a href="https://www.zhihu.com/question/54332085" target="_blank" rel="noopener">通俗理解Gradient Boost和Adaboost</a></li>
+<li><a href="https://quantdare.com/what-is-the-difference-between-bagging-and-boosting/" target="_blank" rel="noopener">Bagging and Boosting</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    ZHENG Guoying
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://stazhenggy.github.io/2019/03/29/adaboost/" title="Adaboost">http://stazhenggy.github.io/2019/03/29/adaboost/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/adaboost/" rel="tag"># adaboost</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/29/c50/" rel="next" title="Tree Models">
+                <i class="fa fa-chevron-left"></i> Tree Models
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/02/rf/" rel="prev" title="Random Forest">
+                Random Forest <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ZHENG Guoying</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Adaboost简介"><span class="nav-number">1.</span> <span class="nav-text">Adaboost简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#几个特点"><span class="nav-number">1.1.</span> <span class="nav-text">几个特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几个优点-简单，有效"><span class="nav-number">1.2.</span> <span class="nav-text">几个优点: 简单，有效</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实例计算过程"><span class="nav-number">2.</span> <span class="nav-text">实例计算过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第1个分类器-G-1"><span class="nav-number">2.1.</span> <span class="nav-text">第1个分类器$G_1$</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#样本权重-w-1"><span class="nav-number">2.1.1.</span> <span class="nav-text">样本权重$w_1$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类结果-G-1"><span class="nav-number">2.1.2.</span> <span class="nav-text">分类结果 $G_1$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算误差-e-1"><span class="nav-number">2.1.3.</span> <span class="nav-text">计算误差$e_{1}$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根据-e-1-计算-G-1-在最终分类器中的权重"><span class="nav-number">2.1.4.</span> <span class="nav-text">根据$e_{1}$计算$G_1$在最终分类器中的权重</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最终分类器-f-1"><span class="nav-number">2.2.</span> <span class="nav-text">最终分类器$f_1$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第2个分类器-G-2"><span class="nav-number">2.3.</span> <span class="nav-text">第2个分类器$G_2$</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于-G-1-分类误差调整所有样本权重-w-2"><span class="nav-number">2.3.1.</span> <span class="nav-text">基于$G_1$分类误差调整所有样本权重$w_2$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于新样本权重-w-2-得到新分类器-G-2"><span class="nav-number">2.3.2.</span> <span class="nav-text">基于新样本权重$w_2$得到新分类器$G_2$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算误差-e-2"><span class="nav-number">2.3.3.</span> <span class="nav-text">计算误差$e_{2}$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根据-e-2-计算-G-2-在最终分类器中的权重"><span class="nav-number">2.3.4.</span> <span class="nav-text">根据$e_{2}$计算$G_2$在最终分类器中的权重</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最终分类器-f-2"><span class="nav-number">2.3.5.</span> <span class="nav-text">最终分类器$f_2$</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第3个分类器-G-3"><span class="nav-number">2.4.</span> <span class="nav-text">第3个分类器$G_3$</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于-G-2-分类误差调整所有样本权重-w-3"><span class="nav-number">2.4.1.</span> <span class="nav-text">基于$G_2$分类误差调整所有样本权重$w_3$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于新样本权重-w-3-得到新分类器-G-3"><span class="nav-number">2.4.2.</span> <span class="nav-text">基于新样本权重$w_3$得到新分类器$G_3$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算误差-e-3"><span class="nav-number">2.4.3.</span> <span class="nav-text">计算误差$e_{3}$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根据-e-3-计算-G-3-在最终分类器-f-3-中的权重"><span class="nav-number">2.4.4.</span> <span class="nav-text">根据$e_{3}$计算$G_3$在最终分类器$f_3$中的权重</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最终分类器-f-3"><span class="nav-number">2.4.5.</span> <span class="nav-text">最终分类器$f_3$</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">2.5.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZHENG Guoying</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

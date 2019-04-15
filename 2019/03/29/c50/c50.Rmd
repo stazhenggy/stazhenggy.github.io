@@ -1,0 +1,192 @@
+---
+title: "Tree Models"
+output: 
+  md_document: 
+    variant: markdown_github
+  
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+
+### 决策树生成计算过程
+
+#### 数据集
+
+|ID|年龄|有工作|有自己的房子|信贷情况|类别|
+|--|------|----|------------|--------|----|
+|1 | 青年 | 否 | 否 |	一般 | 否 |
+|2 | 青年 | 否 | 否 |	好	 | 否 |
+|3 | 青年 | 是 | 否 |	好	 | 是 |
+|4 | 青年 | 是 | 是 |	一般 | 是 |
+|5 | 青年 | 否 | 否 |	一般 | 否 |
+|6 | 中年 | 否 | 否 |	一般 | 否 |
+|7 | 中年 | 否 | 否 |	好	 | 否 |
+|8 | 中年 | 是 | 是 |	好	 | 是 |
+|9 | 中年 | 否 | 是 |	非常好 | 是 |
+|10| 中年 |	否 | 是 | 非常好 | 是 |
+|11| 老年 |	否 | 是 | 非常好 | 是 |
+|12| 老年 |	否 | 是 | 好	 | 是 |
+|13| 老年 |	是 | 否 | 好	 | 是 |
+|14| 老年 |	是 | 否	| 非常好 | 是 |
+|15| 老年 |	否 | 否 | 一般	 | 否 |
+
+#### ID3: InfoGain g(D|A)
+
+ID3算法的核心是在决策树各个结点上应用信息增益准则选择特征，递归地构建决策树。具体方法是：从根结点开始，对结点计算所有特征的信息增益，选择信息增益最大的特征作为结点特征，由该特征的不同取值建立子结点；再对子结点递归地调用以上方法，构建决策树；直到所有特征的信息增益均很小或没有特征可以选择为止。最后得到一个决策树。
+
+ID3算法只有树的生成，所以该算法生成的树容易产生过拟合。后续包含决策树的剪枝。决策树的剪枝往往通过最小化决策树整体的损失函数实现。
+
+分别以$A_1,A_2,A_3,A_4$表示年龄、有工作、有自己的房子和信贷情况4个特征，则
+
+(1)$$H(D) = -\frac{9}{15}\times log_2{\frac{9}{15}} -\frac{6}{15}\times log_2{\frac{6}{15}} = 0.971$$
+
+(2)$$H(D,A_1) = \frac{5}{15}\times (-\frac{3}{5}\times log_2{\frac{3}{5}} -\frac{2}{5}\times log_2{\frac{2}{5}}) + \\ \frac{5}{15}\times (-\frac{3}{5}\times log_2{\frac{3}{5}} -\frac{2}{5}\times log_2{\frac{2}{5}}) + \\ \frac{5}{15}\times (-\frac{1}{5}\times log_2{\frac{1}{5}} -\frac{4}{5}\times log_2{\frac{4}{5}}) = 0.888$$
+
+(3)$$H(D,A_2) = \frac{5}{15}\times 0 + \frac{10}{15}\times (-\frac{6}{10}\times log_2{\frac{6}{10}} - \frac{4}{10}\times log_2{\frac{4}{10}}) = 0.647$$
+
+(4)$$H(D,A_3) = \frac{6}{15}\times 0 + \frac{9}{15}\times (-\frac{3}{9}\times log_2{\frac{3}{9}} - \frac{6}{9}\times log_2{\frac{6}{9}}) = 0.551$$
+
+(5)$$H(D,A_4) = \frac{5}{15}\times (-\frac{1}{5}log_2{\frac{1}{5}} -\frac{4}{5}log_2{\frac{4}{5}}) + \\ \frac{6}{15}\times (-\frac{4}{6}log_2{\frac{4}{6}} - \frac{2}{6}log_2{\frac{2}{6}}) + \frac{4}{15}\times 0 = 0.608$$
+
+由于$H(D,A_3) = 0.551$最小，因此，首先选择$A_3$作为最优特征，生成树的第一个分枝。
+
+#### ID3: try Variance like ANOVA
+
+(1)$$V(D) = 15\times \frac{9}{15}\times \frac{6}{19} = 3.6$$
+
+$V(D,A)$为基于特征A划分后的组内方差之和；$g_{V}(D,A)$为组间方差。选择组间方差最大的特征
+
+(2)$$g_{V}(D,A_1) = 5\times \frac{3}{5}\times \frac{2}{5} + 5\times \frac{3}{5}\times \frac{2}{5} + 5\times \frac{1}{5}\times \frac{4}{5} = 3.2$$
+
+(3)$$g_{V}(D,A_2) = 5\times 0 + 10\times \frac{4}{10}\times \frac{6}{10} = 2.4$$
+
+(4)$$g_{V}(D,A_3) = 6\times 0 + 9\times \frac{3}{9}\times \frac{6}{9} = 2$$
+
+(5)$$g_{V}(D,A_4) = 5\times \frac{1}{5}\times \frac{4}{5} + 6\times \frac{2}{6}\times \frac{4}{6} + 4\times 0 = 2.1$$
+
+$g_{V}(D,A_3) = 2$最小，所以选择$A_3$为最优特征进行分割。
+
+#### C4.5: Info Gain Ratio
+
+计算信息增益比$$g_{R}(D,A) = \frac{g(D,A)}{H(D)}$$
+
+#### CART: Gini 
+
+CART假设决策树是二叉树，内部结点特征的取值为“是”和“否”，左分枝是取值为“是”的分枝，右分枝是取值为“否”的分枝。这样的决策树相当于递归地二分每个特征，将输入空间即特征空间划分为有限个单元，并且在这些单元上确定预测的概率分布，也就是在输入给定的条件下输出的条件概率分布。分类树用基尼指数选择最优特征，同时决定该特征的最优二值切分点。
+
+已1，2，3表示年龄为青年，中年，老年；以1，2表示是有工作和有自己的房子的值为是和否；以1，2，3表示信贷情况的值为非常好、好和一般。
+
+(1)$$Gini(D, A_{1} = 1) = \frac{5}{15}\times (1 - (\frac{2}{5})^2 - (\frac{3}{5})^2) + \frac{10}{15}\times (1 - (\frac{3}{10})^2 - (\frac{7}{10})^2) = 0.44$$
+
+(2)$$Gini(D, A_{2} = 1) = Gini(D,A_{2} = 2) = 0.32$$
+
+(3)$$Gini(D, A_{3} = 1) = Gini(D,A_{3} = 2) = 0.27$$
+
+(4)$$Gini(D, A_{4} = 1) = 0.36$$
+
+(5)$$Gini(D, A_{4} = 2) = 0.47$$
+
+(6)$$Gini(D, A_{4} = 3) = 0.32$$
+
+由于$Gini(D, A_3 = 1) = 0.27$最小，所以选择特征$A_3$为最优特征，$A_3 = 1$为其最优分割点。于是，根结点生成两个子结点，一个是叶结点。对另一个结点继续使用以上方法在$A_1,A_2,A_4$中选择最优的特征及其最优切分点。
+
+### `rpart`
+
+`R`中决策树的包: `rpart`, `party`, `RWeka`, `ipred`, `randomForest`, `gbm`, `C50`.
+
+`rpart`:CART/ID3. The default criterion, which is **maximized** in each split is the `Gini`. 
+
+#### `rpart`常用参数
+
+|参数|说明|
+|------------|--------------------------------------------------|
+|formula| $y \sim x_1 + x_2 + \cdots + x_n$ |
+|data| 数据集|
+|na.action| 去掉 $y$ 缺失，保留自变量缺失|
+|method|`class`:分类变量，`anova`:回归树|
+|parms|只适用分类树 `parms = list(split,prior,loss)`|
+|controls|控制决策树形状大小 `minsplit`,`maxdepth`,`cp`|
+
+#### `rpart.plot`常用参数
+
+|参数|说明|
+|--|-------------------------------|
+|tree|tree模型|
+|type|节点形状1,2,3,4|
+|branch|若=1，则为垂直决策树|
+|cex|符号大小|
+
++ [`rpart` 参数详解](https://www.rdocumentation.org/packages/rpart/versions/4.1-13/topics/rpart)
+
++ [`controls` 参数详解](https://www.rdocumentation.org/packages/rpart/versions/4.1-13/topics/rpart.control)
+
+
+```{r rpart,cache.lazy=TRUE}
+library(rpart)
+library(rpart.plot)
+library(gmodels)
+library(caret)
+library(magrittr)
+data("iris")
+
+# seperate the dataset into two parts: the training and test datasets
+picker <- sample(150, 110)
+iris_train = iris[picker,]
+iris_test = iris[-picker,]
+
+# fit the tree model: classification tree
+# method: switched according to the type of the response variable. 
+# class for categorial, anova for numerical, poisson for count data and exp for survival data.
+treecart <- rpart(Species ~., data = iris_train, method = "class")
+
+# plot the tree
+rpart.plot(treecart)
+
+# cross-check its validity by pitching it against our test data
+predictions <- predict(treecart, iris_test, type = "class")
+
+# confusion matrix: overfitting
+# CrossTable(predictions,iris_test$Species, prop.r = FALSE,prop.c = FALSE, chisq = FALSE, prop.chisq = FALSE, prop.t = TRUE)
+confusionMatrix(predictions,iris_test$Species)
+
+# pruning 
+treecart_ms5 <- rpart(Species ~., data = iris_train, method = "class", control = rpart.control(minsplit = 5))
+treecart_ms10 <- rpart(Species ~., data = iris_train, method = "class", control = rpart.control(minsplit = 10))
+
+# rpart.plot
+par(mfrow = c(1,2))
+rpart.plot(treecart, main = "tree_with_parms", branch = 1, cex = 0.8)
+rpart.plot(treecart_ms5, main = "minsplit=5")
+```
+
+### `C50`
+
+```{r c50}
+library(C50)
+# C5.0是一个boosting算法 trials 控制循环次数
+# build model
+treec50 <- C5.0(Species ~ ., data = iris_train)
+summary(treec50)
+plot(treec50)
+# make predictions
+table(predict(treec50, newdata = iris_test), iris_test$Species)
+```
+
+### Reference
++ [lassification with Decision Trees ](https://en.proft.me/2016/11/9/classification-using-decision-trees-r/)
+
++　[R实现决策树](https://blog.csdn.net/weixin_43216017/article/details/87739323)
+
++ [CRAN: C5.0](https://cran.r-project.org/web/packages/C50/vignettes/C5.0.html)
+
++ [user_c5.0](https://static1.squarespace.com/static/51156277e4b0b8b2ffe11c00/t/51e7e42ce4b0fd2e32684bca/1374151724529/user_C5.0.pdf)
+
++ [决策树对不同分类分布的拟合情况](http://www.lac.inpe.br/~rafael.santos/Docs/R/CAP359/cap359r-ClassDecTree-C50-Artificial.html)
+
+
+
+

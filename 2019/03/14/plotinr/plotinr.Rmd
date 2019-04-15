@@ -1,0 +1,86 @@
+---
+title: "Plot in R"
+output: 
+  md_document:
+    variant: markdown_github
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE,
+                      message = FALSE,
+                      cache = TRUE)
+options(digits = 3)
+```
+
+
+### Histogram(直方图):
+#### `base:hist()`
+```{r his}
+library(DMwR)
+library(car)
+library(magrittr)
+df <- algae
+par(mfrow = c(1,3))
+hist(df$mxPH,prob = T)
+hist(df$mxPH,prob = T,xlab = '',main = 'Histogram of mxPH',ylim = 0:1)
+density(df$mxPH, na.rm = TRUE) %>% lines()
+jitter(df$mxPH) %>% rug()
+qqPlot(df$mxPH, main = 'Q-Q plot of mxPH',ylab = 'mxPH')
+par(mfrow = c(1,1))
+```
+
+```{r hiscondition,fig.height = 15}
+library(lattice)
+library(gridExtra)
+hisc1 <- histogram(~ mxPH | season, data = df)
+# multiple factors
+hisc2 <- histogram(~ mxPH | season * speed, data = df)
+# stripplot ways
+stri1 <- stripplot(size ~ mxPH | speed, data = df, jitter = TRUE)
+grid.arrange(hisc1,hisc2,stri1,nrow = 3)
+```
+
+### 箱线图(boxplot)
+#### `lattice: bwplot()`
+```{r boxcondition,fig.height = 5}
+library(ggplot2)
+library(gridExtra)
+# condition boxplot with lattice
+bx1 <- bwplot(size ~ a1, data = df, ylab = "River Size", xlab = "Algae a1")
+bx2 <- ggplot(aes(x = size, y = a1),data = df) + geom_boxplot() + coord_flip()
+grid.arrange(bx1, bx2, ncol = 2)
+```
+
+#### `Hmisc:bwplot()`
+```{r boxquantile,fig.height = 13}
+library(Hmisc)
+# point: mean
+# vertical lines: quantiles
+# 下图结论：小型河流更高频率海藻且分布更加分散
+bxq1 <- bwplot(size ~ a1, data = df, 
+       panel = panel.bpplot,
+       probs = seq(0.01,0.49, by = 0.01),
+       datadensity = TRUE, ylab = "size", xlab = "a1")
+# 多个因子，因子为分类变量
+bxq2 <- bwplot(season ~ a1 | size, data = df,
+       panel = panel.bpplot,
+       probs = seq(0.01,0.49, by = 0.01),
+       datadensity = TRUE)
+bxq3 <- bwplot(season ~ a1 | size, data = df)
+# 多个因子，因子中包含连续变量  将其离散化后即可
+## 连续变量离散化
+mno2i <- equal.count(na.omit(df$mnO2), number = 4, overlap = 1/5)
+## 类似散点图，从左到右从下到上
+bxq4 <- stripplot(season ~ a1|mno2i, data = df[!is.na(df$mnO2),])
+grid.arrange(bxq1,bxq2,bxq4,bxq3,nrow = 2,ncol = 2)
+```
+
+
+## 可视化参考书籍
++ *Statistics for Technology*, Chatfield(1983)。简单很好的统计书籍。例子简单能说明问题
++ *Introductry Statistics with R*, Dalgaard(2002)
++ *Visualizing Data*, Cleveland(1993), 物有所值
++ *The Element of Graphing Data*, Cleveland(1995), 更正式
++ *Data Visualization*, Chen(2008)
++ *R Graphics*, Murrell(2006), R 软件绘图

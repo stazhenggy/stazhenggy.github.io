@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="tree,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的R实现。">
+<meta name="keywords" content="tree">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tree Models">
+<meta property="og:url" content="http://stazhenggy.github.io/2019/03/29/c50/index.html">
+<meta property="og:site_name" content="S-Dragon">
+<meta property="og:description" content="本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的R实现。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://stazhenggy.github.io/2019/03/29/c50/c50_files/figure-markdown_github/rpart-1.png">
+<meta property="og:image" content="http://stazhenggy.github.io/2019/03/29/c50/c50_files/figure-markdown_github/rpart-2.png">
+<meta property="og:image" content="http://stazhenggy.github.io/2019/03/29/c50/c50_files/figure-markdown_github/c50-1.png">
+<meta property="og:updated_time" content="2019-04-15T09:07:01.603Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tree Models">
+<meta name="twitter:description" content="本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的R实现。">
+<meta name="twitter:image" content="http://stazhenggy.github.io/2019/03/29/c50/c50_files/figure-markdown_github/rpart-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://stazhenggy.github.io/2019/03/29/c50/">
+
+
+
+
+
+  <title>Tree Models | S-Dragon</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">S-Dragon</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://stazhenggy.github.io/2019/03/29/c50/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ZHENG Guoying">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="S-Dragon">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Tree Models</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-29T14:17:00+08:00">
+                2019-03-29
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-15T17:07:01+08:00">
+                2019-04-15
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/machine-learning/" itemprop="url" rel="index">
+                    <span itemprop="name">machine learning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的<code>R</code>实现。</p>
+<a id="more"></a>
+<h3 id="决策树生成计算过程"><a href="#决策树生成计算过程" class="headerlink" title="决策树生成计算过程"></a>决策树生成计算过程</h3><h4 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>年龄</th>
+<th>有工作</th>
+<th>有自己的房子</th>
+<th>信贷情况</th>
+<th>类别</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>青年</td>
+<td>否</td>
+<td>否</td>
+<td>一般</td>
+<td>否</td>
+</tr>
+<tr>
+<td>2</td>
+<td>青年</td>
+<td>否</td>
+<td>否</td>
+<td>好</td>
+<td>否</td>
+</tr>
+<tr>
+<td>3</td>
+<td>青年</td>
+<td>是</td>
+<td>否</td>
+<td>好</td>
+<td>是</td>
+</tr>
+<tr>
+<td>4</td>
+<td>青年</td>
+<td>是</td>
+<td>是</td>
+<td>一般</td>
+<td>是</td>
+</tr>
+<tr>
+<td>5</td>
+<td>青年</td>
+<td>否</td>
+<td>否</td>
+<td>一般</td>
+<td>否</td>
+</tr>
+<tr>
+<td>6</td>
+<td>中年</td>
+<td>否</td>
+<td>否</td>
+<td>一般</td>
+<td>否</td>
+</tr>
+<tr>
+<td>7</td>
+<td>中年</td>
+<td>否</td>
+<td>否</td>
+<td>好</td>
+<td>否</td>
+</tr>
+<tr>
+<td>8</td>
+<td>中年</td>
+<td>是</td>
+<td>是</td>
+<td>好</td>
+<td>是</td>
+</tr>
+<tr>
+<td>9</td>
+<td>中年</td>
+<td>否</td>
+<td>是</td>
+<td>非常好</td>
+<td>是</td>
+</tr>
+<tr>
+<td>10</td>
+<td>中年</td>
+<td>否</td>
+<td>是</td>
+<td>非常好</td>
+<td>是</td>
+</tr>
+<tr>
+<td>11</td>
+<td>老年</td>
+<td>否</td>
+<td>是</td>
+<td>非常好</td>
+<td>是</td>
+</tr>
+<tr>
+<td>12</td>
+<td>老年</td>
+<td>否</td>
+<td>是</td>
+<td>好</td>
+<td>是</td>
+</tr>
+<tr>
+<td>13</td>
+<td>老年</td>
+<td>是</td>
+<td>否</td>
+<td>好</td>
+<td>是</td>
+</tr>
+<tr>
+<td>14</td>
+<td>老年</td>
+<td>是</td>
+<td>否</td>
+<td>非常好</td>
+<td>是</td>
+</tr>
+<tr>
+<td>15</td>
+<td>老年</td>
+<td>否</td>
+<td>否</td>
+<td>一般</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="ID3-InfoGain-g-D-A"><a href="#ID3-InfoGain-g-D-A" class="headerlink" title="ID3: InfoGain g(D|A)"></a>ID3: InfoGain g(D|A)</h4><p>ID3算法的核心是在决策树各个结点上应用信息增益准则选择特征，递归地构建决策树。具体方法是：从根结点开始，对结点计算所有特征的信息增益，选择信息增益最大的特征作为结点特征，由该特征的不同取值建立子结点；再对子结点递归地调用以上方法，构建决策树；直到所有特征的信息增益均很小或没有特征可以选择为止。最后得到一个决策树。</p>
+<p>ID3算法只有树的生成，所以该算法生成的树容易产生过拟合。后续包含决策树的剪枝。决策树的剪枝往往通过最小化决策树整体的损失函数实现。</p>
+<p>分别以<em>A</em><sub>1</sub>, <em>A</em><sub>2</sub>, <em>A</em><sub>3</sub>, <em>A</em><sub>4</sub>表示年龄、有工作、有自己的房子和信贷情况4个特征，则</p>
+<p>(1)</p>
+<script type="math/tex; mode=display">H(D) = -\frac{9}{15}\times log\_2{\frac{9}{15}} -\frac{6}{15}\times log\_2{\frac{6}{15}} = 0.971</script><p>(2)</p>
+<script type="math/tex; mode=display">H(D,A\_1) = \frac{5}{15}\times (-\frac{3}{5}\times log\_2{\frac{3}{5}} -\frac{2}{5}\times log\_2{\frac{2}{5}}) + \ \frac{5}{15}\times (-\frac{3}{5}\times log\_2{\frac{3}{5}} -\frac{2}{5}\times log\_2{\frac{2}{5}}) + \ \frac{5}{15}\times (-\frac{1}{5}\times log\_2{\frac{1}{5}} -\frac{4}{5}\times log\_2{\frac{4}{5}}) = 0.888</script><p>(3)</p>
+<script type="math/tex; mode=display">H(D,A\_2) = \frac{5}{15}\times 0 + \frac{10}{15}\times (-\frac{6}{10}\times log\_2{\frac{6}{10}} - \frac{4}{10}\times log\_2{\frac{4}{10}}) = 0.647</script><p>(4)</p>
+<script type="math/tex; mode=display">H(D,A\_3) = \frac{6}{15}\times 0 + \frac{9}{15}\times (-\frac{3}{9}\times log\_2{\frac{3}{9}} - \frac{6}{9}\times log\_2{\frac{6}{9}}) = 0.551</script><p>(5)</p>
+<script type="math/tex; mode=display">H(D,A\_4) = \frac{5}{15}\times (-\frac{1}{5}log\_2{\frac{1}{5}} -\frac{4}{5}log\_2{\frac{4}{5}}) + \ \frac{6}{15}\times (-\frac{4}{6}log\_2{\frac{4}{6}} - \frac{2}{6}log\_2{\frac{2}{6}}) + \frac{4}{15}\times 0 = 0.608</script><p>由于<em>H</em>(<em>D</em>, <em>A</em><sub>3</sub>)=0.551最小，因此，首先选择<em>A</em><sub>3</sub>作为最优特征，生成树的第一个分枝。</p>
+<h4 id="ID3-try-Variance-like-ANOVA"><a href="#ID3-try-Variance-like-ANOVA" class="headerlink" title="ID3: try Variance like ANOVA"></a>ID3: try Variance like ANOVA</h4><p>(1)</p>
+<script type="math/tex; mode=display">V(D) = 15\times \frac{9}{15}\times \frac{6}{19} = 3.6</script><p><em>V</em>(<em>D</em>, <em>A</em>)为基于特征A划分后的组内方差之和；<em>g</em><sub><em>V</em></sub>(<em>D</em>, <em>A</em>)为组间方差。选择组间方差最大的特征</p>
+<p>(2)</p>
+<script type="math/tex; mode=display">g\_{V}(D,A\_1) = 5\times \frac{3}{5}\times \frac{2}{5} + 5\times \frac{3}{5}\times \frac{2}{5} + 5\times \frac{1}{5}\times \frac{4}{5} = 3.2</script><p>(3)</p>
+<script type="math/tex; mode=display">g\_{V}(D,A\_2) = 5\times 0 + 10\times \frac{4}{10}\times \frac{6}{10} = 2.4</script><p>(4)</p>
+<script type="math/tex; mode=display">g\_{V}(D,A\_3) = 6\times 0 + 9\times \frac{3}{9}\times \frac{6}{9} = 2</script><p>(5)</p>
+<script type="math/tex; mode=display">g\_{V}(D,A\_4) = 5\times \frac{1}{5}\times \frac{4}{5} + 6\times \frac{2}{6}\times \frac{4}{6} + 4\times 0 = 2.1</script><p><em>g</em><sub><em>V</em></sub>(<em>D</em>, <em>A</em><sub>3</sub>)=2最小，所以选择<em>A</em><sub>3</sub>为最优特征进行分割。</p>
+<h4 id="C4-5-Info-Gain-Ratio"><a href="#C4-5-Info-Gain-Ratio" class="headerlink" title="C4.5: Info Gain Ratio"></a>C4.5: Info Gain Ratio</h4><p>计算信息增益比</p>
+<script type="math/tex; mode=display">g\_{R}(D,A) = \frac{g(D,A)}{H(D)}</script><h4 id="CART-Gini"><a href="#CART-Gini" class="headerlink" title="CART: Gini"></a>CART: Gini</h4><p>CART假设决策树是二叉树，内部结点特征的取值为“是”和“否”，左分枝是取值为“是”的分枝，右分枝是取值为“否”的分枝。这样的决策树相当于递归地二分每个特征，将输入空间即特征空间划分为有限个单元，并且在这些单元上确定预测的概率分布，也就是在输入给定的条件下输出的条件概率分布。分类树用基尼指数选择最优特征，同时决定该特征的最优二值切分点。</p>
+<p>已1，2，3表示年龄为青年，中年，老年；以1，2表示是有工作和有自己的房子的值为是和否；以1，2，3表示信贷情况的值为非常好、好和一般。</p>
+<p>(1)</p>
+<script type="math/tex; mode=display">Gini(D, A\_{1} = 1) = \frac{5}{15}\times (1 - (\frac{2}{5})^2 - (\frac{3}{5})^2) + \frac{10}{15}\times (1 - (\frac{3}{10})^2 - (\frac{7}{10})^2) = 0.44</script><p>(2)</p>
+<script type="math/tex; mode=display">Gini(D, A\_{2} = 1) = Gini(D, A\_{2} = 2) = 0.32</script><p>(3)</p>
+<script type="math/tex; mode=display">Gini(D, A\_{3} = 1) = Gini(D, A\_{3} = 2) = 0.27</script><p>(4)</p>
+<script type="math/tex; mode=display">Gini(D, A\_{4} = 1) = 0.36</script><p>(5)</p>
+<script type="math/tex; mode=display">Gini(D, A\_{4} = 1) = 0.47</script><p>(6)</p>
+<script type="math/tex; mode=display">Gini(D, A\_{4} = 3) = 0.32</script><p>由于Gini(<em>D</em>, <em>A</em><sub>3</sub> = 1) = 0.27最小，所以选择特征<em>A</em><sub>3</sub>为最优特征，<em>A</em><sub>3</sub> = 1为其最优分割点。于是，根结点生成两个子结点，一个是叶结点。对另一个结点继续使用以上方法在<em>A</em><sub>1</sub>, <em>A</em><sub>2</sub>, <em>A</em><sub>4</sub>中选择最优的特征及其最优切分点。</p>
+<h3 id="rpart"><a href="#rpart" class="headerlink" title="rpart"></a><code>rpart</code></h3><p><code>R</code>中决策树的包: <code>rpart</code>, <code>party</code>, <code>RWeka</code>, <code>ipred</code>, <code>randomForest</code>, <code>gbm</code>, <code>C50</code>.</p>
+<p><code>rpart</code>:CART/ID3. The default criterion, which is <strong>maximized</strong> in each split is the <code>Gini</code>.</p>
+<h4 id="rpart常用参数"><a href="#rpart常用参数" class="headerlink" title="rpart常用参数"></a><code>rpart</code>常用参数</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>formula</td>
+<td><em>y</em> ∼ <em>x</em><sub>1</sub> + <em>x</em><sub>2</sub> + ⋯ + <em>x</em><sub><em>n</em></sub></td>
+</tr>
+<tr>
+<td>data</td>
+<td>数据集</td>
+</tr>
+<tr>
+<td>na.action</td>
+<td>去掉 <em>y</em> 缺失，保留自变量缺失</td>
+</tr>
+<tr>
+<td>method</td>
+<td><code>class</code>:分类变量，<code>anova</code>:回归树</td>
+</tr>
+<tr>
+<td>parms</td>
+<td>只适用分类树 <code>parms = list(split,prior,loss)</code></td>
+</tr>
+<tr>
+<td>controls</td>
+<td>控制决策树形状大小 <code>minsplit</code>,<code>maxdepth</code>,<code>cp</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="rpart-plot常用参数"><a href="#rpart-plot常用参数" class="headerlink" title="rpart.plot常用参数"></a><code>rpart.plot</code>常用参数</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tree</td>
+<td>tree模型</td>
+</tr>
+<tr>
+<td>type</td>
+<td>节点形状1,2,3,4</td>
+</tr>
+<tr>
+<td>branch</td>
+<td>若=1，则为垂直决策树</td>
+</tr>
+<tr>
+<td>cex</td>
+<td>符号大小</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li><p><a href="https://www.rdocumentation.org/packages/rpart/versions/4.1-13/topics/rpart" target="_blank" rel="noopener"><code>rpart</code> 参数详解</a></p>
+</li>
+<li><p><a href="https://www.rdocumentation.org/packages/rpart/versions/4.1-13/topics/rpart.control" target="_blank" rel="noopener"><code>controls</code> 参数详解</a></p>
+</li>
+</ul>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(rpart)</span><br><span class="line"><span class="keyword">library</span>(rpart.plot)</span><br></pre></td></tr></table></figure>
+<pre><code>## Warning: package &#39;rpart.plot&#39; was built under R version 3.5.3
+</code></pre><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(gmodels)</span><br><span class="line"><span class="keyword">library</span>(caret)</span><br></pre></td></tr></table></figure>
+<pre><code>## Loading required package: lattice
+
+## Loading required package: ggplot2
+</code></pre><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(magrittr)</span><br><span class="line">data(<span class="string">"iris"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># seperate the dataset into two parts: the training and test datasets</span></span><br><span class="line">picker &lt;- sample(<span class="number">150</span>, <span class="number">110</span>)</span><br><span class="line">iris_train = iris[picker,]</span><br><span class="line">iris_test = iris[-picker,]</span><br><span class="line"></span><br><span class="line"><span class="comment"># fit the tree model: classification tree</span></span><br><span class="line"><span class="comment"># method: switched according to the type of the response variable. </span></span><br><span class="line"><span class="comment"># class for categorial, anova for numerical, poisson for count data and exp for survival data.</span></span><br><span class="line">treecart &lt;- rpart(Species ~., data = iris_train, method = <span class="string">"class"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># plot the tree</span></span><br><span class="line">rpart.plot(treecart)</span><br></pre></td></tr></table></figure>
+<p><img src="c50_files/figure-markdown_github/rpart-1.png" alt></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cross-check its validity by pitching it against our test data</span></span><br><span class="line">predictions &lt;- predict(treecart, iris_test, type = <span class="string">"class"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># confusion matrix: overfitting</span></span><br><span class="line"><span class="comment"># CrossTable(predictions,iris_test$Species, prop.r = FALSE,prop.c = FALSE, chisq = FALSE, prop.chisq = FALSE, prop.t = TRUE)</span></span><br><span class="line">confusionMatrix(predictions,iris_test$Species)</span><br></pre></td></tr></table></figure>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##             Reference
+## Prediction   setosa versicolor virginica
+##   setosa         15          0         0
+##   versicolor      0         13         1
+##   virginica       0          1        10
+## 
+## Overall Statistics
+##                                           
+##                Accuracy : 0.95            
+##                  95% CI : (0.8308, 0.9939)
+##     No Information Rate : 0.375           
+##     P-Value [Acc &gt; NIR] : 2.044e-14       
+##                                           
+##                   Kappa : 0.9244          
+##  Mcnemar&#39;s Test P-Value : NA              
+## 
+## Statistics by Class:
+## 
+##                      Class: setosa Class: versicolor Class: virginica
+## Sensitivity                  1.000            0.9286           0.9091
+## Specificity                  1.000            0.9615           0.9655
+## Pos Pred Value               1.000            0.9286           0.9091
+## Neg Pred Value               1.000            0.9615           0.9655
+## Prevalence                   0.375            0.3500           0.2750
+## Detection Rate               0.375            0.3250           0.2500
+## Detection Prevalence         0.375            0.3500           0.2750
+## Balanced Accuracy            1.000            0.9451           0.9373
+</code></pre><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># pruning </span></span><br><span class="line">treecart_ms5 &lt;- rpart(Species ~., data = iris_train, method = <span class="string">"class"</span>, control = rpart.control(minsplit = <span class="number">5</span>))</span><br><span class="line">treecart_ms10 &lt;- rpart(Species ~., data = iris_train, method = <span class="string">"class"</span>, control = rpart.control(minsplit = <span class="number">10</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># rpart.plot</span></span><br><span class="line">par(mfrow = c(<span class="number">1</span>,<span class="number">2</span>))</span><br><span class="line">rpart.plot(treecart, main = <span class="string">"tree_with_parms"</span>, branch = <span class="number">1</span>, cex = <span class="number">0.8</span>)</span><br><span class="line">rpart.plot(treecart_ms5, main = <span class="string">"minsplit=5"</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="c50_files/figure-markdown_github/rpart-2.png" alt></p>
+<h3 id="C50"><a href="#C50" class="headerlink" title="C50"></a><code>C50</code></h3><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(C50)</span><br><span class="line"><span class="comment"># C5.0是一个boosting算法 trials 控制循环次数</span></span><br><span class="line"><span class="comment"># build model</span></span><br><span class="line">treec50 &lt;- C5.0(Species ~ ., data = iris_train)</span><br><span class="line">summary(treec50)</span><br></pre></td></tr></table></figure>
+<pre><code>## 
+## Call:
+## C5.0.formula(formula = Species ~ ., data = iris_train)
+## 
+## 
+## C5.0 [Release 2.07 GPL Edition]      Fri Mar 29 10:47:45 2019
+## -------------------------------
+## 
+## Class specified by attribute `outcome&#39;
+## 
+## Read 110 cases (5 attributes) from undefined.data
+## 
+## Decision tree:
+## 
+## Petal.Width &lt;= 0.4: setosa (35)
+## Petal.Width &gt; 0.4:
+## :...Petal.Width &gt; 1.7: virginica (35)
+##     Petal.Width &lt;= 1.7:
+##     :...Petal.Length &lt;= 5: versicolor (36/1)
+##         Petal.Length &gt; 5: virginica (4/1)
+## 
+## 
+## Evaluation on training data (110 cases):
+## 
+##      Decision Tree   
+##    ----------------  
+##    Size      Errors  
+## 
+##       4    2( 1.8%)   &lt;&lt;
+## 
+## 
+##     (a)   (b)   (c)    &lt;-classified as
+##    ----  ----  ----
+##      35                (a): class setosa
+##            35     1    (b): class versicolor
+##             1    38    (c): class virginica
+## 
+## 
+##  Attribute usage:
+## 
+##  100.00% Petal.Width
+##   36.36% Petal.Length
+## 
+## 
+## Time: 0.0 secs
+</code></pre><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plot(treec50)</span><br></pre></td></tr></table></figure>
+<p><img src="c50_files/figure-markdown_github/c50-1.png" alt></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># make predictions</span></span><br><span class="line">table(predict(treec50, newdata = iris_test), iris_test$Species)</span><br></pre></td></tr></table></figure>
+<pre><code>##             
+##              setosa versicolor virginica
+##   setosa         13          0         0
+##   versicolor      2         13         1
+##   virginica       0          1        10
+</code></pre><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
+<li><p><a href="https://en.proft.me/2016/11/9/classification-using-decision-trees-r/" target="_blank" rel="noopener">lassification with Decision Trees</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/weixin_43216017/article/details/87739323" target="_blank" rel="noopener">R实现决策树</a></p>
+</li>
+<li><p><a href="https://cran.r-project.org/web/packages/C50/vignettes/C5.0.html" target="_blank" rel="noopener">CRAN: C5.0</a></p>
+</li>
+<li><p><a href="https://static1.squarespace.com/static/51156277e4b0b8b2ffe11c00/t/51e7e42ce4b0fd2e32684bca/1374151724529/user_C5.0.pdf" target="_blank" rel="noopener">user_c5.0</a></p>
+</li>
+<li><p><a href="http://www.lac.inpe.br/~rafael.santos/Docs/R/CAP359/cap359r-ClassDecTree-C50-Artificial.html" target="_blank" rel="noopener">决策树对不同分类分布的拟合情况</a></p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    ZHENG Guoying
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://stazhenggy.github.io/2019/03/29/c50/" title="Tree Models">http://stazhenggy.github.io/2019/03/29/c50/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tree/" rel="tag"># tree</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/22/xlwings/" rel="next" title="xlwings">
+                <i class="fa fa-chevron-left"></i> xlwings
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/29/adaboost/" rel="prev" title="Adaboost">
+                Adaboost <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ZHENG Guoying</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#决策树生成计算过程"><span class="nav-number">1.</span> <span class="nav-text">决策树生成计算过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据集"><span class="nav-number">1.1.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ID3-InfoGain-g-D-A"><span class="nav-number">1.2.</span> <span class="nav-text">ID3: InfoGain g(D|A)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ID3-try-Variance-like-ANOVA"><span class="nav-number">1.3.</span> <span class="nav-text">ID3: try Variance like ANOVA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C4-5-Info-Gain-Ratio"><span class="nav-number">1.4.</span> <span class="nav-text">C4.5: Info Gain Ratio</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CART-Gini"><span class="nav-number">1.5.</span> <span class="nav-text">CART: Gini</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rpart"><span class="nav-number">2.</span> <span class="nav-text">rpart</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#rpart常用参数"><span class="nav-number">2.1.</span> <span class="nav-text">rpart常用参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#rpart-plot常用参数"><span class="nav-number">2.2.</span> <span class="nav-text">rpart.plot常用参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C50"><span class="nav-number">3.</span> <span class="nav-text">C50</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZHENG Guoying</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
