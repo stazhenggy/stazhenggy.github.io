@@ -88,7 +88,7 @@
 <meta property="og:description" content="本篇包含adaboost的手动实现例子以及adaboost在R上的实现例子。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/03/29/adaboost/bmodeling.png">
-<meta property="og:updated_time" content="2019-04-16T03:12:37.957Z">
+<meta property="og:updated_time" content="2019-04-16T09:27:51.305Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Adaboost">
 <meta name="twitter:description" content="本篇包含adaboost的手动实现例子以及adaboost在R上的实现例子。">
@@ -346,7 +346,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-16T11:12:37+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-16T17:27:51+08:00">
                 2019-04-16
               </time>
             
@@ -413,8 +413,8 @@
       
 
       
-        <p><img src="bmodeling.png" alt="Adaboost"></p>
-<p>本篇包含adaboost的手动实现例子以及adaboost在<code>R</code>上的实现例子。</p>
+        <p><img src="bmodeling.png"></p>
+<p>本篇包含adaboost的手动实现例子以及adaboost在<span id="inline-blue">R</span>上的实现例子。</p>
 <a id="more"></a>
 <h1 id="Adaboost简介"><a href="#Adaboost简介" class="headerlink" title="Adaboost简介"></a>Adaboost简介</h1><h2 id="几个特点"><a href="#几个特点" class="headerlink" title="几个特点"></a>几个特点</h2><p>Adaboost是一种比较有特点的算法，可以总结如下：</p>
 <p>1 每次迭代改变的是样本的分布，而不是重复采样（<strong>reweighting</strong> not resampling)</p>
@@ -595,9 +595,9 @@
 <td>-1</td>
 <td>-1</td>
 <td>-1</td>
-<td><strong>-1</strong></td>
-<td><strong>-1</strong></td>
-<td><strong>-1</strong></td>
+<td><span id="inline-red">-1</span></td>
+<td><span id="inline-red">-1</span></td>
+<td><span id="inline-red">-1</span></td>
 <td>-1</td>
 </tr>
 <tr>
@@ -616,9 +616,9 @@
 </tbody>
 </table>
 </div>
-<h3 id="计算误差-e-1"><a href="#计算误差-e-1" class="headerlink" title="计算误差$e_{1}$"></a>计算误差$e_{1}$</h3><p>误差实际就是错分案例的权重之和。</p>
+<h3 id="误差-e-1"><a href="#误差-e-1" class="headerlink" title="误差$e_{1}$"></a>误差$e_{1}$</h3><p>误差实际就是错分案例的权重之和。</p>
 <p>$e_{1} = \sum_{i=1}^{10}{w_{1i}I(G_{1}(x_{i}) \neq y_{i}}) = \frac{3}{10} = 0.3$ </p>
-<h3 id="根据-e-1-计算-G-1-在最终分类器中的权重"><a href="#根据-e-1-计算-G-1-在最终分类器中的权重" class="headerlink" title="根据$e_{1}$计算$G_1$在最终分类器中的权重"></a>根据$e_{1}$计算$G_1$在最终分类器中的权重</h3><p>$\alpha_{1} = \frac{1}{2}log\frac{1-e_1}{e_1} = \frac{1}{2}log\frac{1-0.3}{0.3} = 0.4236$</p>
+<h3 id="G-1-在最终分类器中的权重-alpha-1"><a href="#G-1-在最终分类器中的权重-alpha-1" class="headerlink" title="$G_1$在最终分类器中的权重$\alpha_{1}$"></a>$G_1$在最终分类器中的权重$\alpha_{1}$</h3><p>$\alpha_{1} = \frac{1}{2}log\frac{1-e_1}{e_1} = \ \frac{1}{2}log\frac{1-0.3}{0.3} = 0.4236$</p>
 <p>可见，被误分类样本的权值之和影响误差率，误差率影响基本分类器在最终分类器中所占的权重。</p>
 <h2 id="最终分类器-f-1"><a href="#最终分类器-f-1" class="headerlink" title="最终分类器$f_1$"></a>最终分类器$f_1$</h2><p>$f_1(x) = sign(\alpha_{1}G_{1}(x)) = sign(0.4236G_1(x))$</p>
 <p><strong>最终分类结果</strong></p>
@@ -674,15 +674,15 @@
 <td>-1</td>
 <td>-1</td>
 <td>-1</td>
-<td><strong>-1</strong></td>
-<td><strong>-1</strong></td>
-<td><strong>-1</strong></td>
+<td><span id="inline-red">-1</span></td>
+<td><span id="inline-red">-1</span></td>
+<td><span id="inline-red">-1</span></td>
 <td>-1</td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>分类器$f_1(x)$ 分类结果： 样本<code>6 7 8</code>最终被分错。</p>
+<p>分类器$f_1(x)$ 分类结果： 样本<span id="inline-green">7,8,9</span>最终被分错。</p>
 <h2 id="第2个分类器-G-2"><a href="#第2个分类器-G-2" class="headerlink" title="第2个分类器$G_2$"></a>第2个分类器$G_2$</h2><h3 id="基于-G-1-分类误差调整所有样本权重-w-2"><a href="#基于-G-1-分类误差调整所有样本权重-w-2" class="headerlink" title="基于$G_1$分类误差调整所有样本权重$w_2$"></a>基于$G_1$分类误差调整所有样本权重$w_2$</h3><p>$w_{2i} = \frac{w_{1i}}{Z_1}e^{-\alpha_{1}*G_1(x_i)y_i}$</p>
 <p>其中，$Z_{1} = \sum_{i = 1}^{10}w_{1i}e^{-\alpha_{1}*G_1(x_i)y_i}$</p>
 <p>由权重公式可知，每个样本的权重在下一轮是变大还是变小取决于该样本在上一轮分类中分类正确或错误。如果正确，则$-\alpha_{1}G_1(x_i)y_i &lt; 0$,即$e^{-\alpha_{1}G_1(x_i)y_i} &lt; 1$, 权重将会减小；如果错误, 则$-\alpha_{1}G_1(x_i)y_i &gt; 0$,即$e^{-\alpha_{1}G_1(x_i)y_i} &gt; 1$ 权重会增大。</p>
@@ -738,9 +738,9 @@
 <td>-1</td>
 <td>-1</td>
 <td>-1</td>
-<td><strong>-1</strong></td>
-<td><strong>-1</strong></td>
-<td><strong>-1</strong></td>
+<td><span id="inline-red">-1</span></td>
+<td><span id="inline-red">-1</span></td>
+<td><span id="inline-red">-1</span></td>
 <td>-1</td>
 </tr>
 <tr>
@@ -772,7 +772,7 @@
 </tbody>
 </table>
 </div>
-<p>由此可以看出，因为样本数据”6 7 8”被$G_1(x)$分错了，所以它们的权值由之前的0.1增大到0.1666，反之，其它数据皆被分正确，所以它们的权值皆由之前的0.1减小到0.0715。</p>
+<p>由此可以看出，因为样本<span id="inline-green">7,8,9</span>被$G_1(x)$分错了，所以它们的权值由之前的0.1增大到0.1666，反之，其它数据皆被分正确，所以它们的权值皆由之前的0.1减小到0.0715。</p>
 <h3 id="基于新样本权重-w-2-得到新分类器-G-2"><a href="#基于新样本权重-w-2-得到新分类器-G-2" class="headerlink" title="基于新样本权重$w_2$得到新分类器$G_2$"></a>基于新样本权重$w_2$得到新分类器$G_2$</h3><p>找到阈值$v = 8.5$, 使得该分类器对上述数据分类误差最低。</p>
 <p><strong>分类规则</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">if</span>(x &gt; <span class="number">8.5</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">    <span class="keyword">elif</span>(x &lt; <span class="number">8.5</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
@@ -826,9 +826,9 @@
 <td>1</td>
 <td>1</td>
 <td>1</td>
-<td><strong>1</strong></td>
-<td><strong>1</strong></td>
-<td><strong>1</strong></td>
+<td><span id="inline-red">1</span></td>
+<td><span id="inline-red">1</span></td>
+<td><span id="inline-red">1</span></td>
 <td>1</td>
 <td>1</td>
 <td>1</td>
@@ -852,7 +852,7 @@
 </div>
 <h3 id="计算误差-e-2"><a href="#计算误差-e-2" class="headerlink" title="计算误差$e_{2}$"></a>计算误差$e_{2}$</h3><p>$e_{2} = \sum_{i=1}^{10}{w_{2i}I(G_{2}x_{i} \neq y_{i})} = 3*0.0715 = 0.2145$ </p>
 <h3 id="根据-e-2-计算-G-2-在最终分类器中的权重"><a href="#根据-e-2-计算-G-2-在最终分类器中的权重" class="headerlink" title="根据$e_{2}$计算$G_2$在最终分类器中的权重"></a>根据$e_{2}$计算$G_2$在最终分类器中的权重</h3><p>$\alpha_{2} = \frac{1}{2}log\frac{1-e_2}{e_2} = \frac{1}{2}log\frac{1-0.2145}{0.2145} = 0.649$</p>
-<h3 id="最终分类器-f-2"><a href="#最终分类器-f-2" class="headerlink" title="最终分类器$f_2$"></a>最终分类器$f_2$</h3><p>$f_{2}(x) = sign(\alpha_{1}G_{1}(x) + \alpha_{2}G_{2}(x)) = sign(0.4236G_1(x) + 0.649G_2(x))$</p>
+<h3 id="最终分类器-f-2"><a href="#最终分类器-f-2" class="headerlink" title="最终分类器$f_2$"></a>最终分类器$f_2$</h3><p>$f_{2}(x) = sign(\alpha_{1}G_{1}(x) + \alpha_{2}G_{2}(x)) \ = sign(0.4236G_1(x) + 0.649G_2(x))$</p>
 <p><strong>最终分类结果</strong></p>
 <div class="table-container">
 <table>
@@ -903,9 +903,9 @@
 <td>1</td>
 <td>1</td>
 <td>1</td>
-<td><strong>1</strong></td>
-<td><strong>1</strong></td>
-<td><strong>1</strong></td>
+<td><span id="inline-red">1</span></td>
+<td><span id="inline-red">1</span></td>
+<td><span id="inline-red">1</span></td>
 <td>1</td>
 <td>1</td>
 <td>1</td>
@@ -919,9 +919,9 @@
 <td>-1</td>
 <td>-1</td>
 <td>-1</td>
-<td><strong>-1</strong></td>
-<td><strong>-1</strong></td>
-<td><strong>-1</strong></td>
+<td><span id="inline-red">-1</span></td>
+<td><span id="inline-red">-1</span></td>
+<td><span id="inline-red">-1</span></td>
 <td>-1</td>
 </tr>
 <tr>
@@ -929,9 +929,9 @@
 <td>1</td>
 <td>1</td>
 <td>1</td>
-<td><strong>1</strong></td>
-<td><strong>1</strong></td>
-<td><strong>1</strong></td>
+<td><span id="inline-red">1</span></td>
+<td><span id="inline-red">1</span></td>
+<td><span id="inline-red">1</span></td>
 <td>1</td>
 <td>1</td>
 <td>1</td>
@@ -940,7 +940,7 @@
 </tbody>
 </table>
 </div>
-<p>分类器$f_2(x)$分类结果： 样本<code>3 4 5</code> 最终被分错。</p>
+<p>分类器$f_2(x)$分类结果： 样本<span id="inline-green">4,5,6</span>最终被分错。</p>
 <h2 id="第3个分类器-G-3"><a href="#第3个分类器-G-3" class="headerlink" title="第3个分类器$G_3$"></a>第3个分类器$G_3$</h2><h3 id="基于-G-2-分类误差调整所有样本权重-w-3"><a href="#基于-G-2-分类误差调整所有样本权重-w-3" class="headerlink" title="基于$G_2$分类误差调整所有样本权重$w_3$"></a>基于$G_2$分类误差调整所有样本权重$w_3$</h3><p>$w_{3i} = \frac{w_{2i}}{Z_2}e^{-\alpha_{2}*G_2(x_i)y_i}$</p>
 <p>其中，$Z_{2} = \sum_{i = 1}^{10}w_{2i}e^{-\alpha_{2}*G_2(x_i)y_i}$</p>
 <div class="table-container">
@@ -992,9 +992,9 @@
 <td>1</td>
 <td>1</td>
 <td>1</td>
-<td><strong>1</strong></td>
-<td><strong>1</strong></td>
-<td><strong>1</strong></td>
+<td><span id="inline-red">1</span></td>
+<td><span id="inline-red">1</span></td>
+<td><span id="inline-red">1</span></td>
 <td>1</td>
 <td>1</td>
 <td>1</td>
@@ -1042,7 +1042,7 @@
 </tbody>
 </table>
 </div>
-<p>同理，由于上一轮结束后，样本数据<code>3 4 5</code>被$G_2(x)$分错了，所以它们的权值由之前的0.0715增大到.1666，反之，其它数据皆被分正确，所以它们的权值皆由之前的0.0715减小到0.0455。</p>
+<p>同理，由于上一轮结束后，样本<span id="inline-green">4,5,6</span>被$G_2(x)$分错了，所以它们的权值由之前的0.0715增大到.1666，反之，其它数据皆被分正确，所以它们的权值皆由之前的0.0715减小到0.0455。</p>
 <h3 id="基于新样本权重-w-3-得到新分类器-G-3"><a href="#基于新样本权重-w-3-得到新分类器-G-3" class="headerlink" title="基于新样本权重$w_3$得到新分类器$G_3$"></a>基于新样本权重$w_3$得到新分类器$G_3$</h3><p>找到阈值$v = 5.5$, 使得该分类器对上述数据分类误差最低。</p>
 <p><strong>分类规则</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">if</span>(x &gt; <span class="number">5.5</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">elif</span>(x &lt; <span class="number">5.5</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span></span><br></pre></td></tr></table></figure>
@@ -1093,16 +1093,16 @@
 </tr>
 <tr>
 <td>$G_3(x)$</td>
-<td><strong>-1</strong></td>
-<td><strong>-1</strong></td>
-<td><strong>-1</strong></td>
+<td><span id="inline-red">-1</span></td>
+<td><span id="inline-red">-1</span></td>
+<td><span id="inline-red">-1</span></td>
 <td>-1</td>
 <td>-1</td>
 <td>-1</td>
 <td>1</td>
 <td>1</td>
 <td>1</td>
-<td><strong>1</strong></td>
+<td><span id="inline-red">1</span></td>
 </tr>
 <tr>
 <td>$w_3$</td>
@@ -1122,7 +1122,7 @@
 </div>
 <h3 id="计算误差-e-3"><a href="#计算误差-e-3" class="headerlink" title="计算误差$e_{3}$"></a>计算误差$e_{3}$</h3><p>$e_{3} = \sum_{i=1}^{10}{w_{2i}I(G_{2}x_{i} \neq y_{i})} = 4*0.0455 = 0.182$ </p>
 <h3 id="根据-e-3-计算-G-3-在最终分类器-f-3-中的权重"><a href="#根据-e-3-计算-G-3-在最终分类器-f-3-中的权重" class="headerlink" title="根据$e_{3}$计算$G_3$在最终分类器$f_3$中的权重"></a>根据$e_{3}$计算$G_3$在最终分类器$f_3$中的权重</h3><p>$\alpha_{3} = \frac{1}{2}log\frac{1-e_3}{e_3} = \frac{1}{2}log\frac{1-0.182}{0.182} = 0.7514$</p>
-<h3 id="最终分类器-f-3"><a href="#最终分类器-f-3" class="headerlink" title="最终分类器$f_3$"></a>最终分类器$f_3$</h3><p>$f_{3}(x) = sign(\alpha_{1}G_{1}(x) + \alpha_{2}G_{2}(x) + \alpha_{3}G_{3}(x)) = sign(0.4236G_1(x) + 0.649G_2(x) + 0.7514G_3(x))$</p>
+<h3 id="最终分类器-f-3"><a href="#最终分类器-f-3" class="headerlink" title="最终分类器$f_3$"></a>最终分类器$f_3$</h3><p>$f_{3}(x) = sign(\alpha_{1}G_{1}(x) + \alpha_{2}G_{2}(x) + \alpha_{3}G_{3}(x)) \\= sign(0.4236G_1(x) + 0.649G_2(x) + 0.7514G_3(x))$</p>
 <p><strong>最终分类结果</strong></p>
 <div class="table-container">
 <table>
@@ -1189,9 +1189,9 @@
 <td>-1</td>
 <td>-1</td>
 <td>-1</td>
-<td><strong>-1</strong></td>
-<td><strong>-1</strong></td>
-<td><strong>-1</strong></td>
+<td><span id="inline-red">-1</span></td>
+<td><span id="inline-red">-1</span></td>
+<td><span id="inline-red">-1</span></td>
 <td>-1</td>
 </tr>
 <tr>
@@ -1199,9 +1199,9 @@
 <td>1</td>
 <td>1</td>
 <td>1</td>
-<td><strong>1</strong></td>
-<td><strong>1</strong></td>
-<td><strong>1</strong></td>
+<td><span id="inline-red">1</span></td>
+<td><span id="inline-red">1</span></td>
+<td><span id="inline-red">1</span></td>
 <td>1</td>
 <td>1</td>
 <td>1</td>
@@ -1209,16 +1209,16 @@
 </tr>
 <tr>
 <td>$G_3(x)$</td>
-<td><strong>-1</strong></td>
-<td><strong>-1</strong></td>
-<td><strong>-1</strong></td>
+<td><span id="inline-red">-1</span></td>
+<td><span id="inline-red">-1</span></td>
+<td><span id="inline-red">-1</span></td>
 <td>-1</td>
 <td>-1</td>
 <td>-1</td>
 <td>1</td>
 <td>1</td>
 <td>1</td>
-<td><strong>1</strong></td>
+<td><span id="inline-red">1</span></td>
 </tr>
 </tbody>
 </table>
@@ -1226,12 +1226,12 @@
 <p>分类器$f_3(x)$ 分类结果全部正确，没有错分情况。</p>
 <p>至此，整个训练过程结束。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>现在来总结一下整个训练过程, 包含各样本权重，分类器误差率的变化：</p>
-<p>1 训练之前，各个样本的权重被初始化为$w_1 = (0.1, 0.1,0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1)$</p>
-<p>2 第一轮分类后，样本<code>6 7 8</code>被分错，对应误差率为$e_1 = 0.3$，此第一个基本分类器在最终分类器中所占的权重为$\alpha_{1} = 0.4236$。 同时，用于下一轮迭代的样本新权重为$w2 = (0.0715, 0.0715, 0.0715, 0.0715, 0.0715,  0.0715, 0.1666, 0.1666, 0.1666, 0.0715)$</p>
-<p>3 第二轮迭代后，样本<code>3 4 5</code>被分错，对应误差率为$e_2 = 0.2145$，此第二个基本分类器在最终分类器中所占的权重为$\alpha_{2} = 0.649$。 同时，用于下一轮迭代的样本新权值为$w_3 = (0.0455, 0.0455, 0.0455, 0.1666, 0.1666,  0.01666, 0.1060, 0.1060, 0.1060, 0.0455)$</p>
-<p>4 第三轮迭代中，样本<code>0 1 2 9</code>被分错，对应误差率为$e_3 = 0.1820$，此第三个基本分类器在最终分类器中所占的权重为$\alpha_{3} = 0.7514$。</p>
+<p>1 训练之前，各个样本的权重被初始化为</p>
+<script type="math/tex; mode=display">w_1 = (0.1, 0.1,0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1)</script><p>2 第一轮分类后，样本<span id="inline-green">7,8,9</span>被分错，对应误差率为$e_1 = 0.3$，此第一个基本分类器在最终分类器中所占的权重为$\alpha_{1} = 0.4236$。 同时，用于下一轮迭代的样本新权重为</p>
+<script type="math/tex; mode=display">w2 = (0.0715, 0.0715, 0.0715, 0.0715, 0.0715,  0.0715, 0.1666, 0.1666, 0.1666, 0.0715)</script><p>3 第二轮迭代后，样本<span id="inline-green">3,4,5</span>被分错，对应误差率为$e_2 = 0.2145$，此第二个基本分类器在最终分类器中所占的权重为$\alpha_{2} = 0.649$。 同时，用于下一轮迭代的样本新权值为</p>
+<script type="math/tex; mode=display">w_3 = (0.0455, 0.0455, 0.0455, 0.1666, 0.1666,  0.01666, 0.1060, 0.1060, 0.1060, 0.0455)</script><p>4 第三轮迭代中，样本样本<span id="inline-green">1,2,3,10</span>被分错，对应误差率为$e_3 = 0.1820$，此第三个基本分类器在最终分类器中所占的权重为$\alpha_{3} = 0.7514$。</p>
 <p>从上述过程中可以发现，如果某些个样本被分错，它们在下一轮迭代中的权值将被增大，同时，其它被分对的样本在下一轮迭代中的权值将被减小。就这样，分错样本权值增大，分对样本权值变小。 最终分类器:</p>
-<p>$f(x) = sign(f_3(x)) = sign(\alpha_1G_1(x) + \alpha_2G_2(x) + \alpha_3G_3(x)) = 0.4236G_1(x) + 0.6490G_2(x)+0.7514G_3(x)$</p>
+<p>$f(x) = sign(f_3(x)) = sign(\alpha_1G_1(x) + \alpha_2G_2(x) + \alpha_3G_3(x)) \\= 0.4236G_1(x) + 0.6490G_2(x)+0.7514G_3(x)$</p>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
 <li><a href="https://blog.csdn.net/v_july_v/article/details/40718799" target="_blank" rel="noopener">Adaboost算法原理与推导</a></li>
 <li><a href="https://blog.csdn.net/guyuealian/article/details/70995333" target="_blank" rel="noopener">Adaboost简明解释</a></li>
@@ -1415,9 +1415,7 @@
           
           
 
-          <div id="music163player">
-    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="330" src="//music.163.com/outchain/player?type=0&id=27779385&auto=1&height=430"></iframe>
-</div>
+          
 
 
         </div>
@@ -1433,7 +1431,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Adaboost简介"><span class="nav-number">1.</span> <span class="nav-text">Adaboost简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#几个特点"><span class="nav-number">1.1.</span> <span class="nav-text">几个特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几个优点-简单，有效"><span class="nav-number">1.2.</span> <span class="nav-text">几个优点: 简单，有效</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实例计算过程"><span class="nav-number">2.</span> <span class="nav-text">实例计算过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第1个分类器-G-1"><span class="nav-number">2.1.</span> <span class="nav-text">第1个分类器$G_1$</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#样本权重-w-1"><span class="nav-number">2.1.1.</span> <span class="nav-text">样本权重$w_1$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类结果-G-1"><span class="nav-number">2.1.2.</span> <span class="nav-text">分类结果 $G_1$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算误差-e-1"><span class="nav-number">2.1.3.</span> <span class="nav-text">计算误差$e_{1}$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根据-e-1-计算-G-1-在最终分类器中的权重"><span class="nav-number">2.1.4.</span> <span class="nav-text">根据$e_{1}$计算$G_1$在最终分类器中的权重</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最终分类器-f-1"><span class="nav-number">2.2.</span> <span class="nav-text">最终分类器$f_1$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第2个分类器-G-2"><span class="nav-number">2.3.</span> <span class="nav-text">第2个分类器$G_2$</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于-G-1-分类误差调整所有样本权重-w-2"><span class="nav-number">2.3.1.</span> <span class="nav-text">基于$G_1$分类误差调整所有样本权重$w_2$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于新样本权重-w-2-得到新分类器-G-2"><span class="nav-number">2.3.2.</span> <span class="nav-text">基于新样本权重$w_2$得到新分类器$G_2$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算误差-e-2"><span class="nav-number">2.3.3.</span> <span class="nav-text">计算误差$e_{2}$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根据-e-2-计算-G-2-在最终分类器中的权重"><span class="nav-number">2.3.4.</span> <span class="nav-text">根据$e_{2}$计算$G_2$在最终分类器中的权重</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最终分类器-f-2"><span class="nav-number">2.3.5.</span> <span class="nav-text">最终分类器$f_2$</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第3个分类器-G-3"><span class="nav-number">2.4.</span> <span class="nav-text">第3个分类器$G_3$</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于-G-2-分类误差调整所有样本权重-w-3"><span class="nav-number">2.4.1.</span> <span class="nav-text">基于$G_2$分类误差调整所有样本权重$w_3$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于新样本权重-w-3-得到新分类器-G-3"><span class="nav-number">2.4.2.</span> <span class="nav-text">基于新样本权重$w_3$得到新分类器$G_3$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算误差-e-3"><span class="nav-number">2.4.3.</span> <span class="nav-text">计算误差$e_{3}$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根据-e-3-计算-G-3-在最终分类器-f-3-中的权重"><span class="nav-number">2.4.4.</span> <span class="nav-text">根据$e_{3}$计算$G_3$在最终分类器$f_3$中的权重</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最终分类器-f-3"><span class="nav-number">2.4.5.</span> <span class="nav-text">最终分类器$f_3$</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">2.5.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Adaboost简介"><span class="nav-number">1.</span> <span class="nav-text">Adaboost简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#几个特点"><span class="nav-number">1.1.</span> <span class="nav-text">几个特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几个优点-简单，有效"><span class="nav-number">1.2.</span> <span class="nav-text">几个优点: 简单，有效</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实例计算过程"><span class="nav-number">2.</span> <span class="nav-text">实例计算过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第1个分类器-G-1"><span class="nav-number">2.1.</span> <span class="nav-text">第1个分类器$G_1$</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#样本权重-w-1"><span class="nav-number">2.1.1.</span> <span class="nav-text">样本权重$w_1$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类结果-G-1"><span class="nav-number">2.1.2.</span> <span class="nav-text">分类结果 $G_1$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#误差-e-1"><span class="nav-number">2.1.3.</span> <span class="nav-text">误差$e_{1}$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#G-1-在最终分类器中的权重-alpha-1"><span class="nav-number">2.1.4.</span> <span class="nav-text">$G_1$在最终分类器中的权重$\alpha_{1}$</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最终分类器-f-1"><span class="nav-number">2.2.</span> <span class="nav-text">最终分类器$f_1$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第2个分类器-G-2"><span class="nav-number">2.3.</span> <span class="nav-text">第2个分类器$G_2$</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于-G-1-分类误差调整所有样本权重-w-2"><span class="nav-number">2.3.1.</span> <span class="nav-text">基于$G_1$分类误差调整所有样本权重$w_2$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于新样本权重-w-2-得到新分类器-G-2"><span class="nav-number">2.3.2.</span> <span class="nav-text">基于新样本权重$w_2$得到新分类器$G_2$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算误差-e-2"><span class="nav-number">2.3.3.</span> <span class="nav-text">计算误差$e_{2}$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根据-e-2-计算-G-2-在最终分类器中的权重"><span class="nav-number">2.3.4.</span> <span class="nav-text">根据$e_{2}$计算$G_2$在最终分类器中的权重</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最终分类器-f-2"><span class="nav-number">2.3.5.</span> <span class="nav-text">最终分类器$f_2$</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第3个分类器-G-3"><span class="nav-number">2.4.</span> <span class="nav-text">第3个分类器$G_3$</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于-G-2-分类误差调整所有样本权重-w-3"><span class="nav-number">2.4.1.</span> <span class="nav-text">基于$G_2$分类误差调整所有样本权重$w_3$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于新样本权重-w-3-得到新分类器-G-3"><span class="nav-number">2.4.2.</span> <span class="nav-text">基于新样本权重$w_3$得到新分类器$G_3$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算误差-e-3"><span class="nav-number">2.4.3.</span> <span class="nav-text">计算误差$e_{3}$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根据-e-3-计算-G-3-在最终分类器-f-3-中的权重"><span class="nav-number">2.4.4.</span> <span class="nav-text">根据$e_{3}$计算$G_3$在最终分类器$f_3$中的权重</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最终分类器-f-3"><span class="nav-number">2.4.5.</span> <span class="nav-text">最终分类器$f_3$</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">2.5.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
@@ -1982,9 +1980,11 @@
 
   
 
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/clicklove.js"></script>
+
 </body>
 </html>
 
-<!-- 页面点击小红心 -->
-<script type="text/javascript" src="/js/src/clicklove.js"></script>
 

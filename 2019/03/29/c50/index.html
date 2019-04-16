@@ -90,7 +90,7 @@
 <meta property="og:image" content="http://stazhenggy.github.io/2019/03/29/c50/c50_files/figure-markdown_github/rpart-1.png">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/03/29/c50/c50_files/figure-markdown_github/rpart-2.png">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/03/29/c50/c50_files/figure-markdown_github/c50-1.png">
-<meta property="og:updated_time" content="2019-04-16T03:13:57.104Z">
+<meta property="og:updated_time" content="2019-04-16T09:27:25.440Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tree Models">
 <meta name="twitter:description" content="本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的R实现。">
@@ -348,7 +348,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-16T11:13:57+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-16T17:27:25+08:00">
                 2019-04-16
               </time>
             
@@ -415,7 +415,7 @@
       
 
       
-        <p>本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的<code>R</code>实现。</p>
+        <p>本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的<span id="inline-blue">R</span>实现。</p>
 <a id="more"></a>
 <h3 id="决策树生成计算过程"><a href="#决策树生成计算过程" class="headerlink" title="决策树生成计算过程"></a>决策树生成计算过程</h3><h4 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h4><div class="table-container">
 <table>
@@ -555,32 +555,32 @@
 </div>
 <h4 id="ID3-InfoGain-g-D-A"><a href="#ID3-InfoGain-g-D-A" class="headerlink" title="ID3: InfoGain g(D|A)"></a>ID3: InfoGain g(D|A)</h4><p>ID3算法的核心是在决策树各个结点上应用信息增益准则选择特征，递归地构建决策树。具体方法是：从根结点开始，对结点计算所有特征的信息增益，选择信息增益最大的特征作为结点特征，由该特征的不同取值建立子结点；再对子结点递归地调用以上方法，构建决策树；直到所有特征的信息增益均很小或没有特征可以选择为止。最后得到一个决策树。</p>
 <p>ID3算法只有树的生成，所以该算法生成的树容易产生过拟合。后续包含决策树的剪枝。决策树的剪枝往往通过最小化决策树整体的损失函数实现。</p>
-<p>分别以<em>A</em><sub>1</sub>, <em>A</em><sub>2</sub>, <em>A</em><sub>3</sub>, <em>A</em><sub>4</sub>表示年龄、有工作、有自己的房子和信贷情况4个特征，则</p>
+<p>分别以$A_1, A_2, A_3, A_4$表示年龄、有工作、有自己的房子和信贷情况4个特征，则</p>
 <p>(1)</p>
-<script type="math/tex; mode=display">H(D) = -\frac{9}{15}\times log\_2{\frac{9}{15}} -\frac{6}{15}\times log\_2{\frac{6}{15}} = 0.971</script><p>(2)</p>
-<script type="math/tex; mode=display">H(D,A\_1) = \frac{5}{15}\times (-\frac{3}{5}\times log\_2{\frac{3}{5}} -\frac{2}{5}\times log\_2{\frac{2}{5}}) + \ \frac{5}{15}\times (-\frac{3}{5}\times log\_2{\frac{3}{5}} -\frac{2}{5}\times log\_2{\frac{2}{5}}) + \ \frac{5}{15}\times (-\frac{1}{5}\times log\_2{\frac{1}{5}} -\frac{4}{5}\times log\_2{\frac{4}{5}}) = 0.888</script><p>(3)</p>
-<script type="math/tex; mode=display">H(D,A\_2) = \frac{5}{15}\times 0 + \frac{10}{15}\times (-\frac{6}{10}\times log\_2{\frac{6}{10}} - \frac{4}{10}\times log\_2{\frac{4}{10}}) = 0.647</script><p>(4)</p>
-<script type="math/tex; mode=display">H(D,A\_3) = \frac{6}{15}\times 0 + \frac{9}{15}\times (-\frac{3}{9}\times log\_2{\frac{3}{9}} - \frac{6}{9}\times log\_2{\frac{6}{9}}) = 0.551</script><p>(5)</p>
-<script type="math/tex; mode=display">H(D,A\_4) = \frac{5}{15}\times (-\frac{1}{5}log\_2{\frac{1}{5}} -\frac{4}{5}log\_2{\frac{4}{5}}) + \ \frac{6}{15}\times (-\frac{4}{6}log\_2{\frac{4}{6}} - \frac{2}{6}log\_2{\frac{2}{6}}) + \frac{4}{15}\times 0 = 0.608</script><p>由于<em>H</em>(<em>D</em>, <em>A</em><sub>3</sub>)=0.551最小，因此，首先选择<em>A</em><sub>3</sub>作为最优特征，生成树的第一个分枝。</p>
+<script type="math/tex; mode=display">H(D) = -\frac{9}{15}\times log_2{\frac{9}{15}} -\frac{6}{15}\times log_2{\frac{6}{15}} = 0.971</script><p>(2)</p>
+<script type="math/tex; mode=display">H(D,A_1) = \frac{5}{15}\times (-\frac{3}{5}\times log_2{\frac{3}{5}} -\frac{2}{5}\times log_2{\frac{2}{5}}) + \\ \frac{5}{15}\times (-\frac{3}{5}\times log_2{\frac{3}{5}} -\frac{2}{5}\times log_2{\frac{2}{5}}) + \\ \frac{5}{15}\times (-\frac{1}{5}\times log_2{\frac{1}{5}} -\frac{4}{5}\times log_2{\frac{4}{5}}) = 0.888</script><p>(3)</p>
+<script type="math/tex; mode=display">H(D,A_2) = \frac{5}{15}\times 0 + \frac{10}{15}\times (-\frac{6}{10}\times log_2{\frac{6}{10}} - \frac{4}{10}\times log_2{\frac{4}{10}}) = 0.647</script><p>(4)</p>
+<script type="math/tex; mode=display">H(D,A_3) = \frac{6}{15}\times 0 + \frac{9}{15}\times (-\frac{3}{9}\times log_2{\frac{3}{9}} - \frac{6}{9}\times log_2{\frac{6}{9}}) = 0.551</script><p>(5)</p>
+<script type="math/tex; mode=display">H(D,A_4) = \frac{5}{15}\times (-\frac{1}{5}log_2{\frac{1}{5}} -\frac{4}{5}log_2{\frac{4}{5}}) + \\ \frac{6}{15}\times (-\frac{4}{6}log_2{\frac{4}{6}} - \frac{2}{6}log_2{\frac{2}{6}}) + \\ \frac{4}{15}\times 0 = 0.608</script><p>由于$H(D,A_3)=0.551$最小，因此，首先选择$A_3$作为最优特征，生成树的第一个分枝。</p>
 <h4 id="ID3-try-Variance-like-ANOVA"><a href="#ID3-try-Variance-like-ANOVA" class="headerlink" title="ID3: try Variance like ANOVA"></a>ID3: try Variance like ANOVA</h4><p>(1)</p>
-<script type="math/tex; mode=display">V(D) = 15\times \frac{9}{15}\times \frac{6}{19} = 3.6</script><p><em>V</em>(<em>D</em>, <em>A</em>)为基于特征A划分后的组内方差之和；<em>g</em><sub><em>V</em></sub>(<em>D</em>, <em>A</em>)为组间方差。选择组间方差最大的特征</p>
+<script type="math/tex; mode=display">V(D) = 15\times \frac{9}{15}\times \frac{6}{19} = 3.6</script><p>$V(D,A)$为基于特征A划分后的组内方差之和；$g_{v}(D,A)$为组间方差。选择组间方差最大的特征</p>
 <p>(2)</p>
-<script type="math/tex; mode=display">g\_{V}(D,A\_1) = 5\times \frac{3}{5}\times \frac{2}{5} + 5\times \frac{3}{5}\times \frac{2}{5} + 5\times \frac{1}{5}\times \frac{4}{5} = 3.2</script><p>(3)</p>
-<script type="math/tex; mode=display">g\_{V}(D,A\_2) = 5\times 0 + 10\times \frac{4}{10}\times \frac{6}{10} = 2.4</script><p>(4)</p>
-<script type="math/tex; mode=display">g\_{V}(D,A\_3) = 6\times 0 + 9\times \frac{3}{9}\times \frac{6}{9} = 2</script><p>(5)</p>
-<script type="math/tex; mode=display">g\_{V}(D,A\_4) = 5\times \frac{1}{5}\times \frac{4}{5} + 6\times \frac{2}{6}\times \frac{4}{6} + 4\times 0 = 2.1</script><p><em>g</em><sub><em>V</em></sub>(<em>D</em>, <em>A</em><sub>3</sub>)=2最小，所以选择<em>A</em><sub>3</sub>为最优特征进行分割。</p>
+<script type="math/tex; mode=display">g_{V}(D,A_1) = 5\times \frac{3}{5}\times \frac{2}{5} + 5\times \frac{3}{5}\times \frac{2}{5} + 5\times \frac{1}{5}\times \frac{4}{5} = 3.2</script><p>(3)</p>
+<script type="math/tex; mode=display">g_{V}(D,A_2) = 5\times 0 + 10\times \frac{4}{10}\times \frac{6}{10} = 2.4</script><p>(4)</p>
+<script type="math/tex; mode=display">g_{V}(D,A_3) = 6\times 0 + 9\times \frac{3}{9}\times \frac{6}{9} = 2</script><p>(5)</p>
+<script type="math/tex; mode=display">g_{V}(D,A_4) = 5\times \frac{1}{5}\times \frac{4}{5} + 6\times \frac{2}{6}\times \frac{4}{6} + 4\times 0 = 2.1</script><p>$g_{V}(D,A_3)=2$最小，所以选择$A_3$为最优特征进行分割。</p>
 <h4 id="C4-5-Info-Gain-Ratio"><a href="#C4-5-Info-Gain-Ratio" class="headerlink" title="C4.5: Info Gain Ratio"></a>C4.5: Info Gain Ratio</h4><p>计算信息增益比</p>
-<script type="math/tex; mode=display">g\_{R}(D,A) = \frac{g(D,A)}{H(D)}</script><h4 id="CART-Gini"><a href="#CART-Gini" class="headerlink" title="CART: Gini"></a>CART: Gini</h4><p>CART假设决策树是二叉树，内部结点特征的取值为“是”和“否”，左分枝是取值为“是”的分枝，右分枝是取值为“否”的分枝。这样的决策树相当于递归地二分每个特征，将输入空间即特征空间划分为有限个单元，并且在这些单元上确定预测的概率分布，也就是在输入给定的条件下输出的条件概率分布。分类树用基尼指数选择最优特征，同时决定该特征的最优二值切分点。</p>
+<script type="math/tex; mode=display">g_{R}(D,A) = \frac{g(D,A)}{H(D)}</script><h4 id="CART-Gini"><a href="#CART-Gini" class="headerlink" title="CART: Gini"></a>CART: Gini</h4><p>CART假设决策树是二叉树，内部结点特征的取值为“是”和“否”，左分枝是取值为“是”的分枝，右分枝是取值为“否”的分枝。这样的决策树相当于递归地二分每个特征，将输入空间即特征空间划分为有限个单元，并且在这些单元上确定预测的概率分布，也就是在输入给定的条件下输出的条件概率分布。分类树用基尼指数选择最优特征，同时决定该特征的最优二值切分点。</p>
 <p>已1，2，3表示年龄为青年，中年，老年；以1，2表示是有工作和有自己的房子的值为是和否；以1，2，3表示信贷情况的值为非常好、好和一般。</p>
 <p>(1)</p>
-<script type="math/tex; mode=display">Gini(D, A\_{1} = 1) = \frac{5}{15}\times (1 - (\frac{2}{5})^2 - (\frac{3}{5})^2) + \frac{10}{15}\times (1 - (\frac{3}{10})^2 - (\frac{7}{10})^2) = 0.44</script><p>(2)</p>
-<script type="math/tex; mode=display">Gini(D, A\_{2} = 1) = Gini(D, A\_{2} = 2) = 0.32</script><p>(3)</p>
-<script type="math/tex; mode=display">Gini(D, A\_{3} = 1) = Gini(D, A\_{3} = 2) = 0.27</script><p>(4)</p>
-<script type="math/tex; mode=display">Gini(D, A\_{4} = 1) = 0.36</script><p>(5)</p>
-<script type="math/tex; mode=display">Gini(D, A\_{4} = 1) = 0.47</script><p>(6)</p>
-<script type="math/tex; mode=display">Gini(D, A\_{4} = 3) = 0.32</script><p>由于Gini(<em>D</em>, <em>A</em><sub>3</sub> = 1) = 0.27最小，所以选择特征<em>A</em><sub>3</sub>为最优特征，<em>A</em><sub>3</sub> = 1为其最优分割点。于是，根结点生成两个子结点，一个是叶结点。对另一个结点继续使用以上方法在<em>A</em><sub>1</sub>, <em>A</em><sub>2</sub>, <em>A</em><sub>4</sub>中选择最优的特征及其最优切分点。</p>
-<h3 id="rpart"><a href="#rpart" class="headerlink" title="rpart"></a><code>rpart</code></h3><p><code>R</code>中决策树的包: <code>rpart</code>, <code>party</code>, <code>RWeka</code>, <code>ipred</code>, <code>randomForest</code>, <code>gbm</code>, <code>C50</code>.</p>
-<p><code>rpart</code>:CART/ID3. The default criterion, which is <strong>maximized</strong> in each split is the <code>Gini</code>.</p>
+<script type="math/tex; mode=display">Gini(D, A_{1} = 1) = \frac{5}{15}\times (1 - (\frac{2}{5})^2 - (\frac{3}{5})^2) + \\ \frac{10}{15}\times (1 - (\frac{3}{10})^2 - (\frac{7}{10})^2) = 0.44</script><p>(2)</p>
+<script type="math/tex; mode=display">Gini(D, A_{2} = 1) = Gini(D, A_{2} = 2) = 0.32</script><p>(3)</p>
+<script type="math/tex; mode=display">Gini(D, A_{3} = 1) = Gini(D, A_{3} = 2) = 0.27</script><p>(4)</p>
+<script type="math/tex; mode=display">Gini(D, A_{4} = 1) = 0.36</script><p>(5)</p>
+<script type="math/tex; mode=display">Gini(D, A_{4} = 1) = 0.47</script><p>(6)</p>
+<script type="math/tex; mode=display">Gini(D, A_{4} = 3) = 0.32</script><p>由于$Gini(D, A_3 = 1) = 0.27$最小，所以选择特征$A_3$为最优特征，$A_3 = 1$为其最优分割点。于是，根结点生成两个子结点，一个是叶结点。对另一个结点继续使用以上方法在$A_1,A_2,A_3,A_4$中选择最优的特征及其最优切分点。</p>
+<h3 id="rpart"><a href="#rpart" class="headerlink" title="rpart"></a><code>rpart</code></h3><p><span id="inline-blue">R</span>中决策树的包: <span id="inline-purple">rpart, party, RWeka, ipred, randomForest, gbm, C50</span>.</p>
+<p><span id="inline-purple">rpart</span>:CART/ID3. The default criterion, which is <strong>maximized</strong> in each split is the <code>Gini</code>.</p>
 <h4 id="rpart常用参数"><a href="#rpart常用参数" class="headerlink" title="rpart常用参数"></a><code>rpart</code>常用参数</h4><div class="table-container">
 <table>
 <thead>
@@ -617,6 +617,7 @@
 </tbody>
 </table>
 </div>
+<p><code>rpart</code><a class="btn" href="https://www.rdocumentation.org/packages/rpart/versions/4.1-13/topics/rpart" target="_blank" rel="noopener"><i class="fa fa-hand-o-right"></i>参数详解</a></p>
 <h4 id="rpart-plot常用参数"><a href="#rpart-plot常用参数" class="headerlink" title="rpart.plot常用参数"></a><code>rpart.plot</code>常用参数</h4><div class="table-container">
 <table>
 <thead>
@@ -645,12 +646,7 @@
 </tbody>
 </table>
 </div>
-<ul>
-<li><p><a href="https://www.rdocumentation.org/packages/rpart/versions/4.1-13/topics/rpart" target="_blank" rel="noopener"><code>rpart</code> 参数详解</a></p>
-</li>
-<li><p><a href="https://www.rdocumentation.org/packages/rpart/versions/4.1-13/topics/rpart.control" target="_blank" rel="noopener"><code>controls</code> 参数详解</a></p>
-</li>
-</ul>
+<p><code>controls</code><a class="btn" href="https://www.rdocumentation.org/packages/rpart/versions/4.1-13/topics/rpart.control" target="_blank" rel="noopener"><i class="fa fa-hand-o-right"></i>参数详解</a></p>
 <figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(rpart)</span><br><span class="line"><span class="keyword">library</span>(rpart.plot)</span><br></pre></td></tr></table></figure>
 <pre><code>## Warning: package &#39;rpart.plot&#39; was built under R version 3.5.3
 </code></pre><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(gmodels)</span><br><span class="line"><span class="keyword">library</span>(caret)</span><br></pre></td></tr></table></figure>
@@ -936,9 +932,7 @@
           
           
 
-          <div id="music163player">
-    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="330" src="//music.163.com/outchain/player?type=0&id=27779385&auto=1&height=430"></iframe>
-</div>
+          
 
 
         </div>
@@ -1503,9 +1497,11 @@
 
   
 
+
+  <!-- 页面点击小红心 -->
+  <script type="text/javascript" src="/js/src/clicklove.js"></script>
+
 </body>
 </html>
 
-<!-- 页面点击小红心 -->
-<script type="text/javascript" src="/js/src/clicklove.js"></script>
 
