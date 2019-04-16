@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="plot,">
+  <meta name="keywords" content="Statistics, Machine Learning, R">
 
 
 
@@ -79,23 +79,13 @@
 
 
 
-<meta name="description" content="本篇内容主要包含常用的可视化图的R实现代码及效果。">
-<meta name="keywords" content="plot">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Plot in R">
-<meta property="og:url" content="http://stazhenggy.github.io/2019/03/14/plotinr/index.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="S-Dragon">
+<meta property="og:url" content="http://stazhenggy.github.io/categories/tools/hexo/index.html">
 <meta property="og:site_name" content="S-Dragon">
-<meta property="og:description" content="本篇内容主要包含常用的可视化图的R实现代码及效果。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://stazhenggy.github.io/2019/03/14/plotinr/plotinr_files/figure-markdown_github/his-1.png">
-<meta property="og:image" content="http://stazhenggy.github.io/2019/03/14/plotinr/plotinr_files/figure-markdown_github/hiscondition-1.png">
-<meta property="og:image" content="http://stazhenggy.github.io/2019/03/14/plotinr/plotinr_files/figure-markdown_github/boxcondition-1.png">
-<meta property="og:image" content="http://stazhenggy.github.io/2019/03/14/plotinr/plotinr_files/figure-markdown_github/boxquantile-1.png">
-<meta property="og:updated_time" content="2019-04-16T03:14:53.415Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Plot in R">
-<meta name="twitter:description" content="本篇内容主要包含常用的可视化图的R实现代码及效果。">
-<meta name="twitter:image" content="http://stazhenggy.github.io/2019/03/14/plotinr/plotinr_files/figure-markdown_github/his-1.png">
+<meta name="twitter:title" content="S-Dragon">
 
 
 
@@ -125,13 +115,13 @@
 
 
 
-  <link rel="canonical" href="http://stazhenggy.github.io/2019/03/14/plotinr/">
+  <link rel="canonical" href="http://stazhenggy.github.io/categories/tools/hexo/">
 
 
 
 
 
-  <title>Plot in R | S-Dragon</title>
+  <title>分类: hexo | S-Dragon</title>
   
 
 
@@ -154,7 +144,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -290,233 +280,53 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
+  
+  
+  
+  <div class="post-block category">
 
-  
+    <div id="posts" class="posts-collapse">
+      <div class="collection-title">
+        <h1>hexo<small>分类</small>
+        </h1>
+      </div>
 
-  
-  
-  
+      
+        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://stazhenggy.github.io/2019/03/14/plotinr/">
+    <header class="post-header">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ZHENG Guoying">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="S-Dragon">
-    </span>
-
-    
-      <header class="post-header">
-
+      <h2 class="post-title">
         
+            <a class="post-title-link" href="/2019/02/27/blogwithhexo/" itemprop="url">
+              
+                <span itemprop="name">Windows:利用Hexo搭建个人博客</span>
+              
+            </a>
         
-          <h1 class="post-title" itemprop="name headline">Plot in R</h1>
-        
+      </h2>
 
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-14T18:05:41+08:00">
-                2019-03-14
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">更新于&#58;</span>
-              
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-16T11:14:53+08:00">
-                2019-04-16
-              </time>
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Visualization/" itemprop="url" rel="index">
-                    <span itemprop="name">Visualization</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Visualization/R/" itemprop="url" rel="index">
-                    <span itemprop="name">R</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p>本篇内容主要包含常用的可视化图的R实现代码及效果。</p>
-<a id="more"></a>
-<h2 id="Histogram-直方图"><a href="#Histogram-直方图" class="headerlink" title="Histogram(直方图)"></a>Histogram(直方图)</h2><h3 id="base-hist"><a href="#base-hist" class="headerlink" title="base:hist()"></a><code>base:hist()</code></h3><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(DMwR)</span><br><span class="line"><span class="keyword">library</span>(car)</span><br><span class="line"><span class="keyword">library</span>(magrittr)</span><br><span class="line">df &lt;- algae</span><br><span class="line">par(mfrow = c(<span class="number">1</span>,<span class="number">3</span>))</span><br><span class="line">hist(df$mxPH,prob = <span class="literal">T</span>)</span><br><span class="line">hist(df$mxPH,prob = <span class="literal">T</span>,xlab = <span class="string">''</span>,main = <span class="string">'Histogram of mxPH'</span>,ylim = <span class="number">0</span>:<span class="number">1</span>)</span><br><span class="line">density(df$mxPH, na.rm = <span class="literal">TRUE</span>) %&gt;% lines()</span><br><span class="line">jitter(df$mxPH) %&gt;% rug()</span><br><span class="line">qqPlot(df$mxPH, main = <span class="string">'Q-Q plot of mxPH'</span>,ylab = <span class="string">'mxPH'</span>)</span><br></pre></td></tr></table></figure>
-<p><img src="plotinr_files/figure-markdown_github/his-1.png" alt></p>
-<pre><code>## [1] 56 57
-</code></pre><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">par(mfrow = c(<span class="number">1</span>,<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
-<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(lattice)</span><br><span class="line"><span class="keyword">library</span>(gridExtra)</span><br><span class="line">hisc1 &lt;- histogram(~ mxPH | season, data = df)</span><br><span class="line"><span class="comment"># multiple factors</span></span><br><span class="line">hisc2 &lt;- histogram(~ mxPH | season * speed, data = df)</span><br><span class="line"><span class="comment"># stripplot ways</span></span><br><span class="line">stri1 &lt;- stripplot(size ~ mxPH | speed, data = df, jitter = <span class="literal">TRUE</span>)</span><br><span class="line">grid.arrange(hisc1,hisc2,stri1,nrow = <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
-<p><img src="plotinr_files/figure-markdown_github/hiscondition-1.png" alt></p>
-<h2 id="箱线图-boxplot"><a href="#箱线图-boxplot" class="headerlink" title="箱线图(boxplot)"></a>箱线图(boxplot)</h2><h3 id="lattice-bwplot"><a href="#lattice-bwplot" class="headerlink" title="lattice: bwplot()"></a><code>lattice: bwplot()</code></h3><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(ggplot2)</span><br><span class="line"><span class="keyword">library</span>(gridExtra)</span><br><span class="line"><span class="comment"># condition boxplot with lattice</span></span><br><span class="line">bx1 &lt;- bwplot(size ~ a1, data = df, ylab = <span class="string">"River Size"</span>, xlab = <span class="string">"Algae a1"</span>)</span><br><span class="line">bx2 &lt;- ggplot(aes(x = size, y = a1),data = df) + geom_boxplot() + coord_flip()</span><br><span class="line">grid.arrange(bx1, bx2, ncol = <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-<p><img src="plotinr_files/figure-markdown_github/boxcondition-1.png" alt></p>
-<h3 id="Hmisc-bwplot"><a href="#Hmisc-bwplot" class="headerlink" title="Hmisc:bwplot()"></a><code>Hmisc:bwplot()</code></h3><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(Hmisc)</span><br><span class="line"><span class="comment"># point: mean</span></span><br><span class="line"><span class="comment"># vertical lines: quantiles</span></span><br><span class="line"><span class="comment"># 下图结论：小型河流更高频率海藻且分布更加分散</span></span><br><span class="line">bxq1 &lt;- bwplot(size ~ a1, data = df, </span><br><span class="line">       panel = panel.bpplot,</span><br><span class="line">       probs = seq(<span class="number">0.01</span>,<span class="number">0.49</span>, by = <span class="number">0.01</span>),</span><br><span class="line">       datadensity = <span class="literal">TRUE</span>, ylab = <span class="string">"size"</span>, xlab = <span class="string">"a1"</span>)</span><br><span class="line"><span class="comment"># 多个因子，因子为分类变量</span></span><br><span class="line">bxq2 &lt;- bwplot(season ~ a1 | size, data = df,</span><br><span class="line">       panel = panel.bpplot,</span><br><span class="line">       probs = seq(<span class="number">0.01</span>,<span class="number">0.49</span>, by = <span class="number">0.01</span>),</span><br><span class="line">       datadensity = <span class="literal">TRUE</span>)</span><br><span class="line">bxq3 &lt;- bwplot(season ~ a1 | size, data = df)</span><br><span class="line"><span class="comment"># 多个因子，因子中包含连续变量  将其离散化后即可</span></span><br><span class="line"><span class="comment">## 连续变量离散化</span></span><br><span class="line">mno2i &lt;- equal.count(na.omit(df$mnO2), number = <span class="number">4</span>, overlap = <span class="number">1</span>/<span class="number">5</span>)</span><br><span class="line"><span class="comment">## 类似散点图，从左到右从下到上</span></span><br><span class="line">bxq4 &lt;- stripplot(season ~ a1|mno2i, data = df[!is.na(df$mnO2),])</span><br><span class="line">grid.arrange(bxq1,bxq2,bxq4,bxq3,nrow = <span class="number">2</span>,ncol = <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-<p><img src="plotinr_files/figure-markdown_github/boxquantile-1.png" alt></p>
-<h2 id="可视化参考书籍"><a href="#可视化参考书籍" class="headerlink" title="可视化参考书籍"></a>可视化参考书籍</h2><ul>
-<li><em>Statistics for Technology</em>, Chatfield(1983)。简单很好的统计书籍。例子简单能说明问题</li>
-<li><em>Introductry Statistics with R</em>, Dalgaard(2002)</li>
-<li><em>Visualizing Data</em>, Cleveland(1993), 物有所值</li>
-<li><em>The Element of Graphing Data</em>, Cleveland(1995), 更正式</li>
-<li><em>Data Visualization</em>, Chen(2008)</li>
-<li><em>R Graphics</em>, Murrell(2006), R 软件绘图</li>
-</ul>
-
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-      <div>
-        <ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>本文作者：</strong>
-    ZHENG Guoying
-  </li>
-  <li class="post-copyright-link">
-    <strong>本文链接：</strong>
-    <a href="http://stazhenggy.github.io/2019/03/14/plotinr/" title="Plot in R">http://stazhenggy.github.io/2019/03/14/plotinr/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>版权声明： </strong>
-    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
-  </li>
-</ul>
-
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated" datetime="2019-02-27T00:00:00+08:00" content="2019-02-27">
+          02-27
+        </time>
       </div>
-    
 
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/plot/" rel="tag"><i class="fa fa-tag"></i> plot</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2019/03/05/如何优雅地系列-with-Sublime-Text/" rel="next" title="如何优雅地系列之: Sublime Text">
-                <i class="fa fa-chevron-left"></i> 如何优雅地系列之: Sublime Text
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/03/22/xlwings/" rel="prev" title="xlwings">
-                xlwings <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
+    </header>
   </article>
 
 
-
-    <div class="post-spread">
       
     </div>
+
   </div>
+  
+  
+  
+
+  
+
 
 
           </div>
@@ -524,10 +334,6 @@
 
 
           
-
-  
-
-
 
         </div>
         
@@ -548,17 +354,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -621,22 +418,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Histogram-直方图"><span class="nav-number">1.</span> <span class="nav-text">Histogram(直方图)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#base-hist"><span class="nav-number">1.1.</span> <span class="nav-text">base:hist()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#箱线图-boxplot"><span class="nav-number">2.</span> <span class="nav-text">箱线图(boxplot)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lattice-bwplot"><span class="nav-number">2.1.</span> <span class="nav-text">lattice: bwplot()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hmisc-bwplot"><span class="nav-number">2.2.</span> <span class="nav-text">Hmisc:bwplot()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可视化参考书籍"><span class="nav-number">3.</span> <span class="nav-text">可视化参考书籍</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -775,10 +556,6 @@
 
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
 
   
 
