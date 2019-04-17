@@ -79,20 +79,21 @@
 
 
 
-<meta name="description" content="没有测量，就没有科学。 —— 门捷列夫  模型评估是模型开发过程不可或缺的一部分。 它有助于发现表达数据的最佳模型和所选模型将来工作的性能如何。 在数据挖掘中， 使用训练集中的数据评估模型性能是不可接受的， 容易过拟合。 为了避免过拟合，都使用模型没有遇到过的测试集来评估模型性能。">
+<meta name="description" content="没有测量，就没有科学。 —— 门捷列夫  模型评估是模型开发过程不可或缺的一部分。 它有助于发现表达数据的最佳模型(模型与模型的调参)和所选模型将来工作的性能(泛化能力)如何。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="模型评价">
 <meta property="og:url" content="http://stazhenggy.github.io/2019/04/10/modelfit/index.html">
 <meta property="og:site_name" content="S-Dragon">
-<meta property="og:description" content="没有测量，就没有科学。 —— 门捷列夫  模型评估是模型开发过程不可或缺的一部分。 它有助于发现表达数据的最佳模型和所选模型将来工作的性能如何。 在数据挖掘中， 使用训练集中的数据评估模型性能是不可接受的， 容易过拟合。 为了避免过拟合，都使用模型没有遇到过的测试集来评估模型性能。">
+<meta property="og:description" content="没有测量，就没有科学。 —— 门捷列夫  模型评估是模型开发过程不可或缺的一部分。 它有助于发现表达数据的最佳模型(模型与模型的调参)和所选模型将来工作的性能(泛化能力)如何。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://stazhenggy.github.io/2019/04/10/modelfit/src=modeljudgement.png">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/04/10/modelfit/overfit.png">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/04/10/modelfit/roc.png">
-<meta property="og:updated_time" content="2019-04-16T03:15:49.185Z">
+<meta property="og:updated_time" content="2019-04-17T12:04:55.155Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="模型评价">
-<meta name="twitter:description" content="没有测量，就没有科学。 —— 门捷列夫  模型评估是模型开发过程不可或缺的一部分。 它有助于发现表达数据的最佳模型和所选模型将来工作的性能如何。 在数据挖掘中， 使用训练集中的数据评估模型性能是不可接受的， 容易过拟合。 为了避免过拟合，都使用模型没有遇到过的测试集来评估模型性能。">
-<meta name="twitter:image" content="http://stazhenggy.github.io/2019/04/10/modelfit/overfit.png">
+<meta name="twitter:description" content="没有测量，就没有科学。 —— 门捷列夫  模型评估是模型开发过程不可或缺的一部分。 它有助于发现表达数据的最佳模型(模型与模型的调参)和所选模型将来工作的性能(泛化能力)如何。">
+<meta name="twitter:image" content="http://stazhenggy.github.io/2019/04/10/modelfit/src=modeljudgement.png">
 
 
 
@@ -346,8 +347,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-16T11:15:49+08:00">
-                2019-04-16
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-17T20:04:55+08:00">
+                2019-04-17
               </time>
             
           </span>
@@ -405,48 +406,49 @@
         <blockquote>
 <p>没有测量，就没有科学。 —— 门捷列夫</p>
 </blockquote>
-<p>模型评估是模型开发过程不可或缺的一部分。 它有助于发现表达数据的最佳模型和所选模型将来工作的性能如何。 在数据挖掘中， 使用训练集中的数据评估模型性能是不可接受的， 容易过拟合。 为了避免过拟合，都使用模型没有遇到过的测试集来评估模型性能。</p>
+<p>模型评估是模型开发过程不可或缺的一部分。 它有助于发现表达数据的最佳模型(模型与模型的调参)和所选模型将来工作的性能(泛化能力)如何。 </p>
 <a id="more"></a>
-<h1 id="为什么要做模型评价"><a href="#为什么要做模型评价" class="headerlink" title="为什么要做模型评价"></a>为什么要做模型评价</h1><p>想找到最有效的模型.模型的应用是循环迭代的过程,只有通过持续调整和调优才能适应在线数据和业务目标.<br>选用模型开始都是假设数据的分布是一定的,然而数据的分布会随着时间的移动而改变，这种现象称为分布漂移（Distribution Drift）。验证指标可以对模型在不断新生的数据集上进行性能跟踪。当性能开始下降时，说明该模型已经无法拟合当前的数据了，因此需要对模型进行重新训练了。 模型能够拟合新的数据称为模型的泛化能力。</p>
-<h1 id="怎么检验和评估模型"><a href="#怎么检验和评估模型" class="headerlink" title="怎么检验和评估模型"></a>怎么检验和评估模型</h1><p>机器学习过程分为原型设计阶段（<strong>Prototyping</strong>）与应用阶段（<strong>Deployed</strong>）。其中原型设计阶段（<strong>Prototyping</strong>）为离线评估，应用阶段（<strong>Deployed</strong>）为在线评估(<strong>online evaluation</strong>).</p>
-<ul>
-<li><p><strong>Prototyping</strong>阶段是使用历史数据训练一个适合解决目标任务的一个或多个机器学习模型，并对模型进行验证（Validation）与离线评估（Offline evaluation），然后通过评估指标选择一个较好的模型。</p>
-</li>
-<li><p><strong>Deployed</strong>阶段是当模型达到设定的指标值时便将模型上线，投入生产，使用新生成的在线数据来对该模型进行在线评估（Online evaluation）。在线测试不同于离线测试，有着不同的测试方法（最常见的便是<strong>A/B testing</strong>，它是一种统计假设检验方法）以及评价指标（在线评估时会采用业务指标,如用户点击率等，而离线评估则采用不同的评估指标,如常用的经验误差的方法）。</p>
-</li>
-</ul>
-<h1 id="模型评估"><a href="#模型评估" class="headerlink" title="模型评估"></a>模型评估</h1><p>在离线评估阶段从历史数据据获取数据集校验模型的方法包括训练集-验证集二划分校验（Hold-out validation）、交叉校验（Cross-validation）, 另一种方式是重采样技术，如bootstrapping与Jackknife,此类方法可以充分利用现有数据信息,一定程度减少过拟合。 </p>
-<h2 id="模型性能离线评估方法"><a href="#模型性能离线评估方法" class="headerlink" title="模型性能离线评估方法"></a>模型性能离线评估方法</h2><p>我们把学习器在训练集上的误差称为“训练误差”或“经验误差”, 在新样本上的误差称为“泛化误差”。</p>
-<p>在很多情况下，我们可以学得一个经验误差很小，在训练集上表现很好的学习器。 这也是学习器学习的目标。 但很多情况下，训练集上表现良好的学习器，在面对新样本时，表现并不好。 这并不是我们真正想要的。</p>
-<p>我们真正想要的是泛化误差小的学习器， 即在新样本上能够表现很好的学习器。 为了达到这个目的， 应该从训练样本中尽可能学出适用于所有潜在样本的“普遍规律”， 这样此案嗯在遇到新样本时作出正确的判断。 然而，当学习器把训练样本学得“太好了”，就很可能把训练样本自身的一些特点当作所有潜在样本都会具有的一般性质，这样就会导致泛化性能下降。 这就是“过拟合”。 与之相对的是“欠拟合”，即连训练样本的一般性质尚未学好。 </p>
+<h1 id="为什么要做模型评估"><a href="#为什么要做模型评估" class="headerlink" title="为什么要做模型评估"></a>为什么要做模型评估</h1><p>想找到最有效的模型。 </p>
+<p>这里的最有效包含两个层面：一是能尽可能好地表达当前数据，二是尽可能好地表达(预测)未来的数据,即泛化能力强。 两者都需满足。 一般情况下，泛化能力强的基础是模型首先能够尽可能地表达当前数据。 因此，可以说模型评估的目的是找到泛化能力强的模型。 如果泛化能力不够强，则重新对模型进行调整，优化甚至重建。 不断迭代，直到泛化能力达到指定标准。</p>
+<h1 id="怎么做模型评估"><a href="#怎么做模型评估" class="headerlink" title="怎么做模型评估"></a>怎么做模型评估</h1><p>模型评估贯穿于机器学习的两个大的阶段。 不同阶段，评估的方法以及指标并不相同。 如果将机器学习分为两个阶段，原型设计阶段（<strong>Prototyping</strong>）与应用阶段（<strong>Deployed</strong>），则原型设计阶段（<strong>Prototyping</strong>）主要为离线评估，而应用阶段（<strong>Deployed</strong>）为在线评估(<strong>online evaluation</strong>)。</p>
+<span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img itemprop="url image" src="src=modeljudgement.png" class="full-image"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
+<h2 id="离线评估"><a href="#离线评估" class="headerlink" title="离线评估"></a>离线评估</h2><p><strong>Prototyping</strong>阶段使用历史数据训练一个适合解决目标任务的一个或多个机器学习模型，并对模型进行验证（Validation）与离线评估（Offline evaluation），然后通过评估指标选择一个较好的模型并预测该模型未来的工作性能。 其中，Validation用于模型选择与参数调优，Evaluation用于预测该模型未来的工作性能。</p>
+<div class="note info"><p>离线评估是包含有效性的两个层面的。</p>
+<p>一方面，它使用训练集中的数据建模，并借助Validation不断调整直到找到最佳的模型，来表达当前数据。 </p>
+<p>另一方面，Evaluation通常会使用训练时没有遇到过的测试集来评估模型的未来工作性能是否达到指定标准，即最终判定当前模型是有效的。</p></div>
+<div class="note info"><h3 id="过拟合"><a href="#过拟合" class="headerlink" title="过拟合"></a>过拟合</h3><p>我们真正想要的是泛化误差小的学习器， 即在新样本上能够表现很好的学习器。 但很多情况下，训练集上表现良好的学习器，在面对新样本时，表现并不好。 因此，并不能简单认为对现有样本表达好的模型就可以很好的预测未来的新样本。 即低经验误差并不等于低泛化误差。 相反，两者之间大体是一个先正相关后负相关的关系。 </p>
+<p>为了达到泛化误差小的学习器，路径是尽可能的最小化经验误差，即从训练样本中尽可能学出适用于所有潜在样本的“普遍规律”， 这样在遇到新样本时就可以依据这个”普遍规律”作出正确的判断。 即泛化误差会随着经验误差的降低而减小，当我们学到的是真正的“普遍规律”的时候。 但当学习器过度追求最小化经验误差，即把训练样本学得“太好了”，就很可能把训练样本自身的一些特点当作所有潜在样本都会具有的一般性质，即学到的并不是真正的“普遍规律”。这样就会导致泛化性能下降。 这就是“过拟合”。 与之相对的是“欠拟合”，即连训练样本的一般性质尚未学好。 </p>
+<p>导致过拟合的原因是学习器学习能力过于强大，把训练样本不太一般的特性都学到了，而欠拟合通常是由于学习能力低下造成的。 欠拟合比较容易克服，例如在决策树中扩展分枝，神经网络增加训练轮数； 而过拟合则比较麻烦。 过拟合是机器学习面临的关键障碍，各类学习器都必然带有一些针对过拟合的措施。 同时，过拟合是无法彻底避免的。 </p></div>
 <p><img src="overfit.png" alt></p>
-<p>导致过拟合的原因是学习器学习能力过于强大，把训练样本不太一般的特性都学到了，而欠拟合通常是由于学习能力低下造成的。 欠拟合比较容易克服，例如在决策树中扩展分枝，神经网络增加训练轮数； 而过拟合则比较麻烦。 过拟合是机器学习面临的关键障碍，各类学习器都必然带有一些针对过拟合的措施。 同时，过拟合是无法彻底避免的。 </p>
-<p>我们往往有多种学习算法可供选择，甚至同一个算法也可以配置不同的参数。 那么究竟该选用哪一个学习算法，哪一种参数配置呢？ 这就是机器学习中的“模型选择(model selection)” 问题。 理想的方案是度候选模型的泛化误差进行评估，然后选择泛化误差最小的那个模型。 然而在模型构建时我们无法获得泛化误差，而训练你误差又由于过拟合现象的存在而不适合作为标准。 那么，现实中如何进行模型评估与选择呢？</p>
-<p>通过实验测试对学习器的泛化误差进行评估并选择。 为此，需使用一个测试集(testing set) 来测试学习器对新样本的判别能力，然后以测试集上的“测试误差” 作为泛化误差的近似估计。 但需要注意的是，测试集应该尽可能与训练集互斥，即测试样本尽量不在训练集中出现、 未在训练过程中使用。</p>
-<p>我们只有一个数据集，既要训练，又要测试。实现方法是： 从该数据集中产生出训练集和测试集。</p>
-<h3 id="留出法-Hold-out-validation"><a href="#留出法-Hold-out-validation" class="headerlink" title="留出法(Hold-out validation)"></a>留出法(Hold-out validation)</h3><p>使用这种方法时，通常大的数据集会被随机分成2个子集，1个用于训练，1个用于测试。 或数据量更大时，将训练集拆分成3个子集，1个用于训练，1个用于模型选择和参数优化，1个用于测试。</p>
-<p>需要注意的是，这种数据集划分相当于“分层采样(<strong>Stratified Sampling</strong>)”。 另外一个问题是，单次使用留出法得到的估计结果往往不够稳定可靠，在使用时，一般采用若干次随机划分重复实验评估后取平均值作为留出法的评估结果。 例如进行100次随机划分，每次产生一个训练/测试集用于实验评估，100次后就得到100个结果，而留出法返回的则是这100个结果的平均。</p>
-<p>最后一点是，训练样本过多则训练接近于使用全量样本，过少则与全量样本相差过大，可能也无法学习出“普遍规律”。 对于这一点，也没有完美的解决方案，常见做法是2/3 - 4/5用于训练。</p>
+<h2 id="在线评估"><a href="#在线评估" class="headerlink" title="在线评估"></a>在线评估</h2><p><strong>Deployed</strong>阶段是当模型达到设定的指标值时便将模型上线，投入生产，使用新生成的在线数据来对该模型进行在线评估（Online evaluation）。在线测试不同于离线测试，有着不同的测试方法（最常见的便是<strong>A/B testing</strong>，它是一种统计假设检验方法）以及评价指标（在线评估时会采用业务指标,如用户点击率等。而离线评估则更多采用评估模型本身拟合能力的指标,如常用的经验误差的方法）。</p>
+<p>在线评估使用的验证指标对模型在不断新生的数据集上进行性能跟踪。 当性能开始下降时，说明该模型已经无法拟合当前的数据了，因此需要对模型进行重新训练。即返回到原型涉及阶段。 </p>
+<h1 id="离线评估-1"><a href="#离线评估-1" class="headerlink" title="离线评估"></a>离线评估</h1><p>既然我们最终的目标是得到一个泛化误差最小的模型。 最理想的方案就是对所有候选模型的泛化误差进行评估，然后选择泛化误差最小的那个模型。 然而在模型构建时我们无法获得泛化误差，而训练你误差又由于过拟合现象的存在而不适合作为标准。 那么，现实中如何进行模型离线评估呢？</p>
+<p>通过实验测试对学习器的泛化误差进行预测。 即使用一个测试集(testing set) 来测试学习器对新样本的判别能力，然后以测试集上的“测试误差” 作为泛化误差的近似估计。<br>但我们只有一个数据集，既要训练，又要测试。 实现路径是： 从该数据集中产生出训练集和测试集。 具体方法包括训练集-验证集二划分校验（Hold-out validation）、交叉校验（Cross-validation），重采样技术(如Bootstrapping与Jackknife，此类方法可以充分利用现有数据信息,一定程度减少过拟合)</p>
+<div class="note warning"><p>测试集应该尽可能与训练集互斥，即测试样本尽量不在训练集中出现、 未在训练过程中使用。</p></div>
+<h2 id="留出法-Hold-out-validation"><a href="#留出法-Hold-out-validation" class="headerlink" title="留出法(Hold-out validation)"></a>留出法(Hold-out validation)</h2><p>使用这种方法时，通常大的数据集会被随机分成2个子集，1个用于训练，1个用于测试。 或数据量更大时，将训练集拆分成3个子集，1个用于训练，1个用于模型选择和参数优化，1个用于测试。</p>
 <p>训练集(Training set)： 用于构建模型</p>
 <p>验证集(Validation set)： 用于评估训练阶段所得模型的性能。 它为模型参数优化和选择最优模型提供了测试平台</p>
 <p>测试集(Test set)： 用于评估模型未来可能的性能(泛化能力)</p>
-<p>为什么不能在训练集上直接验证？ 训练误差小的，泛化误差不一定小。 </p>
-<h3 id="交叉检验-Cross-Validation"><a href="#交叉检验-Cross-Validation" class="headerlink" title="交叉检验(Cross Validation)"></a>交叉检验(Cross Validation)</h3><p>当仅有有限数量的数据时， 可以使用k折交叉验证(k-fold cross validation)。使用这种方法时， 数据被随机分成<strong>k</strong>份<strong>大小</strong>与<strong>结构</strong>均<strong>相似</strong>的<strong>互斥</strong>的子集。 然后，每次用k-1个子集的并集用于训练，余下的那个作为测试集。 进行k次训练。 最终使用k个学习器性能平均预测未来可能的性能。 k最常见的取值是10。 其他常用的还有5，20(实际中，还需要考虑时间，存储开销等其他因素。 如果学习器本身比较复杂，k如果较大则意味着时间和存储的开销都会比较大)。</p>
-<p>与留出法相似，将<strong>数据集划分为k个子集同样存在多种划分方式</strong>，为<strong>减小</strong>因<strong>样本划分不同</strong>而引入的差别, k折交叉验证通常要重复p次不同的随机划分，最终的评估结果是这p次交叉验证结果的均值，常见的是10次10折交叉验证。（平均的平均，去掉划分的影响）</p>
-<p>自助法在数据集较小，难以有效划分训练/测试集时很有用； 此外，自助法能从初始数据集中产生多个不同的训练集，这对集成学习等方法有很大的好处。 然而，自助法产生的数据集改变了初始数据集的分布(而这恰好是集成学习需要的)，这会引入估计偏差。 </p>
+<div class="note warning"><p>这种数据集划分相当于“分层采样(<strong>Stratified Sampling</strong>)”</p></div>
+<p>单次使用留出法得到的估计结果往往不够稳定可靠(数据集划分的因素)。 在使用时，一般采用若干次随机划分重复实验评估后取平均值(取多次随机的平均消除划分因素影响)作为留出法的评估结果。 例如进行100次随机划分，每次产生一个训练/测试集用于实验评估，100次后就得到100个结果，而留出法返回的则是这100个结果的平均。</p>
+<p>对于选取多少样本量用于训练，没有完美的解决方案，常见做法是2/3 - 4/5用于训练。（训练样本过多则训练接近于使用全量样本，过少则与全量样本相差过大，可能也无法学习出“普遍规律”）</p>
+<h3 id="交叉检验-Cross-Validation"><a href="#交叉检验-Cross-Validation" class="headerlink" title="交叉检验(Cross Validation)"></a>交叉检验(Cross Validation)</h3><p>当仅有有限数量的数据时， 可以使用k折交叉验证(k-fold cross validation)。 使用这种方法时，数据被随机分成<span id="inline_red">k</span>份<span id="inline-blue">大小</span>与<span id="inline-blue">结构</span>均<span id="inline-blue">相似</span>的<span id="inline-blue">互斥</span>的子集。 然后，每次用<span id="inline_red">k-1</span>个子集的并集用于训练，余下的那个作为测试集。 进行k次训练。 最终使用k个学习器性能平均预测未来可能的性能。 k最常见的取值是10。 其他常用的还有5，20(实际中，还需要考虑时间，存储开销等其他因素。 如果学习器本身比较复杂，k如果较大则意味着时间和存储的开销都会比较大)。</p>
+<p>与留出法相似，将<strong>数据集划分为k个子集同样存在多种划分方式</strong>，为<strong>减小</strong>因<strong>样本划分不同</strong>而引入的差别, k折交叉验证通常要重复p次不同的随机划分，最终的评估结果是这p次交叉验证结果的均值，常见的是10次10折交叉验证。（取多次随机的平均，去掉划分的影响）</p>
 <p>在初始数据量足够时，留出法和交叉验证法更常用一些。</p>
 <h3 id="自助法"><a href="#自助法" class="headerlink" title="自助法"></a>自助法</h3><p>我们希望评估的是用D训练出的模型。 由于保留了一部分样本用于测试， 这必然会引入一些因训练样本规模不同而导致的伏击偏差。 留一法虽受训练样本规模的变化影响较小，但是计算复杂度太高。 自助法(<strong>Boostraping</strong>)就是一个比较好的解决方案。</p>
-<h1 id="评估过程中如何调优"><a href="#评估过程中如何调优" class="headerlink" title="评估过程中如何调优"></a>评估过程中如何调优</h1><p>在进行模型评估与选择时，除了要对适用学习算法进行选择，还需要对参数进行设定。 这就是通常所说的“参数调节(<strong>Parameter Tuning</strong>)”。 参数除了模型参数还有超参数（hyperparameters）。例如logistic回归中的特征系数为模型参数,需要使用多少个特征进行表征，特征的数目这个参数便是该模型的超参数。 调参和算法选择没什么本质区别： 对每种参数配置都训练出模型，热爱后把对应最好模型的参数作为结果。 需要注意的一点是学习算法的很多参数是在实数范围内取值。 现实中常用的做法是对每个参数选定一个范围和变化步长。 这样选定的参数往往不是“最佳”值，但这是在计算开销和性能估计之间进行折中的结果。  在很多强大的学算法中有大量参数需要设定，这将导致极大的调惨工程量。 以至于在不少应用任务中，参数调得好不好往往对最终模型性能有关键性影响。</p>
+<p>自助法在数据集较小，难以有效划分训练/测试集时很有用； 此外，自助法能从初始数据集中产生多个不同的训练集，这对集成学习等方法有很大的好处。 然而，自助法产生的数据集改变了初始数据集的分布(而这恰好是集成学习需要的)，这会引入估计偏差。 </p>
+<h1 id="离线评估过程中的调优"><a href="#离线评估过程中的调优" class="headerlink" title="离线评估过程中的调优"></a>离线评估过程中的调优</h1><p>在进行模型评估与选择时，除了要对适用学习算法进行选择，还需要对参数进行设定。 这就是通常所说的“参数调节(<strong>Parameter Tuning</strong>)”。 参数除了模型参数还有超参数（hyperparameters）。例如logistic回归中的特征系数为模型参数,需要使用多少个特征进行表征，特征的数目这个参数便是该模型的超参数。 调参和算法选择没什么本质区别： 对每种参数配置都训练出模型，热爱后把对应最好模型的参数作为结果。 需要注意的一点是学习算法的很多参数是在实数范围内取值。 现实中常用的做法是对每个参数选定一个范围和变化步长。 这样选定的参数往往不是“最佳”值，但这是在计算开销和性能估计之间进行折中的结果。  在很多强大的学算法中有大量参数需要设定，这将导致极大的调惨工程量。 以至于在不少应用任务中，参数调得好不好往往对最终模型性能有关键性影响。</p>
 <p>可以用格搜索（<strong>grid search</strong>）、随机搜索（<strong>random search</strong>）以及启发式搜索（<strong>smart search</strong>）等进行Hyperparameter tuning, 从超参数空间中寻找最优的值。</p>
 <h2 id="格搜索-grid-search"><a href="#格搜索-grid-search" class="headerlink" title="格搜索(grid search)"></a>格搜索(grid search)</h2><p>格搜索便是将超参数的取值范围划分成一个个格子,对每一个格子所对应的值进行评估，选择评估结果最好的格子所对应的超参数值。例如，对于决策树叶子节点个数这一超参数，可以将值划分为这些格子：10, 20, 30, …, 100, …</p>
 <h2 id="随机搜索（random-search）"><a href="#随机搜索（random-search）" class="headerlink" title="随机搜索（random search）"></a>随机搜索（random search）</h2><p>它是格搜索的变种。相比于搜索整个格空间，随机搜索只对随机采样的那些格进行计算，然后在这中间选择一个最好的。因此随机搜索比格搜索的代价低。</p>
 <p>需要注意的是，在模型评估与选择过程中由于需要留出一部分数据进行评估测试，事实上只使用了一部分数据训练模型。 在模型选择完成后，学习算法与参数配置已选定， 应该用全量数据集重新训练模型。 这个模型训练过程中使用了所有样本，才是最终提交的模型。</p>
-<h1 id="模型评价指标-性能度量"><a href="#模型评价指标-性能度量" class="headerlink" title="模型评价指标(性能度量)"></a>模型评价指标(性能度量)</h1><p>对学习器泛化性能进行评估，不仅要有有效可行的实验估计方法，还需要有衡量泛化能力的评价标准，这就是性能度量(performance measure).</p>
-<p><a href="https://blog.csdn.net/u014182497/article/details/79384233" target="_blank" rel="noopener">https://blog.csdn.net/u014182497/article/details/79384233</a></p>
-<ul>
-<li><a href="https://blog.csdn.net/wong2016/article/details/81479665" target="_blank" rel="noopener">sklearn模型评价</a></li>
-</ul>
-<h2 id="回归任务"><a href="#回归任务" class="headerlink" title="回归任务"></a>回归任务</h2><h3 id="mse"><a href="#mse" class="headerlink" title="mse"></a>mse</h3><h3 id="rmse"><a href="#rmse" class="headerlink" title="rmse"></a>rmse</h3><h3 id="mae"><a href="#mae" class="headerlink" title="mae"></a>mae</h3><h3 id="mape-Mean-Absoloute-Precentage-Error"><a href="#mape-Mean-Absoloute-Precentage-Error" class="headerlink" title="mape(Mean Absoloute Precentage Error)"></a>mape(Mean Absoloute Precentage Error)</h3><script type="math/tex; mode=display">mape = \frac{1}{m}|\frac{trues - preds}{trues}|$</script><h2 id="分类任务"><a href="#分类任务" class="headerlink" title="分类任务"></a>分类任务</h2><h3 id="recall"><a href="#recall" class="headerlink" title="recall"></a>recall</h3><h3 id="precision"><a href="#precision" class="headerlink" title="precision"></a>precision</h3><h3 id="F1"><a href="#F1" class="headerlink" title="F1"></a>F1</h3><p>P-R曲线</p>
+<h1 id="离线评估常用的评价-性能度量-指标"><a href="#离线评估常用的评价-性能度量-指标" class="headerlink" title="离线评估常用的评价(性能度量)指标"></a>离线评估常用的评价(性能度量)指标</h1><p>对学习器泛化性能进行评估，不仅要有有效可行的实验估计方法，还需要有衡量泛化能力的评价标准，这就是性能度量(performance measure)。 回归和分类任务分别对应不同的评价指标。 </p>
+<a class="btn" href title="hand-o-right"><i class="fa fa-https://blog.csdn.net/wong2016/article/details/81479665"></i>sklearn模型评价</a>
+<h2 id="回归任务"><a href="#回归任务" class="headerlink" title="回归任务"></a>回归任务</h2><h3 id="mse"><a href="#mse" class="headerlink" title="mse"></a>mse</h3><script type="math/tex; mode=display">mse = \frac{1}{m}\sum_{i=1}^{m}{(y^i - h_{\theta}(x^i))^2}</script><h3 id="rmse"><a href="#rmse" class="headerlink" title="rmse"></a>rmse</h3><script type="math/tex; mode=display">mse = \sqrt{\frac{1}{m}\sum_{i=1}^{m}{(y^i - h_{\theta}(x^i))^2}$$}
+
+### mae
+
+$$mse = \frac{1}{m}\sum_{i=1}^{m}{|y^i - h_{\theta}(x^i)|}</script><h3 id="mape-Mean-Absoloute-Precentage-Error"><a href="#mape-Mean-Absoloute-Precentage-Error" class="headerlink" title="mape(Mean Absoloute Precentage Error)"></a>mape(Mean Absoloute Precentage Error)</h3><script type="math/tex; mode=display">mape = \frac{1}{m}\sum_{i=1}^{m}{|\frac{y^i - h_{\theta}(x^i)}{y_i}|}</script><h2 id="分类任务"><a href="#分类任务" class="headerlink" title="分类任务"></a>分类任务</h2><h3 id="recall"><a href="#recall" class="headerlink" title="recall"></a>recall</h3><h3 id="precision"><a href="#precision" class="headerlink" title="precision"></a>precision</h3><h3 id="F1"><a href="#F1" class="headerlink" title="F1"></a>F1</h3><p>P-R曲线</p>
 <p>P-R曲线绘制方法： 纵轴P，横轴R. 点： 根据预测结果，概率从高到低，按顺序逐个把样本作为positive进行预测，每次可计算出当前的R和P </p>
 <p>缺点：有交叉时不好比较，更好的方法是计算面积，但这个区域不好估算。 所以设计了一些综合考虑两者的性能度量指标。</p>
 <p>R和P的调和平均</p>
@@ -456,8 +458,10 @@
 <h3 id="AUC"><a href="#AUC" class="headerlink" title="AUC"></a>AUC</h3><h3 id="PR"><a href="#PR" class="headerlink" title="PR"></a>PR</h3><blockquote>
 <p>All models are wrong. But some are useful.</p>
 </blockquote>
-<h1 id="Rreference"><a href="#Rreference" class="headerlink" title="Rreference"></a>Rreference</h1><p>+<a href="https://www.jianshu.com/p/498ea0d8017d" target="_blank" rel="noopener">模型评价与标准</a></p>
-<p><a href="https://blog.csdn.net/u014182497/article/details/79384233" target="_blank" rel="noopener">https://blog.csdn.net/u014182497/article/details/79384233</a></p>
+<h1 id="Rreference"><a href="#Rreference" class="headerlink" title="Rreference"></a>Rreference</h1><ul>
+<li><a href="https://www.jianshu.com/p/498ea0d8017d" target="_blank" rel="noopener">模型评价与标准</a></li>
+<li><a href="https://blog.csdn.net/u014182497/article/details/79384233" target="_blank" rel="noopener">模型评价指标</a></li>
+</ul>
 
       
     </div>
@@ -645,7 +649,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么要做模型评价"><span class="nav-number">1.</span> <span class="nav-text">为什么要做模型评价</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#怎么检验和评估模型"><span class="nav-number">2.</span> <span class="nav-text">怎么检验和评估模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模型评估"><span class="nav-number">3.</span> <span class="nav-text">模型评估</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模型性能离线评估方法"><span class="nav-number">3.1.</span> <span class="nav-text">模型性能离线评估方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#留出法-Hold-out-validation"><span class="nav-number">3.1.1.</span> <span class="nav-text">留出法(Hold-out validation)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#交叉检验-Cross-Validation"><span class="nav-number">3.1.2.</span> <span class="nav-text">交叉检验(Cross Validation)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自助法"><span class="nav-number">3.1.3.</span> <span class="nav-text">自助法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#评估过程中如何调优"><span class="nav-number">4.</span> <span class="nav-text">评估过程中如何调优</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#格搜索-grid-search"><span class="nav-number">4.1.</span> <span class="nav-text">格搜索(grid search)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#随机搜索（random-search）"><span class="nav-number">4.2.</span> <span class="nav-text">随机搜索（random search）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模型评价指标-性能度量"><span class="nav-number">5.</span> <span class="nav-text">模型评价指标(性能度量)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#回归任务"><span class="nav-number">5.1.</span> <span class="nav-text">回归任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mse"><span class="nav-number">5.1.1.</span> <span class="nav-text">mse</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rmse"><span class="nav-number">5.1.2.</span> <span class="nav-text">rmse</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mae"><span class="nav-number">5.1.3.</span> <span class="nav-text">mae</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mape-Mean-Absoloute-Precentage-Error"><span class="nav-number">5.1.4.</span> <span class="nav-text">mape(Mean Absoloute Precentage Error)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分类任务"><span class="nav-number">5.2.</span> <span class="nav-text">分类任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#recall"><span class="nav-number">5.2.1.</span> <span class="nav-text">recall</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#precision"><span class="nav-number">5.2.2.</span> <span class="nav-text">precision</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#F1"><span class="nav-number">5.2.3.</span> <span class="nav-text">F1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#macro-P"><span class="nav-number">5.2.4.</span> <span class="nav-text">macro-P</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#macro-R"><span class="nav-number">5.2.5.</span> <span class="nav-text">macro-R</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#macro-F1"><span class="nav-number">5.2.6.</span> <span class="nav-text">macro-F1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#micro-P"><span class="nav-number">5.2.7.</span> <span class="nav-text">micro-P</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#micro-R"><span class="nav-number">5.2.8.</span> <span class="nav-text">micro-R</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#micro-F1"><span class="nav-number">5.2.9.</span> <span class="nav-text">micro-F1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ROC"><span class="nav-number">5.2.10.</span> <span class="nav-text">ROC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AUC"><span class="nav-number">5.2.11.</span> <span class="nav-text">AUC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PR"><span class="nav-number">5.2.12.</span> <span class="nav-text">PR</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Rreference"><span class="nav-number">6.</span> <span class="nav-text">Rreference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么要做模型评估"><span class="nav-number">1.</span> <span class="nav-text">为什么要做模型评估</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#怎么做模型评估"><span class="nav-number">2.</span> <span class="nav-text">怎么做模型评估</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#离线评估"><span class="nav-number">2.1.</span> <span class="nav-text">离线评估</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#过拟合"><span class="nav-number">2.1.1.</span> <span class="nav-text">过拟合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在线评估"><span class="nav-number">2.2.</span> <span class="nav-text">在线评估</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#离线评估-1"><span class="nav-number">3.</span> <span class="nav-text">离线评估</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#留出法-Hold-out-validation"><span class="nav-number">3.1.</span> <span class="nav-text">留出法(Hold-out validation)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#交叉检验-Cross-Validation"><span class="nav-number">3.1.1.</span> <span class="nav-text">交叉检验(Cross Validation)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自助法"><span class="nav-number">3.1.2.</span> <span class="nav-text">自助法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#离线评估过程中的调优"><span class="nav-number">4.</span> <span class="nav-text">离线评估过程中的调优</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#格搜索-grid-search"><span class="nav-number">4.1.</span> <span class="nav-text">格搜索(grid search)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#随机搜索（random-search）"><span class="nav-number">4.2.</span> <span class="nav-text">随机搜索（random search）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#离线评估常用的评价-性能度量-指标"><span class="nav-number">5.</span> <span class="nav-text">离线评估常用的评价(性能度量)指标</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#回归任务"><span class="nav-number">5.1.</span> <span class="nav-text">回归任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mse"><span class="nav-number">5.1.1.</span> <span class="nav-text">mse</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rmse"><span class="nav-number">5.1.2.</span> <span class="nav-text">rmse</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mape-Mean-Absoloute-Precentage-Error"><span class="nav-number">5.1.3.</span> <span class="nav-text">mape(Mean Absoloute Precentage Error)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分类任务"><span class="nav-number">5.2.</span> <span class="nav-text">分类任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#recall"><span class="nav-number">5.2.1.</span> <span class="nav-text">recall</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#precision"><span class="nav-number">5.2.2.</span> <span class="nav-text">precision</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#F1"><span class="nav-number">5.2.3.</span> <span class="nav-text">F1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#macro-P"><span class="nav-number">5.2.4.</span> <span class="nav-text">macro-P</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#macro-R"><span class="nav-number">5.2.5.</span> <span class="nav-text">macro-R</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#macro-F1"><span class="nav-number">5.2.6.</span> <span class="nav-text">macro-F1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#micro-P"><span class="nav-number">5.2.7.</span> <span class="nav-text">micro-P</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#micro-R"><span class="nav-number">5.2.8.</span> <span class="nav-text">micro-R</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#micro-F1"><span class="nav-number">5.2.9.</span> <span class="nav-text">micro-F1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ROC"><span class="nav-number">5.2.10.</span> <span class="nav-text">ROC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AUC"><span class="nav-number">5.2.11.</span> <span class="nav-text">AUC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PR"><span class="nav-number">5.2.12.</span> <span class="nav-text">PR</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Rreference"><span class="nav-number">6.</span> <span class="nav-text">Rreference</span></a></li></ol></div>
             
 
           </div>
