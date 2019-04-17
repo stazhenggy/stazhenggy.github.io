@@ -79,21 +79,21 @@
 
 
 
-<meta name="description" content="本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的R实现。">
+<meta name="description" content="本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的R实现。 决策树学习采用的是自顶向下的递归方法，其基本思想是以信息熵(或其他目标)为度量，构造一棵熵值下降最快的树，到叶子节点处的熵值为零，此时每个叶节点中的实例都属于同一类。">
 <meta name="keywords" content="tree,C50">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tree Models">
 <meta property="og:url" content="http://stazhenggy.github.io/2019/03/29/c50/index.html">
 <meta property="og:site_name" content="S-Dragon">
-<meta property="og:description" content="本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的R实现。">
+<meta property="og:description" content="本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的R实现。 决策树学习采用的是自顶向下的递归方法，其基本思想是以信息熵(或其他目标)为度量，构造一棵熵值下降最快的树，到叶子节点处的熵值为零，此时每个叶节点中的实例都属于同一类。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/03/29/c50/c50_files/figure-markdown_github/rpart-1.png">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/03/29/c50/c50_files/figure-markdown_github/rpart-2.png">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/03/29/c50/c50_files/figure-markdown_github/c50-1.png">
-<meta property="og:updated_time" content="2019-04-16T09:27:25.440Z">
+<meta property="og:updated_time" content="2019-04-17T07:33:21.899Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tree Models">
-<meta name="twitter:description" content="本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的R实现。">
+<meta name="twitter:description" content="本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的R实现。 决策树学习采用的是自顶向下的递归方法，其基本思想是以信息熵(或其他目标)为度量，构造一棵熵值下降最快的树，到叶子节点处的熵值为零，此时每个叶节点中的实例都属于同一类。">
 <meta name="twitter:image" content="http://stazhenggy.github.io/2019/03/29/c50/c50_files/figure-markdown_github/rpart-1.png">
 
 
@@ -348,8 +348,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-16T17:27:25+08:00">
-                2019-04-16
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-17T15:33:21+08:00">
+                2019-04-17
               </time>
             
           </span>
@@ -416,6 +416,7 @@
 
       
         <p>本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的<span id="inline-blue">R</span>实现。</p>
+<p>决策树学习采用的是自顶向下的递归方法，其基本思想是以信息熵(或其他目标)为度量，构造一棵熵值下降最快的树，到叶子节点处的熵值为零，此时每个叶节点中的实例都属于同一类。</p>
 <a id="more"></a>
 <h3 id="决策树生成计算过程"><a href="#决策树生成计算过程" class="headerlink" title="决策树生成计算过程"></a>决策树生成计算过程</h3><h4 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h4><div class="table-container">
 <table>
@@ -608,7 +609,7 @@
 </tr>
 <tr>
 <td>parms</td>
-<td>只适用分类树 <code>parms = list(split,prior,loss)</code></td>
+<td>只适用分类树 <code>parms = list(split,prior,loss)</code> <br> <code>split = c(&quot;info&quot;,&quot;gini&quot;)</code></td>
 </tr>
 <tr>
 <td>controls</td>
@@ -741,8 +742,17 @@
 ##   setosa         13          0         0
 ##   versicolor      2         13         1
 ##   virginica       0          1        10
-</code></pre><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
-<li><p><a href="https://en.proft.me/2016/11/9/classification-using-decision-trees-r/" target="_blank" rel="noopener">lassification with Decision Trees</a></p>
+</code></pre><h3 id="ID3-C4-5-C5-0-CART优缺点"><a href="#ID3-C4-5-C5-0-CART优缺点" class="headerlink" title="ID3, C4.5,C5.0,CART优缺点"></a>ID3, C4.5,C5.0,CART优缺点</h3><div class="tabs" id="tab"><ul class="nav-tabs"><li class="tab active"><a href="#tab-1">ID3</a></li><li class="tab"><a href="#tab-2">C4.5</a></li><li class="tab"><a href="#tab-3">C5.0</a></li><li class="tab"><a href="#tab-4">CART</a></li></ul><div class="tab-content"><div class="tab-pane active" id="tab-1"><p><strong>优点</strong></p>
+<p><strong>缺点</strong></p>
+<p>1 不能处理连续特征</p>
+<p>2 倾向于选择属性值较多的特征进行分枝，可能导致庞大而浅的树。 </p>
+<div class="note info"><p><strong>解决方法</strong><br>特征属性合并，减少特征属性值</p></div>
+
+<p>3 对噪声敏感</p>
+<div class="note info"><p><strong>解决方法</strong><br>将敏感的缺点转化为优点，使用Random Forest</p></div>
+</div><div class="tab-pane" id="tab-2"></div><div class="tab-pane" id="tab-3"></div><div class="tab-pane" id="tab-4"></div></div></div>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
+<li><p><a href="https://en.proft.me/2016/11/9/classification-using-decision-trees-r/" target="_blank" rel="noopener">Classification with Decision Trees</a></p>
 </li>
 <li><p><a href="https://blog.csdn.net/weixin_43216017/article/details/87739323" target="_blank" rel="noopener">R实现决策树</a></p>
 </li>
@@ -948,7 +958,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#决策树生成计算过程"><span class="nav-number">1.</span> <span class="nav-text">决策树生成计算过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据集"><span class="nav-number">1.1.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ID3-InfoGain-g-D-A"><span class="nav-number">1.2.</span> <span class="nav-text">ID3: InfoGain g(D|A)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ID3-try-Variance-like-ANOVA"><span class="nav-number">1.3.</span> <span class="nav-text">ID3: try Variance like ANOVA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C4-5-Info-Gain-Ratio"><span class="nav-number">1.4.</span> <span class="nav-text">C4.5: Info Gain Ratio</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CART-Gini"><span class="nav-number">1.5.</span> <span class="nav-text">CART: Gini</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rpart"><span class="nav-number">2.</span> <span class="nav-text">rpart</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#rpart常用参数"><span class="nav-number">2.1.</span> <span class="nav-text">rpart常用参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#rpart-plot常用参数"><span class="nav-number">2.2.</span> <span class="nav-text">rpart.plot常用参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C50"><span class="nav-number">3.</span> <span class="nav-text">C50</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#决策树生成计算过程"><span class="nav-number">1.</span> <span class="nav-text">决策树生成计算过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据集"><span class="nav-number">1.1.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ID3-InfoGain-g-D-A"><span class="nav-number">1.2.</span> <span class="nav-text">ID3: InfoGain g(D|A)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ID3-try-Variance-like-ANOVA"><span class="nav-number">1.3.</span> <span class="nav-text">ID3: try Variance like ANOVA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C4-5-Info-Gain-Ratio"><span class="nav-number">1.4.</span> <span class="nav-text">C4.5: Info Gain Ratio</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CART-Gini"><span class="nav-number">1.5.</span> <span class="nav-text">CART: Gini</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rpart"><span class="nav-number">2.</span> <span class="nav-text">rpart</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#rpart常用参数"><span class="nav-number">2.1.</span> <span class="nav-text">rpart常用参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#rpart-plot常用参数"><span class="nav-number">2.2.</span> <span class="nav-text">rpart.plot常用参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C50"><span class="nav-number">3.</span> <span class="nav-text">C50</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ID3-C4-5-C5-0-CART优缺点"><span class="nav-number">4.</span> <span class="nav-text">ID3, C4.5,C5.0,CART优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
@@ -969,13 +979,37 @@
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
-  <span class="with-love">
-    <i class="fa fa-heart" aria-hidden="true"></i>
+  <span class="with-love" id="heart">
+    <i class="fa fa-heart" aria-hidden="true" id="heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">ZHENG Guoying</span>
 
   
 </div>
+
+<span class="footer__copyright">
+<div><span id="span_dt_dt"> </span>
+<script language="javascript">
+function show_date_time(){
+window.setTimeout("show_date_time()", 1000);
+BirthDay=new Date("02/26/2019 00:00:00");//这个日期是可以修改的
+today=new Date();
+timeold=(today.getTime()-BirthDay.getTime());//其实仅仅改了这里
+sectimeold=timeold/1000
+secondsold=Math.floor(sectimeold);
+msPerDay=24*60*60*1000
+e_daysold=timeold/msPerDay
+daysold=Math.floor(e_daysold);
+e_hrsold=(e_daysold-daysold)*24;
+hrsold=Math.floor(e_hrsold);
+e_minsold=(e_hrsold-hrsold)*60;
+minsold=Math.floor((e_hrsold-hrsold)*60);
+seconds=Math.floor((e_minsold-minsold)*60);
+span_dt_dt.innerHTML="博客已运行"+daysold+"天"+hrsold+"小时"+minsold+"分"+seconds+"秒 🐼 ";
+}
+show_date_time();
+</script></div>
+</span>
 
 
 
@@ -983,6 +1017,7 @@
 
 
   <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div> 
+
 
 
 
