@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="boosting,random forest,">
+  <meta name="keywords" content="boosting,bagging,random forest,">
 
 
 
@@ -79,30 +79,28 @@
 
 
 
-<meta name="description" content="信息是用来消除随机不确定性的东西。 —— 香农">
-<meta name="keywords" content="boosting,random forest">
+<meta name="description" content="集成学习(Ensemble Learning)集成学习通过构建并结合多个学习器来完成学习任务。 集成学习的一般结构： 先产生一组“个体学习器”，再用某种策略将它们结合起来。 个体学习器通常由一个现有的学习算法从训练数据产生。">
+<meta name="keywords" content="boosting,bagging,random forest">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Random Forest">
 <meta property="og:url" content="http://stazhenggy.github.io/2019/04/02/rf/index.html">
 <meta property="og:site_name" content="S-Dragon">
-<meta property="og:description" content="信息是用来消除随机不确定性的东西。 —— 香农">
+<meta property="og:description" content="集成学习(Ensemble Learning)集成学习通过构建并结合多个学习器来完成学习任务。 集成学习的一般结构： 先产生一组“个体学习器”，再用某种策略将它们结合起来。 个体学习器通常由一个现有的学习算法从训练数据产生。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/mcomp.png">
-<meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/ensembleme.png">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/bb3.png">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/ensemble_adaboost.png">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/adaboost_alg.png">
-<meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/ensemble_pred.png">
+<meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/bagging.png">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/bag_alg.png">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/rf1.png">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/bagrf.png">
-<meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/stackingme.png">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/stacking.png">
-<meta property="og:updated_time" content="2019-04-16T09:53:08.850Z">
+<meta property="og:image" content="http://stazhenggy.github.io/2019/04/02/rf/stackingme.png">
+<meta property="og:updated_time" content="2019-04-18T08:11:43.545Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Random Forest">
-<meta name="twitter:description" content="信息是用来消除随机不确定性的东西。 —— 香农">
-<meta name="twitter:image" content="http://stazhenggy.github.io/2019/04/02/rf/mcomp.png">
+<meta name="twitter:description" content="集成学习(Ensemble Learning)集成学习通过构建并结合多个学习器来完成学习任务。 集成学习的一般结构： 先产生一组“个体学习器”，再用某种策略将它们结合起来。 个体学习器通常由一个现有的学习算法从训练数据产生。">
+<meta name="twitter:image" content="http://stazhenggy.github.io/2019/04/02/rf/bb3.png">
 
 
 
@@ -356,8 +354,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-16T17:53:08+08:00">
-                2019-04-16
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-18T16:11:43+08:00">
+                2019-04-18
               </time>
             
           </span>
@@ -423,24 +421,20 @@
       
 
       
-        <p><img src="mcomp.png" alt></p>
-<blockquote>
-<p>信息是用来消除随机不确定性的东西。 —— 香农</p>
-</blockquote>
+        <p><img src="bb3.png" alt></p>
+<h1 id="集成学习-Ensemble-Learning"><a href="#集成学习-Ensemble-Learning" class="headerlink" title="集成学习(Ensemble Learning)"></a>集成学习(Ensemble Learning)</h1><p>集成学习通过构建并结合多个学习器来完成学习任务。 集成学习的一般结构： 先产生一组“个体学习器”，再用某种策略将它们结合起来。 个体学习器通常由一个现有的学习算法从训练数据产生。 </p>
 <a id="more"></a>
-<h1 id="集成学习-Ensemble-Learning"><a href="#集成学习-Ensemble-Learning" class="headerlink" title="集成学习(Ensemble Learning)"></a>集成学习(Ensemble Learning)</h1><p>集成学习通过构建并结合多个学习器来完成学习任务。 集成学习的一般结构： 先产生一组“个体学习器”，再用某种策略将它们结合起来。 个体学习器通常由一个现有的学习算法从训练数据产生。 如果个体学习器是“同质”的，即个体学习器由相同的算法生成，则这些个体学习器亦称“基学习器”，相应的学习算法称为“基学习算法”。 如果个体学习器是“异质”的，即个体学习器由不同的学习算法生成，则个体学习器常称为“组件学习器”或直接称为个体学习器。</p>
-<p><img src="ensembleme.png" alt></p>
+<p>如果个体学习器是“同质”的，即个体学习器由相同的算法生成，则这些个体学习器亦称“基学习器”，相应的学习算法称为“基学习算法”。 如果个体学习器是“异质”的，即个体学习器由不同的学习算法生成，则个体学习器常称为“组件学习器”或直接称为个体学习器。</p>
 <p>根据个体学习器的生成方式，目前的集成学习大致可以分为两大类，一类是个体学习器间存在强依赖关系，必须串行生成的序列化方法，代表是Boosting. 另一类是个体学习器间不存在强依赖关系，可同时生成的并行化方法，代表是Bagging和Random Forest.</p>
-<p><img src="bb3.png" alt="baggingandboosting"></p>
 <h1 id="Boosting"><a href="#Boosting" class="headerlink" title="Boosting"></a>Boosting</h1><p>Boosting 是一族可将弱学习器提升为强学习器的算法。 这族算法的工作机制类似： 先从初始训练集训练出一个基学习器， 再根据基学习器的表现对训练样本分布进行调整，使得先前基学习器做错的训练样本在后续得到更多的关注。 然后基于调整后的样本分布来训练下一个基学习器。 如此重复进行，直到基学习器数目达到事先指定的值T。 最后将这T个基学习器进行加权结合。</p>
 <p><img src="ensemble_adaboost.png" alt="adaboost"> </p>
 <p><img src="adaboost_alg.png" alt="adaboost"> </p>
 <p>Boosting算法要求基学习器能对特定的数据分布进行学习。 这可通过”重赋权法(<strong>re-weighting</strong>)”实施，即在训练过程的每一轮，根据样本分布为每个训练样本重新赋予一个权重。</p>
 <p>Boosting主要关注降低偏差， 因此Boosting能基于泛化性能相当弱的学习器构建出很强的集成。</p>
-<h1 id="Bagging与随机森林"><a href="#Bagging与随机森林" class="headerlink" title="Bagging与随机森林"></a>Bagging与随机森林</h1><p>欲得到<strong>泛化性能强</strong>的集成，集成中的个体学习器应尽可能相互<strong>独立</strong>；虽然“独立”在现实任务中无法做到(因为所有的分类器是为解决同一个问题训练出来的)，但可以设法使基学习器尽可能具有较大的<strong>差异</strong>。 给定一个训练数据集，一种可能的做法是对训练样本进行采样，产生出若干个不同的子集，再从每个数据子集中训练出一个基学习器。 这样，由于<strong>训练数据不同</strong>，我们获得的<strong>基学习器</strong>有望具有比较大的<strong>差异</strong>。 然而，为获得好的集成，又希望<strong>个体学习器不能太差</strong>。 如果采样出的每个子集都完全不同，则每个基学习器只用到了一小部分训练数据，甚至不足以进行有效学习，这显然无法确保产生出比较好的基学习器。 为了解决这个问题，可以考虑使用互相<strong>有交叠</strong>的<strong>采样</strong>子集。 </p>
+<h1 id="Bagging与Random-Forest"><a href="#Bagging与Random-Forest" class="headerlink" title="Bagging与Random Forest"></a>Bagging与Random Forest</h1><p>欲得到<strong>泛化性能强</strong>的集成，集成中的个体学习器应尽可能相互<strong>独立</strong>；虽然“独立”在现实任务中无法做到(因为所有的分类器是为解决同一个问题训练出来的)，但可以设法使基学习器尽可能具有较大的<strong>差异</strong>。 给定一个训练数据集，一种可能的做法是对训练样本进行采样，产生出若干个不同的子集，再从每个数据子集中训练出一个基学习器。 这样，由于<strong>训练数据不同</strong>，我们获得的<strong>基学习器</strong>有望具有比较大的<strong>差异</strong>。 然而，为获得好的集成，又希望<strong>个体学习器不能太差</strong>。 如果采样出的每个子集都完全不同，则每个基学习器只用到了一小部分训练数据，甚至不足以进行有效学习，这显然无法确保产生出比较好的基学习器。 为了解决这个问题，可以考虑使用互相<strong>有交叠</strong>的<strong>采样</strong>子集。 </p>
 <p>不同于Boosting, Bagging是通过<strong>re-sampling</strong>实现对不同的数据分布进行学习的。</p>
 <h2 id="Bagging"><a href="#Bagging" class="headerlink" title="Bagging"></a>Bagging</h2><p>Bagging(<strong>Bootstrap Aggregating</strong>)是<strong>并行式集成学习方法</strong>最著名的代表。 它直接基于Boostraping. 给定包含m个样本的数据集，有放回随机抽样得到含m个样本的采样集(初始训练集中有的样本在采样集里多次出现，有的则从未出现。 初始训练集中约有63.2%的样本出现在采样集中)。 照这样，可以采样出T个含m个训练样本的采样集，然后基于每个采样集训练出一个基学习器，再将这些基学习器进行结合。 这就是Bagging的基本流程。 在对预测输出进行结合时，Bagging对分类任务使用多数表决法，对回归任务使用简单平均法。 若分类预测时出现两个类收到同样票数的情形，则最简单的做法是随机选一个， 也可以进一步考察学习器投票的置信度来确定最终胜者。 </p>
-<p><img src="ensemble_pred.png" alt> </p>
+<p><img src="bagging.png" alt> </p>
 <p><img src="bag_alg.png" alt></p>
 <p>假定基学习器的计算复杂度为$O(m)$, 则Bagging的复杂度大致为$T(O(m) + O(s))$, 考虑到采样与投票/平均过程的复杂度$O(s)$很小， 而T通常是一个不太大的常数，因此， 训练一个Bagging集成与直接使用基学习算法训练一个学习器的复杂度同阶，这说明Bagging是一个很高效的集成学习算法。 另外，与标准Adaboost只适用于二分类任务不同，Bagging能不经修改地用于多分类、回归等任务。 </p>
 <p>另外，自主采样过程还给Bagging带来了另一个优点： 由于每个基学习器只使用了初始训练集中约63.2%的样本，剩下约36.8%的样本可用作验证集来对泛化性能进行“包外估计”(out-of-bag estimate)。 包外样本还有其他用途。 例如当基学习器是决策树时， 可使用包外样本来辅助剪枝， 或用于估计决策树中各结点的后验概率以辅助对零训练样本结点的处理； 当基学习器是神经网络时， 可使用包外样本来辅助早期停止以减小过拟合风险。</p>
@@ -521,20 +515,18 @@
 </table>
 </div>
 <p>此外，RF相比CART，有两点新增：</p>
-<ol>
+<ul>
 <li><p>新增bagging. 即RF基于Boostraping构建出T个与原数据集相同大小的训练集。然后在每个训练集上构建tree model. 最终将所有树集成森林。</p>
 </li>
 <li><p>在每颗树生成时，节点分裂仅使用部分特征。</p>
 </li>
-</ol>
-<h2 id="结合策略"><a href="#结合策略" class="headerlink" title="结合策略"></a>结合策略</h2><h3 id="简单平均"><a href="#简单平均" class="headerlink" title="简单平均"></a>简单平均</h3><h3 id="加权平均"><a href="#加权平均" class="headerlink" title="加权平均"></a>加权平均</h3><h3 id="绝对多数投票法"><a href="#绝对多数投票法" class="headerlink" title="绝对多数投票法"></a>绝对多数投票法</h3><h3 id="加权投票法"><a href="#加权投票法" class="headerlink" title="加权投票法"></a>加权投票法</h3><p>类标记</p>
-<p>类概率</p>
-<p>有趣的是， 虽然分类器估计出的类概率值一般都不太准确， 但基于类概率进行结合往往比直接基于类标记进行结合性能更好。 </p>
-<h3 id="学习法"><a href="#学习法" class="headerlink" title="学习法"></a>学习法</h3><p>当训练数据很多时，一种更为强大的结合策略是使用“学习法”，即通过另一个学习器来进行结合。  <strong>Stacking</strong>是学习法的典型代表。 把个体学习器称为初级学习器， 用于结合的学习器称为次级学习器或元学习器。</p>
+</ul>
+<h2 id="结合策略"><a href="#结合策略" class="headerlink" title="结合策略"></a>结合策略</h2><h3 id="简单平均"><a href="#简单平均" class="headerlink" title="简单平均"></a>简单平均</h3><h3 id="加权平均"><a href="#加权平均" class="headerlink" title="加权平均"></a>加权平均</h3><h3 id="绝对多数投票法"><a href="#绝对多数投票法" class="headerlink" title="绝对多数投票法"></a>绝对多数投票法</h3><h3 id="加权投票法"><a href="#加权投票法" class="headerlink" title="加权投票法"></a>加权投票法</h3><div class="note success"><p>有趣的是， 虽然分类器估计出的类概率值一般都不太准确， 但基于类概率进行结合往往比直接基于类标记进行结合性能更好。 </p></div>
+<h3 id="学习法"><a href="#学习法" class="headerlink" title="学习法"></a>学习法</h3><p>当训练数据很多时，一种更为强大的结合策略是使用“学习法”，即通过另一个学习器来进行结合。 <strong>Stacking</strong>是学习法的典型代表。 把个体学习器称为初级学习器， 用于结合的学习器称为次级学习器或元学习器。</p>
 <p>Stacking 先从初始数据集训练出初级学习器， 然后“生成” 一个新数据集用于训练次级学习器。 在这个新数据集中， 初级学习器的输出被当作样例输入特征， 而初始样本的标记仍被当作样例标记。</p>
-<p><img src="stackingme.png" alt="stacking"></p>
+<p><img src="stacking.png" alt></p>
 <p>在训练阶段，次级训练集是利用初级学习器产生的，若直接用初级学习器的训练集来产生次级训练集，则过拟合风险比较大； 因此，一般通过交叉验证或留一法这样的方式， 用训练初级学习器未使用的样本来产生次级学习器的训练样本。 以k折交叉验证为例。</p>
-<p><img src="stacking.png" alt="stacking"></p>
+<p><img src="stackingme.png" alt="stacking"></p>
 <p>初始训练集D被随机划分为k个大小相似的集合，$D_1,D_2,\cdots,D_k$. 令$D_j$和$\bar{D_j}$分别表示第j折的测试集和训练集。 </p>
 <p>给定T个初级学习算法，初级学习器$h_{t}^{j}$为在$\bar{D_j}$上使用第t个学习算法而得。</p>
 <p>对每个样本，$x_i$, 令$z_{it} = h_t(x_i)$ 表示$x_i$在第t个初级学习器上的预测值。 则由$x_i$产生的次级训练集为 ${z_i} = (z_{i1},z_{i2},\cdots,z_{iT})$</p>
@@ -607,6 +599,8 @@
         <div class="post-tags">
           
             <a href="/tags/boosting/" rel="tag"><i class="fa fa-tag"></i> boosting</a>
+          
+            <a href="/tags/bagging/" rel="tag"><i class="fa fa-tag"></i> bagging</a>
           
             <a href="/tags/random-forest/" rel="tag"><i class="fa fa-tag"></i> random forest</a>
           
@@ -732,7 +726,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -766,7 +760,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#集成学习-Ensemble-Learning"><span class="nav-number">1.</span> <span class="nav-text">集成学习(Ensemble Learning)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Boosting"><span class="nav-number">2.</span> <span class="nav-text">Boosting</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bagging与随机森林"><span class="nav-number">3.</span> <span class="nav-text">Bagging与随机森林</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Bagging"><span class="nav-number">3.1.</span> <span class="nav-text">Bagging</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Random-Forest"><span class="nav-number">3.2.</span> <span class="nav-text">Random Forest</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#几个优点"><span class="nav-number">3.2.1.</span> <span class="nav-text">几个优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点"><span class="nav-number">3.2.2.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#森林中每棵树的生成-并行"><span class="nav-number">3.2.3.</span> <span class="nav-text">森林中每棵树的生成(并行)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#随机森林的错误率相关因素"><span class="nav-number">3.2.4.</span> <span class="nav-text">随机森林的错误率相关因素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#袋外错误率-obb-error"><span class="nav-number">3.2.5.</span> <span class="nav-text">袋外错误率(obb error)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#和其他算法的比较"><span class="nav-number">3.2.6.</span> <span class="nav-text">和其他算法的比较</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#v-s-CART"><span class="nav-number">3.2.6.1.</span> <span class="nav-text">v.s. CART</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结合策略"><span class="nav-number">3.3.</span> <span class="nav-text">结合策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简单平均"><span class="nav-number">3.3.1.</span> <span class="nav-text">简单平均</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加权平均"><span class="nav-number">3.3.2.</span> <span class="nav-text">加权平均</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绝对多数投票法"><span class="nav-number">3.3.3.</span> <span class="nav-text">绝对多数投票法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加权投票法"><span class="nav-number">3.3.4.</span> <span class="nav-text">加权投票法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#学习法"><span class="nav-number">3.3.5.</span> <span class="nav-text">学习法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思考"><span class="nav-number">4.</span> <span class="nav-text">思考</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#集成学习-Ensemble-Learning"><span class="nav-number">1.</span> <span class="nav-text">集成学习(Ensemble Learning)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Boosting"><span class="nav-number">2.</span> <span class="nav-text">Boosting</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bagging与Random-Forest"><span class="nav-number">3.</span> <span class="nav-text">Bagging与Random Forest</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Bagging"><span class="nav-number">3.1.</span> <span class="nav-text">Bagging</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Random-Forest"><span class="nav-number">3.2.</span> <span class="nav-text">Random Forest</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#几个优点"><span class="nav-number">3.2.1.</span> <span class="nav-text">几个优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点"><span class="nav-number">3.2.2.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#森林中每棵树的生成-并行"><span class="nav-number">3.2.3.</span> <span class="nav-text">森林中每棵树的生成(并行)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#随机森林的错误率相关因素"><span class="nav-number">3.2.4.</span> <span class="nav-text">随机森林的错误率相关因素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#袋外错误率-obb-error"><span class="nav-number">3.2.5.</span> <span class="nav-text">袋外错误率(obb error)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#和其他算法的比较"><span class="nav-number">3.2.6.</span> <span class="nav-text">和其他算法的比较</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#v-s-CART"><span class="nav-number">3.2.6.1.</span> <span class="nav-text">v.s. CART</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结合策略"><span class="nav-number">3.3.</span> <span class="nav-text">结合策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简单平均"><span class="nav-number">3.3.1.</span> <span class="nav-text">简单平均</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加权平均"><span class="nav-number">3.3.2.</span> <span class="nav-text">加权平均</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绝对多数投票法"><span class="nav-number">3.3.3.</span> <span class="nav-text">绝对多数投票法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加权投票法"><span class="nav-number">3.3.4.</span> <span class="nav-text">加权投票法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#学习法"><span class="nav-number">3.3.5.</span> <span class="nav-text">学习法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思考"><span class="nav-number">4.</span> <span class="nav-text">思考</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>

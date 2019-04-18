@@ -79,21 +79,21 @@
 
 
 
-<meta name="description" content="本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的R实现。 决策树学习采用的是自顶向下的递归方法，其基本思想是以信息熵(或其他目标)为度量，构造一棵熵值下降最快的树，到叶子节点处的熵值为零，此时每个叶节点中的实例都属于同一类。">
+<meta name="description" content="信息是用来消除随机不确定性的东西。 —— 香农  本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的R实现。 决策树学习采用的是自顶向下的递归方法，其基本思想是以信息熵(或其他目标)为度量，构造一棵熵值下降最快的树，到叶子节点处的熵值为零，此时每个叶节点中的实例都属于同一类。">
 <meta name="keywords" content="tree,C50">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tree Models">
 <meta property="og:url" content="http://stazhenggy.github.io/2019/03/29/c50/index.html">
 <meta property="og:site_name" content="S-Dragon">
-<meta property="og:description" content="本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的R实现。 决策树学习采用的是自顶向下的递归方法，其基本思想是以信息熵(或其他目标)为度量，构造一棵熵值下降最快的树，到叶子节点处的熵值为零，此时每个叶节点中的实例都属于同一类。">
+<meta property="og:description" content="信息是用来消除随机不确定性的东西。 —— 香农  本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的R实现。 决策树学习采用的是自顶向下的递归方法，其基本思想是以信息熵(或其他目标)为度量，构造一棵熵值下降最快的树，到叶子节点处的熵值为零，此时每个叶节点中的实例都属于同一类。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/03/29/c50/c50_files/figure-markdown_github/rpart-1.png">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/03/29/c50/c50_files/figure-markdown_github/rpart-2.png">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/03/29/c50/c50_files/figure-markdown_github/c50-1.png">
-<meta property="og:updated_time" content="2019-04-17T07:44:25.351Z">
+<meta property="og:updated_time" content="2019-04-18T07:17:34.116Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tree Models">
-<meta name="twitter:description" content="本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的R实现。 决策树学习采用的是自顶向下的递归方法，其基本思想是以信息熵(或其他目标)为度量，构造一棵熵值下降最快的树，到叶子节点处的熵值为零，此时每个叶节点中的实例都属于同一类。">
+<meta name="twitter:description" content="信息是用来消除随机不确定性的东西。 —— 香农  本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的R实现。 决策树学习采用的是自顶向下的递归方法，其基本思想是以信息熵(或其他目标)为度量，构造一棵熵值下降最快的树，到叶子节点处的熵值为零，此时每个叶节点中的实例都属于同一类。">
 <meta name="twitter:image" content="http://stazhenggy.github.io/2019/03/29/c50/c50_files/figure-markdown_github/rpart-1.png">
 
 
@@ -348,8 +348,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-17T15:44:25+08:00">
-                2019-04-17
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-18T15:17:34+08:00">
+                2019-04-18
               </time>
             
           </span>
@@ -415,10 +415,16 @@
       
 
       
-        <p>本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的<span id="inline-blue">R</span>实现。</p>
+        <blockquote>
+<p>信息是用来消除随机不确定性的东西。 —— 香农</p>
+</blockquote>
+<p>本篇主要包含ID3,C4.5在示例数据集上的手动实现以及C5.0的<span id="inline-blue">R</span>实现。</p>
 <p>决策树学习采用的是自顶向下的递归方法，其基本思想是以信息熵(或其他目标)为度量，构造一棵熵值下降最快的树，到叶子节点处的熵值为零，此时每个叶节点中的实例都属于同一类。</p>
 <a id="more"></a>
-<h3 id="决策树生成计算过程"><a href="#决策树生成计算过程" class="headerlink" title="决策树生成计算过程"></a>决策树生成计算过程</h3><h4 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h4><div class="table-container">
+<h1 id="决策树各类算法简介"><a href="#决策树各类算法简介" class="headerlink" title="决策树各类算法简介"></a>决策树各类算法简介</h1><h2 id="ID3"><a href="#ID3" class="headerlink" title="ID3"></a>ID3</h2><p>ID3由Ross Quinlan在1986年提出。ID3决策树可以有多个分支，但是不能处理特征值为连续的情况。决策树是一种贪心算法，每次选取的分割数据的特征都是当前的最佳选择，并不关心是否达到最优。在ID3中，每次根据“最大信息熵增益”选取当前最佳的特征来分割数据，并按照该特征的所有取值来切分，也就是说如果一个特征有4种取值，数据将被切分4份，一旦按某特征切分后，该特征在之后的算法执行中，将不再起作用，所以有观点认为这种切分方式过于迅速。ID3算法十分简单，核心是根据“最大信息熵增益”原则(沿信息熵下降最快的方向)选择划分当前数据集的最好特征，信息熵是信息论里面的概念，是信息的度量方式，不确定度越大或者说越混乱，熵就越大。在建立决策树的过程中，根据特征属性划分数据，使得原本“混乱”的数据的熵(混乱度)减少，按照不同特征划分数据熵减少的程度会不一样。在ID3中选择熵减少程度最大的特征来划分数据（贪心），也就是“最大信息熵增益”原则。</p>
+<h2 id="C4-5"><a href="#C4-5" class="headerlink" title="C4.5"></a>C4.5</h2><p>C4.5是Ross Quinlan在1993年在ID3的基础上改进而提出的。.ID3采用的信息增益度量存在一个缺点，它一般会优先选择有较多属性值的Feature,因为属性值多的Feature会有相对较大的信息增益(信息增益反映的给定一个条件以后不确定性减少的程度,必然是分得越细的数据集确定性更高,也就是条件熵越小,信息增益越大)。为了避免这个不足C4.5中是用信息增益比率(gain ratio)来作为选择分支的准则。信息增益比率通过引入一个被称作分裂信息(Split information)的项来惩罚取值较多的Feature。除此之外，C4.5还弥补了ID3中不能处理特征属性值连续的问题。但是，对连续属性值需要扫描排序，会使C4.5性能下降。</p>
+<h2 id="CART"><a href="#CART" class="headerlink" title="CART"></a>CART</h2><p>CART（Classification and Regression tree）分类回归树由L.Breiman,J.Friedman,R.Olshen和C.Stone于1984年提出。ID3中根据属性值分割数据，之后该特征不会再起作用，这种快速切割的方式会影响算法的准确率。CART是一棵二叉树，采用二元切分法，每次把数据切成两份，分别进入左子树、右子树。而且每个非叶子节点都有两个孩子，所以CART的叶子节点比非叶子多1。相比ID3和C4.5，CART应用要多一些，既可以用于分类也可以用于回归。CART分类时，使用基尼指数（Gini）来选择最好的数据分割的特征，gini描述的是纯度，与信息熵的含义相似。CART中每一次迭代都会降低GINI系数。下图显示信息熵增益的一半，Gini指数，分类误差率三种评价指标非常接近。回归时使用均方差作为loss function。</p>
+<h1 id="决策树生成计算过程"><a href="#决策树生成计算过程" class="headerlink" title="决策树生成计算过程"></a>决策树生成计算过程</h1><h2 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h2><div class="table-container">
 <table>
 <thead>
 <tr>
@@ -554,7 +560,7 @@
 </tbody>
 </table>
 </div>
-<h4 id="ID3-InfoGain-g-D-A"><a href="#ID3-InfoGain-g-D-A" class="headerlink" title="ID3: InfoGain g(D|A)"></a>ID3: InfoGain g(D|A)</h4><p>ID3算法的核心是在决策树各个结点上应用信息增益准则选择特征，递归地构建决策树。具体方法是：从根结点开始，对结点计算所有特征的信息增益，选择信息增益最大的特征作为结点特征，由该特征的不同取值建立子结点；再对子结点递归地调用以上方法，构建决策树；直到所有特征的信息增益均很小或没有特征可以选择为止。最后得到一个决策树。</p>
+<h2 id="ID3-1"><a href="#ID3-1" class="headerlink" title="ID3"></a>ID3</h2><h3 id="InfoGain-g-D-A"><a href="#InfoGain-g-D-A" class="headerlink" title="InfoGain g(D|A)"></a>InfoGain g(D|A)</h3><p>ID3算法的核心是在决策树各个结点上应用信息增益准则选择特征，递归地构建决策树。具体方法是：从根结点开始，对结点计算所有特征的信息增益，选择信息增益最大的特征作为结点特征，由该特征的不同取值建立子结点；再对子结点递归地调用以上方法，构建决策树；直到所有特征的信息增益均很小或没有特征可以选择为止。最后得到一个决策树。</p>
 <p>ID3算法只有树的生成，所以该算法生成的树容易产生过拟合。后续包含决策树的剪枝。决策树的剪枝往往通过最小化决策树整体的损失函数实现。</p>
 <p>分别以$A_1, A_2, A_3, A_4$表示年龄、有工作、有自己的房子和信贷情况4个特征，则</p>
 <p>(1)</p>
@@ -563,15 +569,15 @@
 <script type="math/tex; mode=display">H(D,A_2) = \frac{5}{15}\times 0 + \frac{10}{15}\times (-\frac{6}{10}\times log_2{\frac{6}{10}} - \frac{4}{10}\times log_2{\frac{4}{10}}) = 0.647</script><p>(4)</p>
 <script type="math/tex; mode=display">H(D,A_3) = \frac{6}{15}\times 0 + \frac{9}{15}\times (-\frac{3}{9}\times log_2{\frac{3}{9}} - \frac{6}{9}\times log_2{\frac{6}{9}}) = 0.551</script><p>(5)</p>
 <script type="math/tex; mode=display">H(D,A_4) = \frac{5}{15}\times (-\frac{1}{5}log_2{\frac{1}{5}} -\frac{4}{5}log_2{\frac{4}{5}}) + \\ \frac{6}{15}\times (-\frac{4}{6}log_2{\frac{4}{6}} - \frac{2}{6}log_2{\frac{2}{6}}) + \\ \frac{4}{15}\times 0 = 0.608</script><p>由于$H(D,A_3)=0.551$最小，因此，首先选择$A_3$作为最优特征，生成树的第一个分枝。</p>
-<h4 id="ID3-try-Variance-like-ANOVA"><a href="#ID3-try-Variance-like-ANOVA" class="headerlink" title="ID3: try Variance like ANOVA"></a>ID3: try Variance like ANOVA</h4><p>(1)</p>
+<h3 id="try-Variance-like-ANOVA"><a href="#try-Variance-like-ANOVA" class="headerlink" title="try Variance like ANOVA"></a>try Variance like ANOVA</h3><p>(1)</p>
 <script type="math/tex; mode=display">V(D) = 15\times \frac{9}{15}\times \frac{6}{19} = 3.6</script><p>$V(D,A)$为基于特征A划分后的组内方差之和；$g_{v}(D,A)$为组间方差。选择组间方差最大的特征</p>
 <p>(2)</p>
 <script type="math/tex; mode=display">g_{V}(D,A_1) = 5\times \frac{3}{5}\times \frac{2}{5} + 5\times \frac{3}{5}\times \frac{2}{5} + 5\times \frac{1}{5}\times \frac{4}{5} = 3.2</script><p>(3)</p>
 <script type="math/tex; mode=display">g_{V}(D,A_2) = 5\times 0 + 10\times \frac{4}{10}\times \frac{6}{10} = 2.4</script><p>(4)</p>
 <script type="math/tex; mode=display">g_{V}(D,A_3) = 6\times 0 + 9\times \frac{3}{9}\times \frac{6}{9} = 2</script><p>(5)</p>
 <script type="math/tex; mode=display">g_{V}(D,A_4) = 5\times \frac{1}{5}\times \frac{4}{5} + 6\times \frac{2}{6}\times \frac{4}{6} + 4\times 0 = 2.1</script><p>$g_{V}(D,A_3)=2$最小，所以选择$A_3$为最优特征进行分割。</p>
-<h4 id="C4-5-Info-Gain-Ratio"><a href="#C4-5-Info-Gain-Ratio" class="headerlink" title="C4.5: Info Gain Ratio"></a>C4.5: Info Gain Ratio</h4><p>计算信息增益比</p>
-<script type="math/tex; mode=display">g_{R}(D,A) = \frac{g(D,A)}{H(D)}</script><h4 id="CART-Gini"><a href="#CART-Gini" class="headerlink" title="CART: Gini"></a>CART: Gini</h4><p>CART假设决策树是二叉树，内部结点特征的取值为“是”和“否”，左分枝是取值为“是”的分枝，右分枝是取值为“否”的分枝。这样的决策树相当于递归地二分每个特征，将输入空间即特征空间划分为有限个单元，并且在这些单元上确定预测的概率分布，也就是在输入给定的条件下输出的条件概率分布。分类树用基尼指数选择最优特征，同时决定该特征的最优二值切分点。</p>
+<h2 id="C4-5-Info-Gain-Ratio"><a href="#C4-5-Info-Gain-Ratio" class="headerlink" title="C4.5: Info Gain Ratio"></a>C4.5: Info Gain Ratio</h2><p>计算信息增益比</p>
+<script type="math/tex; mode=display">g_{R}(D,A) = \frac{g(D,A)}{H(D)}</script><h2 id="CART-Gini"><a href="#CART-Gini" class="headerlink" title="CART: Gini"></a>CART: Gini</h2><p>CART假设决策树是二叉树，内部结点特征的取值为“是”和“否”，左分枝是取值为“是”的分枝，右分枝是取值为“否”的分枝。这样的决策树相当于递归地二分每个特征，将输入空间即特征空间划分为有限个单元，并且在这些单元上确定预测的概率分布，也就是在输入给定的条件下输出的条件概率分布。分类树用基尼指数选择最优特征，同时决定该特征的最优二值切分点。</p>
 <p>已1，2，3表示年龄为青年，中年，老年；以1，2表示是有工作和有自己的房子的值为是和否；以1，2，3表示信贷情况的值为非常好、好和一般。</p>
 <p>(1)</p>
 <script type="math/tex; mode=display">Gini(D, A_{1} = 1) = \frac{5}{15}\times (1 - (\frac{2}{5})^2 - (\frac{3}{5})^2) + \\ \frac{10}{15}\times (1 - (\frac{3}{10})^2 - (\frac{7}{10})^2) = 0.44</script><p>(2)</p>
@@ -580,9 +586,9 @@
 <script type="math/tex; mode=display">Gini(D, A_{4} = 1) = 0.36</script><p>(5)</p>
 <script type="math/tex; mode=display">Gini(D, A_{4} = 1) = 0.47</script><p>(6)</p>
 <script type="math/tex; mode=display">Gini(D, A_{4} = 3) = 0.32</script><p>由于$Gini(D, A_3 = 1) = 0.27$最小，所以选择特征$A_3$为最优特征，$A_3 = 1$为其最优分割点。于是，根结点生成两个子结点，一个是叶结点。对另一个结点继续使用以上方法在$A_1,A_2,A_3,A_4$中选择最优的特征及其最优切分点。</p>
-<h3 id="rpart"><a href="#rpart" class="headerlink" title="rpart"></a><code>rpart</code></h3><p><span id="inline-blue">R</span>中决策树的包: <span id="inline-purple">rpart, party, RWeka, ipred, randomForest, gbm, C50</span>.</p>
+<h2 id="R实现：-rpart"><a href="#R实现：-rpart" class="headerlink" title="R实现： rpart"></a>R实现： <code>rpart</code></h2><p><span id="inline-blue">R</span>中决策树的包: <span id="inline-purple">rpart, party, RWeka, ipred, randomForest, gbm, C50</span>.</p>
 <p><span id="inline-purple">rpart</span>:CART/ID3. The default criterion, which is <strong>maximized</strong> in each split is the <code>Gini</code>.</p>
-<h4 id="rpart常用参数"><a href="#rpart常用参数" class="headerlink" title="rpart常用参数"></a><code>rpart</code>常用参数</h4><div class="table-container">
+<h3 id="rpart常用参数"><a href="#rpart常用参数" class="headerlink" title="rpart常用参数"></a><code>rpart</code>常用参数</h3><div class="table-container">
 <table>
 <thead>
 <tr>
@@ -619,7 +625,7 @@
 </table>
 </div>
 <p><code>rpart</code><a class="btn" href="https://www.rdocumentation.org/packages/rpart/versions/4.1-13/topics/rpart" target="_blank" rel="noopener"><i class="fa fa-hand-o-right"></i>参数详解</a></p>
-<h4 id="rpart-plot常用参数"><a href="#rpart-plot常用参数" class="headerlink" title="rpart.plot常用参数"></a><code>rpart.plot</code>常用参数</h4><div class="table-container">
+<h3 id="rpart-plot常用参数"><a href="#rpart-plot常用参数" class="headerlink" title="rpart.plot常用参数"></a><code>rpart.plot</code>常用参数</h3><div class="table-container">
 <table>
 <thead>
 <tr>
@@ -742,25 +748,49 @@
 ##   setosa         13          0         0
 ##   versicolor      2         13         1
 ##   virginica       0          1        10
-</code></pre><h3 id="ID3-C4-5-C5-0-CART优缺点"><a href="#ID3-C4-5-C5-0-CART优缺点" class="headerlink" title="ID3, C4.5,C5.0,CART优缺点"></a>ID3, C4.5,C5.0,CART优缺点</h3><div class="tabs" id="tab"><ul class="nav-tabs"><li class="tab active"><a href="#tab-1">ID3</a></li><li class="tab"><a href="#tab-2">C4.5</a></li><li class="tab"><a href="#tab-3">C5.0</a></li><li class="tab"><a href="#tab-4">CART</a></li></ul><div class="tab-content"><div class="tab-pane active" id="tab-1"><p><strong>优点</strong></p>
+</code></pre><h2 id="ID3-C4-5-C5-0-CART优缺点"><a href="#ID3-C4-5-C5-0-CART优缺点" class="headerlink" title="ID3, C4.5,C5.0,CART优缺点"></a>ID3, C4.5,C5.0,CART优缺点</h2><div class="tabs" id="tab"><ul class="nav-tabs"><li class="tab active"><a href="#tab-1">ID3</a></li><li class="tab"><a href="#tab-2">C4.5</a></li><li class="tab"><a href="#tab-3">C5.0</a></li><li class="tab"><a href="#tab-4">CART</a></li></ul><div class="tab-content"><div class="tab-pane active" id="tab-1"><p><strong>优点</strong></p>
 <p><strong>缺点</strong></p>
 <p>1 不能处理连续特征</p>
-<p>2 倾向于选择属性值较多的特征进行分枝，可能导致庞大而浅的树。 </p>
+<p>2 倾向于选择属性值较多的特征进行分枝，可能导致庞大的树。 </p>
 <div class="note info"><p><strong>解决方法</strong><br>特征属性合并，减少特征属性值</p></div>
 
 <p>3 对噪声敏感</p>
-<div class="note info"><p><strong>解决方法</strong><br>将敏感的缺点转化为优点，使用Random Forest</p></div>
-</div><div class="tab-pane" id="tab-2"></div><div class="tab-pane" id="tab-3"></div><div class="tab-pane" id="tab-4"></div></div></div>
-<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
+<p>4 可能过拟合</p>
+<div class="note info"><p><strong>解决方法</strong><br>将敏感的缺点转化为优点，使用Random Forest<br>ID3换C5.0</p></div>
+
+<p>5 不能处理缺失值</p>
+</div><div class="tab-pane" id="tab-2"><p><strong>优点</strong></p>
+<p>1 能处理连续特征</p>
+<p>2 能处理缺失值</p>
+<p><strong>缺点</strong></p>
+<p>1 产生的树可能不够稳定</p>
+<div class="note info"><p><strong>解决方法</strong><br>将不稳定的缺点转化为优点，使用Random Forest</p></div>
+
+</div><div class="tab-pane" id="tab-3"><p>C5.0是对C4.5的改进。</p>
+<p><strong>优点</strong></p>
+<p>1 主要增加了对boosting的支持</p>
+<p>2 比C4.5构造的树更简单</p>
+<p>3 内存更小</p>
+<p><strong>缺点</strong></p>
+</div><div class="tab-pane" id="tab-4"></div></div></div>
+<h2 id="分类问题各类情况处理"><a href="#分类问题各类情况处理" class="headerlink" title="分类问题各类情况处理"></a>分类问题各类情况处理</h2><h3 id="类不平衡分类问题"><a href="#类不平衡分类问题" class="headerlink" title="类不平衡分类问题"></a>类不平衡分类问题</h3><a class="btn" href="使用Caret处理类不均衡问题"><i class="fa fa-hand-o-right"></i>https://www.r-bloggers.com/handling-class-imbalance-with-r-and-caret-an-introduction/</a>
+<a class="btn" href="使用Caret处理类不均衡问题(译)"><i class="fa fa-hand-o-right"></i>http://bourneli.github.io/[object Object]2018/11/06/handling-imbalance-with-R.html</a>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
 <li><p><a href="https://en.proft.me/2016/11/9/classification-using-decision-trees-r/" target="_blank" rel="noopener">Classification with Decision Trees</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/xlinsist/article/details/51468741" target="_blank" rel="noopener">C4.5,ID3,C5.0,CART比较</a></p>
+</li>
+<li><p><a href="https://www.jianshu.com/p/ca21d2392e73" target="_blank" rel="noopener">C4.5,ID3,C5.0,CART</a></p>
+</li>
+<li><p><a href="https://static1.squarespace.com/static/51156277e4b0b8b2ffe11c00/t/51e7e42ce4b0fd2e32684bca/1374151724529/user_C5.0.pdf" target="_blank" rel="noopener">user c5.0</a></p>
+</li>
+<li><p><a href="http://www.lac.inpe.br/~rafael.santos/Docs/R/CAP359/cap359r-ClassDecTree-C50-Artificial.html" target="_blank" rel="noopener">决策树对不同分类分布的拟合情况</a></p>
 </li>
 <li><p><a href="https://blog.csdn.net/weixin_43216017/article/details/87739323" target="_blank" rel="noopener">R实现决策树</a></p>
 </li>
 <li><p><a href="https://cran.r-project.org/web/packages/C50/vignettes/C5.0.html" target="_blank" rel="noopener">CRAN: C5.0</a></p>
 </li>
-<li><p><a href="https://static1.squarespace.com/static/51156277e4b0b8b2ffe11c00/t/51e7e42ce4b0fd2e32684bca/1374151724529/user_C5.0.pdf" target="_blank" rel="noopener">user_c5.0</a></p>
-</li>
-<li><p><a href="http://www.lac.inpe.br/~rafael.santos/Docs/R/CAP359/cap359r-ClassDecTree-C50-Artificial.html" target="_blank" rel="noopener">决策树对不同分类分布的拟合情况</a></p>
+<li><p><a href="https://scikit-learn.org/stable/modules/tree.html" target="_blank" rel="noopener">sklearn 决策树</a></p>
 </li>
 </ul>
 
@@ -924,7 +954,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -958,7 +988,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#决策树生成计算过程"><span class="nav-number">1.</span> <span class="nav-text">决策树生成计算过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据集"><span class="nav-number">1.1.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ID3-InfoGain-g-D-A"><span class="nav-number">1.2.</span> <span class="nav-text">ID3: InfoGain g(D|A)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ID3-try-Variance-like-ANOVA"><span class="nav-number">1.3.</span> <span class="nav-text">ID3: try Variance like ANOVA</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C4-5-Info-Gain-Ratio"><span class="nav-number">1.4.</span> <span class="nav-text">C4.5: Info Gain Ratio</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CART-Gini"><span class="nav-number">1.5.</span> <span class="nav-text">CART: Gini</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rpart"><span class="nav-number">2.</span> <span class="nav-text">rpart</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#rpart常用参数"><span class="nav-number">2.1.</span> <span class="nav-text">rpart常用参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#rpart-plot常用参数"><span class="nav-number">2.2.</span> <span class="nav-text">rpart.plot常用参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C50"><span class="nav-number">3.</span> <span class="nav-text">C50</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ID3-C4-5-C5-0-CART优缺点"><span class="nav-number">4.</span> <span class="nav-text">ID3, C4.5,C5.0,CART优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#决策树各类算法简介"><span class="nav-number">1.</span> <span class="nav-text">决策树各类算法简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ID3"><span class="nav-number">1.1.</span> <span class="nav-text">ID3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C4-5"><span class="nav-number">1.2.</span> <span class="nav-text">C4.5</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CART"><span class="nav-number">1.3.</span> <span class="nav-text">CART</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#决策树生成计算过程"><span class="nav-number">2.</span> <span class="nav-text">决策树生成计算过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据集"><span class="nav-number">2.1.</span> <span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ID3-1"><span class="nav-number">2.2.</span> <span class="nav-text">ID3</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#InfoGain-g-D-A"><span class="nav-number">2.2.1.</span> <span class="nav-text">InfoGain g(D|A)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#try-Variance-like-ANOVA"><span class="nav-number">2.2.2.</span> <span class="nav-text">try Variance like ANOVA</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C4-5-Info-Gain-Ratio"><span class="nav-number">2.3.</span> <span class="nav-text">C4.5: Info Gain Ratio</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CART-Gini"><span class="nav-number">2.4.</span> <span class="nav-text">CART: Gini</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#R实现：-rpart"><span class="nav-number">2.5.</span> <span class="nav-text">R实现： rpart</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rpart常用参数"><span class="nav-number">2.5.1.</span> <span class="nav-text">rpart常用参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rpart-plot常用参数"><span class="nav-number">2.5.2.</span> <span class="nav-text">rpart.plot常用参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C50"><span class="nav-number">2.5.3.</span> <span class="nav-text">C50</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ID3-C4-5-C5-0-CART优缺点"><span class="nav-number">2.6.</span> <span class="nav-text">ID3, C4.5,C5.0,CART优缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分类问题各类情况处理"><span class="nav-number">2.7.</span> <span class="nav-text">分类问题各类情况处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类不平衡分类问题"><span class="nav-number">2.7.1.</span> <span class="nav-text">类不平衡分类问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">2.8.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></div>
             
 
           </div>
