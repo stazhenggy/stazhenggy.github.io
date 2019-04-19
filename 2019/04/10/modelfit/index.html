@@ -91,7 +91,7 @@
 <meta property="og:image" content="http://stazhenggy.github.io/2019/04/10/modelfit/cv10.png">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/04/10/modelfit/roc.png">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/04/10/modelfit/roccurves.png">
-<meta property="og:updated_time" content="2019-04-18T07:16:23.268Z">
+<meta property="og:updated_time" content="2019-04-19T06:41:04.065Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="模型评价">
 <meta name="twitter:description" content="没有测量，就没有科学。 —— 门捷列夫  模型评估是模型开发过程不可或缺的一部分。 它有助于发现表达数据的最佳模型(模型与模型的调参)和所选模型将来工作的性能(泛化能力)如何。">
@@ -349,8 +349,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-18T15:16:23+08:00">
-                2019-04-18
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-19T14:41:04+08:00">
+                2019-04-19
               </time>
             
           </span>
@@ -462,8 +462,8 @@
 <p><img src="roccurves.png" alt></p>
 <h3 id="AUC"><a href="#AUC" class="headerlink" title="AUC"></a>AUC</h3><p>另一种情形是，我们有多个二分类混淆矩阵，例如进行了多次训练，每次得到一个混淆矩阵；或者执行多分类任务，每两两类别组合都对应一个混淆矩阵；…… 这时，我们希望在n个二分类混淆矩阵上综合考虑R和P。 一种直接的做法是先计算每个混淆矩阵的R和P,再求平均值。 这样就得到“macro-”系的性能度量指标； 还可以先将个混淆矩阵对应元素进行平均，得到TP, FP, FN, TN的平均值，再计算P,R, 这种算法得到的是“micro-”系。</p>
 <h3 id="macro-P"><a href="#macro-P" class="headerlink" title="macro-P"></a>macro-P</h3><script type="math/tex; mode=display">macro-P = \frac{1}{n}\sum_{i=1}^{n}{P_i}</script><h3 id="macro-R"><a href="#macro-R" class="headerlink" title="macro-R"></a>macro-R</h3><script type="math/tex; mode=display">macro-R = \frac{1}{n}\sum_{i=1}^{n}{R_i}</script><h3 id="macro-F1"><a href="#macro-F1" class="headerlink" title="macro-F1"></a>macro-F1</h3><script type="math/tex; mode=display">macro-F1 = \frac{1}{2}\frac{1}{\frac{1}{macro-R}+\frac{1}{macro-P}}</script><h3 id="micro-P"><a href="#micro-P" class="headerlink" title="micro-P"></a>micro-P</h3><script type="math/tex; mode=display">micro-P = \frac{\sum{FP}}{\sum{FP + TN}}</script><h3 id="micro-R"><a href="#micro-R" class="headerlink" title="micro-R"></a>micro-R</h3><script type="math/tex; mode=display">micro-R = \frac{\sum{TP}}{\sum{TP + FN}}</script><h3 id="micro-F1"><a href="#micro-F1" class="headerlink" title="micro-F1"></a>micro-F1</h3><script type="math/tex; mode=display">micro-F1 = \frac{1}{2}\frac{1}{\frac{1}{micro-R}+\frac{1}{micro-P}}</script><h1 id="Rreference"><a href="#Rreference" class="headerlink" title="Rreference"></a>Rreference</h1><ul>
-<li><a href="https://www.jianshu.com/p/498ea0d8017d" target="_blank" rel="noopener">模型评价与标准</a></li>
-<li><a href="https://blog.csdn.net/u014182497/article/details/79384233" target="_blank" rel="noopener">模型评价指标</a></li>
+<li><a href="https://www.jianshu.com/p/498ea0d8017d">模型评价与标准</a></li>
+<li><a href="https://blog.csdn.net/u014182497/article/details/79384233">模型评价指标</a></li>
 </ul>
 <blockquote>
 <p>All models are wrong. But some are useful.</p>
@@ -599,7 +599,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -610,7 +610,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -621,7 +621,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -716,6 +716,15 @@ show_date_time();
   <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div> 
 
 
+
+
+
+  <script src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({theme: 'forest'});
+    }
+  </script>
 
 
 
