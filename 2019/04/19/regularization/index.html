@@ -90,7 +90,7 @@
 <meta property="og:image" content="http://stazhenggy.github.io/2019/04/19/regularization/overfit.png">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/04/19/regularization/reg1.png">
 <meta property="og:image" content="http://stazhenggy.github.io/2019/04/19/regularization/reg2.png">
-<meta property="og:updated_time" content="2019-04-22T11:57:00.418Z">
+<meta property="og:updated_time" content="2019-04-29T10:02:51.118Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="regularization">
 <meta name="twitter:description" content="Learning with intuition.   每一个概念，被定义就是为了去解决一个实际问题（问Why&amp;amp;What），接着寻找解决问题的方法（问How），这个“方法”在计算机领域被称为“算法”（非常多的人在研究）。我们无法真正衡量到底是提出问题重要，还是解决问题重要，但我们可以从不同的解决问题的角度来思考问题。一方面，重复以加深印象。另一方面，具有多角度的视野，能让我们获得更多的灵感">
@@ -348,8 +348,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-22T19:57:00+08:00">
-                2019-04-22
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-29T18:02:51+08:00">
+                2019-04-29
               </time>
             
           </span>
@@ -408,6 +408,7 @@
 <p>Learning with intuition. </p>
 </blockquote>
 <div class="note primary"><p>每一个概念，被定义就是为了去解决一个实际问题（问Why&amp;What），接着寻找解决问题的方法（问How），这个“方法”在计算机领域被称为“算法”（非常多的人在研究）。<br>我们无法真正衡量到底是提出问题重要，还是解决问题重要，但我们可以从不同的解决问题的角度来思考问题。<br>一方面，重复以加深印象。另一方面，具有多角度的视野，能让我们获得更多的灵感，真正做到链接并健壮自己的知识图谱。</p></div>
+<a id="more"></a>
 <h1 id="正则化用来改善过拟合"><a href="#正则化用来改善过拟合" class="headerlink" title="正则化用来改善过拟合"></a>正则化用来改善过拟合</h1><h2 id="过拟合"><a href="#过拟合" class="headerlink" title="过拟合"></a>过拟合</h2><p>首先了解什么是过拟合。 </p>
 <p>一般机器学习的目的为了获得泛化误差小的学习器，进而预测新样本。 实现这个目的的路径是尽可能的最小化经验误差，即从训练样本中尽可能学出适用于所有潜在样本的“普遍规律”，这样在遇到新样本时就可以依据这个”普遍规律”作出正确的判断。 当样本量足够大时，经验误差最小化能保证有很好的学习效果。 在现实中被广泛采用。 但是，当样本容量很小时，经验误差最小化学习的效果未必很好。 学习器过度追求最小化经验误差，把训练样本学得“太好了”，就很可能把训练样本自身的一些特点当作所有潜在样本都会具有的一般性质，即学到的并不是真正的“普遍规律”。这样会导致泛化性能下降。 这就是“过拟合”。 </p>
 <p><img src="overfit.png" alt></p>
